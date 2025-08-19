@@ -37,6 +37,7 @@ export default function Header() {
     { href: '#services', label: 'Servicios' },
     { href: '#timeline', label: 'Trayectoria' },
     { href: '#philosophy', label: 'Filosofía' },
+    { href: '#clients', label: 'Clientes' },
   ];
 
   return (
