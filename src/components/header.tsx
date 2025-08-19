@@ -57,8 +57,8 @@ export default function Header() {
             ))}
           </nav>
           <div className="hidden md:flex items-center gap-2">
-            <Button variant="outline">
-              Evol
+            <Button asChild variant="outline">
+              <Link href="/login">Evol</Link>
             </Button>
             <ContactModal>
               <Button variant="default">
@@ -86,8 +86,8 @@ export default function Header() {
                     {navLinks.map(link => (
                       <a key={link.href} href={link.href} onClick={() => setMobileMenuOpen(false)} className="text-xl font-medium text-foreground hover:text-primary transition-colors">{link.label}</a>
                     ))}
-                     <Button variant="outline" className="w-full">
-                        Evol
+                     <Button asChild variant="outline" className="w-full">
+                        <Link href="/login">Evol</Link>
                       </Button>
                   </nav>
                   <div className="p-4 border-t">
