@@ -12,8 +12,8 @@ const Scene = () => {
     if (!currentMount) return;
 
     const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 1000);
-    camera.position.z = 1;
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    camera.position.z = 500;
 
     const renderer = new THREE.WebGLRenderer({
       alpha: true,
@@ -23,7 +23,7 @@ const Scene = () => {
     currentMount.appendChild(renderer.domElement);
 
     const starGeo = new THREE.BufferGeometry();
-    const starCount = 6000;
+    const starCount = 8000;
     const vertices = new Float32Array(starCount * 3);
     for (let i = 0; i < starCount * 3; i+=3) {
       vertices[i] = (Math.random() - 0.5) * 2000;
@@ -33,10 +33,10 @@ const Scene = () => {
     starGeo.setAttribute('position', new THREE.BufferAttribute(vertices, 3));
     
     const starMaterial = new THREE.PointsMaterial({
-      color: 0xaaaaaa,
-      size: 0.7,
+      color: 0xffffff,
+      size: 1.2,
       transparent: true,
-      opacity: 0.8
+      opacity: 0.9
     });
 
     const stars = new THREE.Points(starGeo, starMaterial);
@@ -57,11 +57,11 @@ const Scene = () => {
 
     let animationFrameId: number;
     const animate = () => {
-      stars.rotation.y += 0.00005;
-      stars.rotation.x += 0.00002;
+      stars.rotation.y += 0.0001;
+      stars.rotation.x += 0.00005;
 
-      camera.position.y += (-mouse.current.y * 0.00001 - camera.position.y) * 0.01;
-      camera.position.x += (mouse.current.x * 0.00001 - camera.position.x) * 0.01;
+      camera.position.y += (-mouse.current.y * 0.001 - camera.position.y) * 0.02;
+      camera.position.x += (mouse.current.x * 0.001 - camera.position.x) * 0.02;
       camera.lookAt(scene.position);
       
       renderer.render(scene, camera);
@@ -73,7 +73,9 @@ const Scene = () => {
       cancelAnimationFrame(animationFrameId);
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('resize', handleResize);
-      currentMount.removeChild(renderer.domElement);
+      if (currentMount && renderer.domElement) {
+        currentMount.removeChild(renderer.domElement);
+      }
       renderer.dispose();
       starGeo.dispose();
       starMaterial.dispose();
