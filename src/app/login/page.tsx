@@ -1,3 +1,4 @@
+
 "use client";
 
 import Link from "next/link";
@@ -5,6 +6,8 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "@/lib/firebase";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -43,15 +46,21 @@ export default function LoginPage() {
   });
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    // Aquí iría la lógica de autenticación con Firebase u otro servicio
-    console.log("Login attempt:", values);
-
-    // Simulación de login exitoso
-    toast({
-      title: "Inicio de Sesión Exitoso",
-      description: "¡Bienvenido de vuelta!",
-    });
-    router.push("/dashboard");
+    try {
+      await signInWithEmailAndPassword(auth, values.email, values.password);
+      toast({
+        title: "Inicio de Sesión Exitoso",
+        description: "¡Bienvenido de vuelta!",
+      });
+      router.push("/dashboard");
+    } catch (error: any) {
+        console.error("Login error:", error);
+        toast({
+            variant: "destructive",
+            title: "Error de Inicio de Sesión",
+            description: "Las credenciales no son correctas. Por favor, inténtalo de nuevo.",
+        });
+    }
   };
 
   return (

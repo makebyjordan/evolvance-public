@@ -1,3 +1,4 @@
+
 "use client";
 
 import Link from "next/link";
@@ -5,6 +6,8 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { auth } from "@/lib/firebase";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -51,14 +54,36 @@ export default function RegisterPage() {
   });
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    // Aquí iría la lógica de registro con Firebase u otro servicio
-    console.log("Registration attempt:", values);
+    try {
+      const userCredential = await createUserWithEmailAndPassword(auth, values.email, values.password);
+      
+      if (userCredential.user) {
+        await updateProfile(userCredential.user, {
+          displayName: values.name,
+        });
+      }
 
-    toast({
-      title: "Registro Exitoso",
-      description: "¡Bienvenido! Ahora puedes iniciar sesión.",
-    });
-    router.push("/login");
+      toast({
+        title: "Registro Exitoso",
+        description: "¡Bienvenido! Ahora puedes iniciar sesión.",
+      });
+      router.push("/login");
+    } catch (error: any) {
+        console.error("Registration error:", error);
+        const errorCode = error.code;
+        let message = "Hubo un error durante el registro.";
+        if (errorCode === 'auth/email-already-in-use') {
+            message = "Este correo electrónico ya está en uso.";
+        } else if (errorCode === 'auth/weak-password') {
+            message = "La contraseña es demasiado débil.";
+        }
+        
+        toast({
+            variant: "destructive",
+            title: "Error de Registro",
+            description: message,
+        });
+    }
   };
 
   return (
