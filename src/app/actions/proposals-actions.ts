@@ -33,13 +33,13 @@ type ProposalsActionResult = {
 };
 
 // Collection reference
-const proposalsCollection = db.collection('proposals');
+const proposalsCollection = db?.collection('proposals');
 
 /**
  * Gets a list of all proposals, ordered by creation date.
  */
 export async function getProposalsList(): Promise<{ proposals: Proposal[], error: string | null }> {
-  if (!isFirebaseAdminInitialized()) {
+  if (!isFirebaseAdminInitialized() || !proposalsCollection) {
     return { proposals: [], error: 'El servicio de Firebase no está inicializado en el servidor.' };
   }
   
@@ -70,7 +70,7 @@ export async function getProposalsList(): Promise<{ proposals: Proposal[], error
  * Saves a new proposal or updates an existing one.
  */
 export async function saveProposal(data: ProposalInput): Promise<ProposalsActionResult> {
-  if (!isFirebaseAdminInitialized()) {
+  if (!isFirebaseAdminInitialized() || !proposalsCollection) {
     return { success: false, error: 'El servicio de Firebase no está inicializado en el servidor.' };
   }
 
@@ -110,7 +110,7 @@ export async function saveProposal(data: ProposalInput): Promise<ProposalsAction
  * Deletes a proposal by its ID.
  */
 export async function deleteProposal(id: string): Promise<ActionResult<null>> {
-  if (!isFirebaseAdminInitialized()) {
+  if (!isFirebaseAdminInitialized() || !proposalsCollection) {
     return { success: false, error: 'El servicio de Firebase no está inicializado en el servidor.' };
   }
 

@@ -5,6 +5,8 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { ProposalsClientPage } from "./components/ProposalsClientPage";
 import { AlertTriangle } from 'lucide-react';
 
+export const dynamic = 'force-dynamic';
+
 export default async function ProposalsPage() {
   const { proposals, error } = await getProposalsList();
 

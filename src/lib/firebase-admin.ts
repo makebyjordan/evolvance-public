@@ -8,14 +8,7 @@ if (!admin.apps.length) {
       throw new Error('The FIREBASE_SERVICE_ACCOUNT_KEY environment variable is not set.');
     }
 
-    let serviceAccount;
-    try {
-        // First, try to parse it as a JSON object directly
-        serviceAccount = JSON.parse(serviceAccountKey);
-    } catch (e) {
-        // If that fails, assume it's a base64 encoded string
-        serviceAccount = JSON.parse(Buffer.from(serviceAccountKey, 'base64').toString('utf8'));
-    }
+    const serviceAccount = JSON.parse(Buffer.from(serviceAccountKey, 'base64').toString('utf8'));
 
     admin.initializeApp({
       credential: admin.credential.cert(serviceAccount),
@@ -27,9 +20,9 @@ if (!admin.apps.length) {
   }
 }
 
-const db = admin.firestore();
-const auth = admin.auth();
-const storage = admin.storage();
+const db = admin.apps.length ? admin.firestore() : undefined;
+const auth = admin.apps.length ? admin.auth() : undefined;
+const storage = admin.apps.length ? admin.storage() : undefined;
 
 const isFirebaseAdminInitialized = () => admin.apps.length > 0;
 
