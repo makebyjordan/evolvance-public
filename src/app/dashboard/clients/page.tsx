@@ -1,23 +1,41 @@
 
+import { getClientsList } from "@/app/actions/clients-actions";
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { FileText } from 'lucide-react';
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { ClientsClientPage } from "./components/ClientsClientPage";
+import { AlertTriangle } from 'lucide-react';
 
-export default function ClientsPage() {
+export const dynamic = 'force-dynamic';
+
+export default async function ClientsPage() {
+  const { clients, error } = await getClientsList();
+
+  if (error) {
+    return (
+        <Alert variant="destructive" className="max-w-2xl mx-auto">
+            <AlertTriangle className="h-4 w-4" />
+            <AlertTitle>Error de Conexión</AlertTitle>
+            <AlertDescription>
+                <p>{error}</p>
+                <p className="mt-2 text-xs">
+                    Esta operación requiere configuración del servidor (Firebase Admin SDK) que parece no estar completa.
+                </p>
+            </AlertDescription>
+        </Alert>
+    );
+  }
+
   return (
     <div>
         <Card className="mb-8">
             <CardHeader>
                 <CardTitle className="text-2xl font-headline">Gestión de Clientes</CardTitle>
                 <CardDescription>
-                    Próximamente: Añade, visualiza y gestiona la información de tus clientes.
+                    Añade, visualiza y gestiona la información de tus clientes.
                 </CardDescription>
             </CardHeader>
         </Card>
-        <div className="text-center p-8 border rounded-lg">
-            <FileText className="mx-auto h-12 w-12 text-gray-400" />
-            <h3 className="mt-2 text-sm font-medium text-gray-900 dark:text-gray-200">Sección en construcción</h3>
-            <p className="mt-1 text-sm text-gray-500">La funcionalidad para gestionar clientes estará disponible pronto.</p>
-        </div>
+        <ClientsClientPage initialClients={clients} />
     </div>
   );
 }
