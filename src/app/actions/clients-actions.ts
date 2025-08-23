@@ -28,17 +28,9 @@ type ActionResult<T> = {
   error?: string;
 };
 
-type ClientsActionResult = {
-  success: boolean;
-  clients?: Client[];
-  error?: string;
-};
-
-// Collection reference
-const clientsCollection = db?.collection('clients');
-
 /**
  * Gets a list of all clients, ordered by creation date.
+ * This function is kept for potential server-side rendering needs but is not used by the real-time client page.
  */
 export async function getClientsList(): Promise<{ clients: Client[], error: string | null }> {
   if (!isFirebaseAdminInitialized() || !clientsCollection) {
@@ -70,19 +62,25 @@ export async function getClientsList(): Promise<{ clients: Client[], error: stri
   }
 }
 
+// Collection reference
+const clientsCollection = db?.collection('clients');
+
 /**
  * Saves a new client or updates an existing one.
  */
-export async function saveClient(data: ClientInput): Promise<ClientsActionResult> {
+export async function saveClient(data: ClientInput): Promise<ActionResult<string>> {
   if (!isFirebaseAdminInitialized() || !clientsCollection) {
     return { success: false, error: 'El servicio de Firebase no está inicializado en el servidor.' };
   }
 
   try {
     const now = new Date();
+    let docId: string;
+
     if (data.id) {
       // Update
-      const docRef = clientsCollection.doc(data.id);
+      docId = data.id;
+      const docRef = clientsCollection.doc(docId);
       await docRef.update({
         ...data,
         updatedAt: now,
@@ -95,14 +93,11 @@ export async function saveClient(data: ClientInput): Promise<ClientsActionResult
         createdAt: now,
         updatedAt: now,
       });
+      docId = docRef.id;
     }
     
-    revalidatePath('/dashboard/clients');
-    const { clients, error } = await getClientsList();
-    if(error) {
-        return { success: false, error };
-    }
-    return { success: true, clients };
+    // No longer need to revalidate path, client will update in real-time
+    return { success: true, data: docId };
 
   } catch (error: any) {
     console.error('Error saving client:', error);
@@ -120,7 +115,7 @@ export async function deleteClient(id: string): Promise<ActionResult<null>> {
 
   try {
     await clientsCollection.doc(id).delete();
-    revalidatePath('/dashboard/clients');
+    // No longer need to revalidate path, client will update in real-time
     return { success: true };
   } catch (error: any) {
     console.error('Error deleting client:', error);

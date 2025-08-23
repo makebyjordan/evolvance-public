@@ -1,8 +1,8 @@
 
 "use client";
 
-import { useState } from "react";
-import { PlusCircle, MoreHorizontal, FileText, Trash2, Pencil } from "lucide-react";
+import { useState, useEffect } from "react";
+import { PlusCircle, MoreHorizontal, FileText, Trash2, Pencil, AlertTriangle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -28,23 +28,57 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { useToast } from "@/hooks/use-toast";
 import { ClientForm } from "./ClientForm";
 import type { Client } from "@/app/actions/clients-actions";
 import { deleteClient } from "@/app/actions/clients-actions";
-import { useRouter } from "next/navigation";
+import { db } from "@/lib/firebase";
+import { collection, onSnapshot, query, orderBy, Timestamp } from "firebase/firestore";
+import { Skeleton } from "@/components/ui/skeleton";
 
-export function ClientsClientPage({ initialClients }: { initialClients: Client[] }) {
-  const [clients, setClients] = useState<Client[]>(initialClients);
+export function ClientsClientPage() {
+  const [clients, setClients] = useState<Client[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [isAlertOpen, setIsAlertOpen] = useState(false);
   const [selectedClient, setSelectedClient] = useState<Client | null>(null);
   const { toast } = useToast();
-  const router = useRouter();
 
-  const handleFormSubmit = (updatedClients: Client[]) => {
-    setClients(updatedClients);
-    router.refresh();
+  useEffect(() => {
+    const q = query(collection(db, "clients"), orderBy("createdAt", "desc"));
+    const unsubscribe = onSnapshot(q, 
+      (querySnapshot) => {
+        const clientsData: Client[] = [];
+        querySnapshot.forEach((doc) => {
+          const data = doc.data();
+          clientsData.push({
+            id: doc.id,
+            name: data.name,
+            phone: data.phone,
+            email: data.email,
+            description: data.description,
+            source: data.source,
+            createdAt: (data.createdAt as Timestamp).toDate().toISOString(),
+            updatedAt: (data.updatedAt as Timestamp).toDate().toISOString(),
+          });
+        });
+        setClients(clientsData);
+        setLoading(false);
+      }, 
+      (err) => {
+        console.error("Error fetching clients in real-time: ", err);
+        setError("No se pudieron cargar los clientes en tiempo real.");
+        setLoading(false);
+      }
+    );
+
+    return () => unsubscribe();
+  }, []);
+
+  const handleFormSubmit = () => {
+    // Real-time listener will handle the update, no need to do anything here
   };
 
   const handleDeleteClick = (client: Client) => {
@@ -63,7 +97,6 @@ export function ClientsClientPage({ initialClients }: { initialClients: Client[]
     const result = await deleteClient(selectedClient.id);
 
     if (result.success) {
-      setClients(clients.filter((p) => p.id !== selectedClient.id));
       toast({
         title: "Cliente Eliminado",
         description: "El cliente ha sido eliminado con éxito.",
@@ -78,6 +111,37 @@ export function ClientsClientPage({ initialClients }: { initialClients: Client[]
     setIsAlertOpen(false);
     setSelectedClient(null);
   };
+
+  if (loading) {
+     return (
+      <div>
+        <div className="flex justify-end mb-4">
+          <Skeleton className="h-10 w-36" />
+        </div>
+        <div className="border rounded-lg p-4 space-y-2">
+            <Skeleton className="h-12 w-full" />
+            <Skeleton className="h-10 w-full" />
+            <Skeleton className="h-10 w-full" />
+            <Skeleton className="h-10 w-full" />
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+     return (
+        <Alert variant="destructive" className="max-w-2xl mx-auto">
+            <AlertTriangle className="h-4 w-4" />
+            <AlertTitle>Error de Conexión</AlertTitle>
+            <AlertDescription>
+                <p>{error}</p>
+                 <p className="mt-2 text-xs">
+                    Comprueba tu conexión a internet y la configuración de Firebase.
+                </p>
+            </AlertDescription>
+        </Alert>
+    );
+  }
 
   return (
     <>

@@ -40,7 +40,7 @@ type ClientFormValues = z.infer<typeof formSchema>;
 interface ClientFormProps {
   isOpen: boolean;
   setIsOpen: (open: boolean) => void;
-  onFormSubmit: (updatedClients: Client[]) => void;
+  onFormSubmit: () => void;
   client: Client | null;
 }
 
@@ -90,12 +90,12 @@ export function ClientForm({ isOpen, setIsOpen, onFormSubmit, client }: ClientFo
     
     const result = await saveClient(clientData);
 
-    if (result.success && result.clients) {
+    if (result.success) {
       toast({
         title: `Cliente ${isEditing ? 'Actualizado' : 'Creado'}`,
         description: `El cliente "${values.name}" ha sido guardado.`,
       });
-      onFormSubmit(result.clients);
+      onFormSubmit();
       handleOpenChange(false);
     } else {
       toast({
