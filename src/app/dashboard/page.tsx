@@ -8,44 +8,74 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
 import { useAuth } from "@/contexts/AuthContext";
-import { auth } from "@/lib/firebase";
-import { useRouter } from "next/navigation";
 
 export default function DashboardPage() {
   const { user } = useAuth();
-  const router = useRouter();
-
-  const handleLogout = async () => {
-    await auth.signOut();
-    router.push('/login');
-  };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-background">
-      <Card className="w-full max-w-2xl bg-card/80 backdrop-blur-sm">
-        <CardHeader className="text-center">
-          <CardTitle className="text-3xl font-headline text-primary">¡Bienvenido al Dashboard!</CardTitle>
-          <CardDescription>
-            Has iniciado sesión como {user?.email}
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="text-center">
-          <p className="text-muted-foreground">
-            Aquí es donde construiremos las herramientas internas de la empresa.
-          </p>
-          <div className="flex gap-4 justify-center mt-6">
-            <Button asChild>
-              <Link href="/">Volver al Inicio</Link>
-            </Button>
-            <Button variant="outline" onClick={handleLogout}>
-              Cerrar Sesión
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
+    <div>
+      <h1 className="text-3xl font-headline font-bold text-foreground mb-2">
+        ¡Bienvenido de vuelta, {user?.displayName || 'Admin'}!
+      </h1>
+      <p className="text-muted-foreground mb-8">
+        Aquí tienes un resumen de la actividad reciente de tu negocio.
+      </p>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+         <Card>
+           <CardHeader>
+            <CardTitle className="text-lg">Propuestas Enviadas</CardTitle>
+            <CardDescription>Últimos 30 días</CardDescription>
+           </CardHeader>
+           <CardContent>
+            <p className="text-4xl font-bold">0</p>
+           </CardContent>
+         </Card>
+         <Card>
+           <CardHeader>
+            <CardTitle className="text-lg">Clientes Nuevos</CardTitle>
+            <CardDescription>Últimos 30 días</CardDescription>
+           </CardHeader>
+           <CardContent>
+            <p className="text-4xl font-bold">0</p>
+           </CardContent>
+         </Card>
+         <Card>
+           <CardHeader>
+            <CardTitle className="text-lg">Colaboradores Activos</CardTitle>
+             <CardDescription>Estado "Firmado"</CardDescription>
+           </CardHeader>
+           <CardContent>
+            <p className="text-4xl font-bold">0</p>
+           </CardContent>
+         </Card>
+          <Card>
+           <CardHeader>
+            <CardTitle className="text-lg">Ingresos Potenciales</CardTitle>
+            <CardDescription>Total de propuestas</CardDescription>
+           </CardHeader>
+           <CardContent>
+            <p className="text-4xl font-bold">0€</p>
+           </CardContent>
+         </Card>
+      </div>
+
+       <div className="mt-8">
+        <Card>
+            <CardHeader>
+                <CardTitle>Próximos Pasos</CardTitle>
+                <CardDescription>
+                    A medida que añadas datos en las otras secciones, este panel de resumen se irá poblando con métricas y gráficos útiles.
+                </CardDescription>
+            </CardHeader>
+            <CardContent>
+                <p className="text-muted-foreground">
+                    Empieza por crear tu primera propuesta, cliente o servicio para ver cómo funciona.
+                </p>
+            </CardContent>
+        </Card>
+       </div>
     </div>
   );
 }
