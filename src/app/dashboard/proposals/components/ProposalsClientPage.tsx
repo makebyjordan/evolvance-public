@@ -2,7 +2,7 @@
 "use client";
 
 import { useState } from "react";
-import { PlusCircle, MoreHorizontal, FileText, Trash2, Pencil } from "lucide-react";
+import { PlusCircle, MoreHorizontal, FileText, Trash2, Pencil, Eye } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -55,6 +55,10 @@ export function ProposalsClientPage({ initialProposals }: { initialProposals: Pr
   const handleEditClick = (proposal: Proposal) => {
     setSelectedProposal(proposal);
     setIsFormOpen(true);
+  };
+
+  const handleViewClick = (proposal: Proposal) => {
+    window.open(`/view-proposal/${proposal.id}`, '_blank');
   };
 
   const confirmDelete = async () => {
@@ -124,6 +128,10 @@ export function ProposalsClientPage({ initialProposals }: { initialProposals: Pr
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
+                        <DropdownMenuItem onClick={() => handleViewClick(proposal)}>
+                          <Eye className="mr-2 h-4 w-4" />
+                          Ver
+                        </DropdownMenuItem>
                         <DropdownMenuItem onClick={() => handleEditClick(proposal)}>
                           <Pencil className="mr-2 h-4 w-4" />
                           Editar
