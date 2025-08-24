@@ -37,6 +37,7 @@ import { db } from "@/lib/firebase";
 import { collection, onSnapshot, query, orderBy, Timestamp } from "firebase/firestore";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Badge } from "@/components/ui/badge";
+import Image from 'next/image';
 
 export function ServicesClientPage() {
   const [services, setServices] = useState<Service[]>([]);
@@ -62,6 +63,7 @@ export function ServicesClientPage() {
             type: data.type,
             estimatedTime: data.estimatedTime,
             description: data.description,
+            imageUrl: data.imageUrl,
             createdAt: (data.createdAt as Timestamp).toDate().toISOString(),
             updatedAt: (data.updatedAt as Timestamp).toDate().toISOString(),
           });
@@ -78,10 +80,6 @@ export function ServicesClientPage() {
 
     return () => unsubscribe();
   }, []);
-
-  const handleFormSubmit = () => {
-    // Real-time listener will handle the update
-  };
 
   const handleDeleteClick = (service: Service) => {
     setSelectedService(service);
@@ -165,7 +163,6 @@ export function ServicesClientPage() {
       <ServiceForm
         isOpen={isFormOpen}
         setIsOpen={setIsFormOpen}
-        onFormSubmit={handleFormSubmit}
         service={selectedService}
       />
       
@@ -173,6 +170,7 @@ export function ServicesClientPage() {
         <Table>
           <TableHeader>
             <TableRow>
+              <TableHead>Imagen</TableHead>
               <TableHead>Nombre</TableHead>
               <TableHead>Tipo</TableHead>
               <TableHead>P. Venta</TableHead>
@@ -185,6 +183,21 @@ export function ServicesClientPage() {
             {services.length > 0 ? (
               services.map((service) => (
                 <TableRow key={service.id}>
+                  <TableCell>
+                    {service.imageUrl ? (
+                        <Image
+                            src={service.imageUrl}
+                            alt={service.name}
+                            width={40}
+                            height={40}
+                            className="rounded-md object-cover"
+                        />
+                    ) : (
+                        <div className="w-10 h-10 bg-muted rounded-md flex items-center justify-center text-muted-foreground text-xs">
+                            Sin foto
+                        </div>
+                    )}
+                  </TableCell>
                   <TableCell className="font-medium">{service.name}</TableCell>
                   <TableCell>
                     <Badge variant="secondary">{service.type}</Badge>
@@ -216,7 +229,7 @@ export function ServicesClientPage() {
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={6} className="h-24 text-center">
+                <TableCell colSpan={7} className="h-24 text-center">
                   <FileText className="mx-auto h-12 w-12 text-gray-400" />
                   <h3 className="mt-2 text-sm font-medium text-gray-900 dark:text-gray-200">No hay servicios</h3>
                   <p className="mt-1 text-sm text-gray-500">Empieza por crear un nuevo servicio.</p>
