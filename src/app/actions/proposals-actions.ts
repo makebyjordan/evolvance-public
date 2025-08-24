@@ -26,59 +26,25 @@ type ActionResult<T> = {
   error?: string;
 };
 
-type ProposalsActionResult = {
-  success: boolean;
-  proposals?: Proposal[];
-  error?: string;
-};
-
 // Collection reference
 const proposalsCollection = db?.collection('proposals');
 
 /**
- * Gets a list of all proposals, ordered by creation date.
- */
-export async function getProposalsList(): Promise<{ proposals: Proposal[], error: string | null }> {
-  if (!isFirebaseAdminInitialized() || !proposalsCollection) {
-    return { proposals: [], error: 'El servicio de Firebase no está inicializado en el servidor.' };
-  }
-  
-  try {
-    const snapshot = await proposalsCollection.orderBy('createdAt', 'desc').get();
-    if (snapshot.empty) {
-      return { proposals: [], error: null };
-    }
-    const proposals: Proposal[] = snapshot.docs.map(doc => {
-      const data = doc.data();
-      return {
-        id: doc.id,
-        title: data.title,
-        code: data.code,
-        htmlText: data.htmlText,
-        createdAt: new Date(data.createdAt.seconds * 1000).toISOString(),
-        updatedAt: new Date(data.updatedAt.seconds * 1000).toISOString(),
-      };
-    });
-    return { proposals, error: null };
-  } catch (error) {
-    console.error('Error fetching proposals:', error);
-    return { proposals: [], error: 'No se pudieron cargar las propuestas.' };
-  }
-}
-
-/**
  * Saves a new proposal or updates an existing one.
  */
-export async function saveProposal(data: ProposalInput): Promise<ProposalsActionResult> {
+export async function saveProposal(data: ProposalInput): Promise<ActionResult<string>> {
   if (!isFirebaseAdminInitialized() || !proposalsCollection) {
     return { success: false, error: 'El servicio de Firebase no está inicializado en el servidor.' };
   }
 
   try {
     const now = new Date();
+    let docId: string;
+
     if (data.id) {
       // Update
-      const docRef = proposalsCollection.doc(data.id);
+      docId = data.id;
+      const docRef = proposalsCollection.doc(docId);
       await docRef.update({
         ...data,
         updatedAt: now,
@@ -86,6 +52,7 @@ export async function saveProposal(data: ProposalInput): Promise<ProposalsAction
     } else {
       // Create
       const docRef = proposalsCollection.doc();
+      docId = docRef.id;
       await docRef.set({
         ...data,
         createdAt: now,
@@ -94,11 +61,7 @@ export async function saveProposal(data: ProposalInput): Promise<ProposalsAction
     }
     
     revalidatePath('/dashboard/proposals');
-    const { proposals, error } = await getProposalsList();
-    if(error) {
-        return { success: false, error };
-    }
-    return { success: true, proposals };
+    return { success: true, data: docId };
 
   } catch (error: any) {
     console.error('Error saving proposal:', error);

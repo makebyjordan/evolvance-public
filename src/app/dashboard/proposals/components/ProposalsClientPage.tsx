@@ -1,8 +1,8 @@
 
 "use client";
 
-import { useState } from "react";
-import { PlusCircle, MoreHorizontal, FileText, Trash2, Pencil, Eye } from "lucide-react";
+import { useState, useEffect } from "react";
+import { PlusCircle, MoreHorizontal, FileText, Trash2, Pencil, Eye, AlertTriangle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -28,23 +28,57 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { useToast } from "@/hooks/use-toast";
 import { ProposalForm } from "./ProposalForm";
 import type { Proposal } from "@/app/actions/proposals-actions";
 import { deleteProposal } from "@/app/actions/proposals-actions";
 import { useRouter } from "next/navigation";
+import { db } from "@/lib/firebase";
+import { collection, onSnapshot, query, orderBy, Timestamp } from "firebase/firestore";
+import { Skeleton } from "@/components/ui/skeleton";
 
-export function ProposalsClientPage({ initialProposals }: { initialProposals: Proposal[] }) {
-  const [proposals, setProposals] = useState<Proposal[]>(initialProposals);
+export function ProposalsClientPage() {
+  const [proposals, setProposals] = useState<Proposal[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [isAlertOpen, setIsAlertOpen] = useState(false);
   const [selectedProposal, setSelectedProposal] = useState<Proposal | null>(null);
   const { toast } = useToast();
   const router = useRouter();
 
-  const handleFormSubmit = (updatedProposals: Proposal[]) => {
-    setProposals(updatedProposals);
-    router.refresh();
+  useEffect(() => {
+    const q = query(collection(db, "proposals"), orderBy("createdAt", "desc"));
+    const unsubscribe = onSnapshot(q, 
+      (querySnapshot) => {
+        const proposalsData: Proposal[] = [];
+        querySnapshot.forEach((doc) => {
+          const data = doc.data();
+          proposalsData.push({
+            id: doc.id,
+            title: data.title,
+            code: data.code,
+            htmlText: data.htmlText,
+            createdAt: (data.createdAt as Timestamp).toDate().toISOString(),
+            updatedAt: (data.updatedAt as Timestamp).toDate().toISOString(),
+          });
+        });
+        setProposals(proposalsData);
+        setLoading(false);
+      }, 
+      (err) => {
+        console.error("Error fetching proposals in real-time: ", err);
+        setError("No se pudieron cargar las propuestas en tiempo real.");
+        setLoading(false);
+      }
+    );
+
+    return () => unsubscribe();
+  }, []);
+
+  const handleFormSubmit = () => {
+    // Real-time listener will handle the update
   };
 
   const handleDeleteClick = (proposal: Proposal) => {
@@ -67,7 +101,6 @@ export function ProposalsClientPage({ initialProposals }: { initialProposals: Pr
     const result = await deleteProposal(selectedProposal.id);
 
     if (result.success) {
-      setProposals(proposals.filter((p) => p.id !== selectedProposal.id));
       toast({
         title: "Propuesta Eliminada",
         description: "La propuesta ha sido eliminada con éxito.",
@@ -82,6 +115,37 @@ export function ProposalsClientPage({ initialProposals }: { initialProposals: Pr
     setIsAlertOpen(false);
     setSelectedProposal(null);
   };
+  
+   if (loading) {
+     return (
+      <div>
+        <div className="flex justify-end mb-4">
+          <Skeleton className="h-10 w-44" />
+        </div>
+        <div className="border rounded-lg p-4 space-y-2">
+            <Skeleton className="h-12 w-full" />
+            <Skeleton className="h-10 w-full" />
+            <Skeleton className="h-10 w-full" />
+            <Skeleton className="h-10 w-full" />
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+     return (
+        <Alert variant="destructive" className="max-w-2xl mx-auto">
+            <AlertTriangle className="h-4 w-4" />
+            <AlertTitle>Error de Conexión</AlertTitle>
+            <AlertDescription>
+                <p>{error}</p>
+                 <p className="mt-2 text-xs">
+                    Comprueba tu conexión a internet y la configuración de Firebase.
+                </p>
+            </AlertDescription>
+        </Alert>
+    );
+  }
 
   return (
     <>

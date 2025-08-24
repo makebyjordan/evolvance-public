@@ -38,7 +38,7 @@ type ProposalFormValues = z.infer<typeof formSchema>;
 interface ProposalFormProps {
   isOpen: boolean;
   setIsOpen: (open: boolean) => void;
-  onFormSubmit: (updatedProposals: Proposal[]) => void;
+  onFormSubmit: () => void;
   proposal: Proposal | null;
 }
 
@@ -75,17 +75,17 @@ export function ProposalForm({ isOpen, setIsOpen, onFormSubmit, proposal }: Prop
   const onSubmit = async (values: ProposalFormValues) => {
     const proposalData = {
       ...values,
-      id: isEditing ? proposal.id : undefined,
+      id: isEditing ? proposal!.id : undefined,
     };
     
     const result = await saveProposal(proposalData);
 
-    if (result.success && result.proposals) {
+    if (result.success) {
       toast({
         title: `Propuesta ${isEditing ? 'Actualizada' : 'Creada'}`,
         description: `La propuesta "${values.title}" ha sido guardada.`,
       });
-      onFormSubmit(result.proposals);
+      onFormSubmit();
       handleOpenChange(false);
     } else {
       toast({
