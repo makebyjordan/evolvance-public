@@ -30,47 +30,47 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { useToast } from "@/hooks/use-toast";
-import { ClientForm } from "./ClientForm";
-import type { Client } from "@/app/actions/clients-actions";
-import { deleteClient } from "@/app/actions/clients-actions";
+import { CollaboratorForm } from "./CollaboratorForm";
+import type { Collaborator } from "@/app/actions/collaborators-actions";
+import { deleteCollaborator } from "@/app/actions/collaborators-actions";
 import { db } from "@/lib/firebase";
 import { collection, onSnapshot, query, orderBy, Timestamp } from "firebase/firestore";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Badge } from "@/components/ui/badge";
 
-export function ClientsClientPage() {
-  const [clients, setClients] = useState<Client[]>([]);
+export function CollaboratorsClientPage() {
+  const [collaborators, setCollaborators] = useState<Collaborator[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [isAlertOpen, setIsAlertOpen] = useState(false);
-  const [selectedClient, setSelectedClient] = useState<Client | null>(null);
+  const [selectedCollaborator, setSelectedCollaborator] = useState<Collaborator | null>(null);
   const { toast } = useToast();
 
   useEffect(() => {
-    const q = query(collection(db, "clients"), orderBy("createdAt", "desc"));
+    const q = query(collection(db, "collaborators"), orderBy("createdAt", "desc"));
     const unsubscribe = onSnapshot(q, 
       (querySnapshot) => {
-        const clientsData: Client[] = [];
+        const collaboratorsData: Collaborator[] = [];
         querySnapshot.forEach((doc) => {
           const data = doc.data();
-          clientsData.push({
+          collaboratorsData.push({
             id: doc.id,
             name: data.name,
             phone: data.phone,
             email: data.email,
-            status: data.status,
+            contractStatus: data.contractStatus,
             description: data.description,
             createdAt: (data.createdAt as Timestamp).toDate().toISOString(),
             updatedAt: (data.updatedAt as Timestamp).toDate().toISOString(),
           });
         });
-        setClients(clientsData);
+        setCollaborators(collaboratorsData);
         setLoading(false);
       }, 
       (err) => {
-        console.error("Error fetching clients in real-time: ", err);
-        setError("No se pudieron cargar los clientes en tiempo real.");
+        console.error("Error fetching collaborators in real-time: ", err);
+        setError("No se pudieron cargar los colaboradores en tiempo real.");
         setLoading(false);
       }
     );
@@ -79,45 +79,45 @@ export function ClientsClientPage() {
   }, []);
 
   const handleFormSubmit = () => {
-    // Real-time listener will handle the update, no need to do anything here
+    // Real-time listener will handle the update
   };
 
-  const handleDeleteClick = (client: Client) => {
-    setSelectedClient(client);
+  const handleDeleteClick = (collaborator: Collaborator) => {
+    setSelectedCollaborator(collaborator);
     setIsAlertOpen(true);
   };
 
-  const handleEditClick = (client: Client) => {
-    setSelectedClient(client);
+  const handleEditClick = (collaborator: Collaborator) => {
+    setSelectedCollaborator(collaborator);
     setIsFormOpen(true);
   };
 
   const confirmDelete = async () => {
-    if (!selectedClient) return;
+    if (!selectedCollaborator) return;
 
-    const result = await deleteClient(selectedClient.id);
+    const result = await deleteCollaborator(selectedCollaborator.id);
 
     if (result.success) {
       toast({
-        title: "Cliente Eliminado",
-        description: "El cliente ha sido eliminado con éxito.",
+        title: "Colaborador Eliminado",
+        description: "El colaborador ha sido eliminado con éxito.",
       });
     } else {
       toast({
         variant: "destructive",
         title: "Error al Eliminar",
-        description: result.error || "No se pudo eliminar el cliente.",
+        description: result.error || "No se pudo eliminar el colaborador.",
       });
     }
     setIsAlertOpen(false);
-    setSelectedClient(null);
+    setSelectedCollaborator(null);
   };
 
   if (loading) {
      return (
       <div>
         <div className="flex justify-end mb-4">
-          <Skeleton className="h-10 w-36" />
+          <Skeleton className="h-10 w-44" />
         </div>
         <div className="border rounded-lg p-4 space-y-2">
             <Skeleton className="h-12 w-full" />
@@ -148,19 +148,19 @@ export function ClientsClientPage() {
     <>
       <div className="flex justify-end mb-4">
         <Button onClick={() => {
-          setSelectedClient(null);
+          setSelectedCollaborator(null);
           setIsFormOpen(true);
         }}>
           <PlusCircle className="mr-2 h-4 w-4" />
-          Crear Cliente
+          Crear Colaborador
         </Button>
       </div>
 
-      <ClientForm
+      <CollaboratorForm
         isOpen={isFormOpen}
         setIsOpen={setIsFormOpen}
         onFormSubmit={handleFormSubmit}
-        client={selectedClient}
+        collaborator={selectedCollaborator}
       />
       
       <div className="border rounded-lg">
@@ -170,19 +170,19 @@ export function ClientsClientPage() {
               <TableHead>Nombre</TableHead>
               <TableHead>Email</TableHead>
               <TableHead>Teléfono</TableHead>
-              <TableHead>Estado</TableHead>
+              <TableHead>Estado Contrato</TableHead>
               <TableHead className="text-right">Acciones</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {clients.length > 0 ? (
-              clients.map((client) => (
-                <TableRow key={client.id}>
-                  <TableCell className="font-medium">{client.name}</TableCell>
-                  <TableCell>{client.email}</TableCell>
-                   <TableCell>{client.phone}</TableCell>
+            {collaborators.length > 0 ? (
+              collaborators.map((collaborator) => (
+                <TableRow key={collaborator.id}>
+                  <TableCell className="font-medium">{collaborator.name}</TableCell>
+                  <TableCell>{collaborator.email}</TableCell>
+                   <TableCell>{collaborator.phone}</TableCell>
                   <TableCell>
-                    <Badge variant="secondary">{client.status}</Badge>
+                    <Badge variant="outline">{collaborator.contractStatus}</Badge>
                   </TableCell>
                   <TableCell className="text-right">
                     <DropdownMenu>
@@ -193,11 +193,11 @@ export function ClientsClientPage() {
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
-                        <DropdownMenuItem onClick={() => handleEditClick(client)}>
+                        <DropdownMenuItem onClick={() => handleEditClick(collaborator)}>
                           <Pencil className="mr-2 h-4 w-4" />
                           Editar
                         </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => handleDeleteClick(client)} className="text-red-500">
+                        <DropdownMenuItem onClick={() => handleDeleteClick(collaborator)} className="text-red-500">
                           <Trash2 className="mr-2 h-4 w-4" />
                           Eliminar
                         </DropdownMenuItem>
@@ -210,8 +210,8 @@ export function ClientsClientPage() {
               <TableRow>
                 <TableCell colSpan={5} className="h-24 text-center">
                   <FileText className="mx-auto h-12 w-12 text-gray-400" />
-                  <h3 className="mt-2 text-sm font-medium text-gray-900 dark:text-gray-200">No hay clientes</h3>
-                  <p className="mt-1 text-sm text-gray-500">Empieza por crear un nuevo cliente.</p>
+                  <h3 className="mt-2 text-sm font-medium text-gray-900 dark:text-gray-200">No hay colaboradores</h3>
+                  <p className="mt-1 text-sm text-gray-500">Empieza por crear un nuevo colaborador.</p>
                 </TableCell>
               </TableRow>
             )}
@@ -224,7 +224,7 @@ export function ClientsClientPage() {
           <AlertDialogHeader>
             <AlertDialogTitle>¿Estás seguro?</AlertDialogTitle>
             <AlertDialogDescription>
-              Esta acción no se puede deshacer. Esto eliminará permanentemente el cliente.
+              Esta acción no se puede deshacer. Esto eliminará permanentemente el colaborador.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

@@ -31,17 +31,13 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { useToast } from "@/hooks/use-toast";
-import { saveClient, type Client } from "@/app/actions/clients-actions";
+import { saveCollaborator, type Collaborator } from "@/app/actions/collaborators-actions";
 import { useEffect } from "react";
 
-const clientStatuses = [
-    "Primer Contacto",
-    "Hacer Propuesta",
+const contractStatuses = [
+    "A Presentar",
     "Presentado",
     "Firmado",
-    "En Ejecucion",
-    "Cobrado",
-    "Cliente Fijo",
     "Cancelado"
 ] as const;
 
@@ -49,68 +45,68 @@ const formSchema = z.object({
   name: z.string().min(2, { message: "El nombre es requerido." }),
   phone: z.string().min(8, { message: "El teléfono es requerido." }),
   email: z.string().email({ message: "El correo no es válido." }),
-  status: z.enum(clientStatuses, { required_error: "El estado es requerido." }),
+  contractStatus: z.enum(contractStatuses, { required_error: "El estado del contrato es requerido." }),
   description: z.string().optional(),
 });
 
-type ClientFormValues = z.infer<typeof formSchema>;
+type CollaboratorFormValues = z.infer<typeof formSchema>;
 
-interface ClientFormProps {
+interface CollaboratorFormProps {
   isOpen: boolean;
   setIsOpen: (open: boolean) => void;
   onFormSubmit: () => void;
-  client: Client | null;
+  collaborator: Collaborator | null;
 }
 
-export function ClientForm({ isOpen, setIsOpen, onFormSubmit, client }: ClientFormProps) {
+export function CollaboratorForm({ isOpen, setIsOpen, onFormSubmit, collaborator }: CollaboratorFormProps) {
   const { toast } = useToast();
-  const isEditing = !!client;
+  const isEditing = !!collaborator;
 
-  const form = useForm<ClientFormValues>({
+  const form = useForm<CollaboratorFormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
       phone: "",
       email: "",
-      status: "Primer Contacto",
+      contractStatus: "A Presentar",
       description: "",
     },
   });
 
   useEffect(() => {
-    if (isEditing && client) {
+    if (isEditing && collaborator) {
       form.reset({
-        name: client.name,
-        phone: client.phone,
-        email: client.email,
-        status: client.status as any,
-        description: client.description,
+        name: collaborator.name,
+        phone: collaborator.phone,
+        email: collaborator.email,
+        contractStatus: collaborator.contractStatus as any,
+        description: collaborator.description,
       });
     } else {
       form.reset({
         name: "",
         phone: "",
         email: "",
-        status: "Primer Contacto",
+        contractStatus: "A Presentar",
         description: "",
       });
     }
-  }, [isEditing, client, form]);
+  }, [isEditing, collaborator, form]);
 
 
-  const onSubmit = async (values: ClientFormValues) => {
-    const clientData = {
+  const onSubmit = async (values: CollaboratorFormValues) => {
+    const collaboratorData = {
       ...values,
       description: values.description || "",
-      id: isEditing ? client!.id : undefined,
+      id: isEditing ? collaborator!.id : undefined,
     };
     
-    const result = await saveClient(clientData);
+    const result = await saveCollaborator(collaboratorData);
 
     if (result.success) {
       toast({
-        title: `Cliente ${isEditing ? 'Actualizado' : 'Creado'}`,
-        description: `El cliente "${values.name}" ha sido guardado.`,
+        title: `Colaborador ${isEditing ? 'Actualizado' : 'Creado'}`,
+        description: `El colaborador "${values.name}" ha sido guardado.`,
       });
       onFormSubmit();
       handleOpenChange(false);
@@ -134,9 +130,9 @@ export function ClientForm({ isOpen, setIsOpen, onFormSubmit, client }: ClientFo
     <Dialog open={isOpen} onOpenChange={handleOpenChange}>
       <DialogContent className="sm:max-w-[600px] bg-card">
         <DialogHeader>
-          <DialogTitle className="font-headline text-primary">{isEditing ? 'Editar Cliente' : 'Nuevo Cliente'}</DialogTitle>
+          <DialogTitle className="font-headline text-primary">{isEditing ? 'Editar Colaborador' : 'Nuevo Colaborador'}</DialogTitle>
           <DialogDescription>
-            Rellena los campos para {isEditing ? 'actualizar' : 'crear'} un cliente.
+            Rellena los campos para {isEditing ? 'actualizar' : 'crear'} un colaborador.
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
@@ -184,10 +180,10 @@ export function ClientForm({ isOpen, setIsOpen, onFormSubmit, client }: ClientFo
             </div>
              <FormField
               control={form.control}
-              name="status"
+              name="contractStatus"
               render={({ field }) => (
                 <FormItem>
-                    <FormLabel>Estado</FormLabel>
+                    <FormLabel>Estado del Contrato</FormLabel>
                     <Select onValueChange={field.onChange} defaultValue={field.value}>
                         <FormControl>
                             <SelectTrigger>
@@ -195,7 +191,7 @@ export function ClientForm({ isOpen, setIsOpen, onFormSubmit, client }: ClientFo
                             </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                            {clientStatuses.map(status => (
+                            {contractStatuses.map(status => (
                                 <SelectItem key={status} value={status}>{status}</SelectItem>
                             ))}
                         </SelectContent>
@@ -211,7 +207,7 @@ export function ClientForm({ isOpen, setIsOpen, onFormSubmit, client }: ClientFo
                 <FormItem>
                   <FormLabel>Descripción</FormLabel>
                   <FormControl>
-                    <Textarea rows={5} placeholder="Añade notas o una descripción sobre el cliente." {...field} />
+                    <Textarea rows={5} placeholder="Añade notas o una descripción sobre el colaborador." {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -222,7 +218,7 @@ export function ClientForm({ isOpen, setIsOpen, onFormSubmit, client }: ClientFo
                 Cancelar
               </Button>
               <Button type="submit" disabled={form.formState.isSubmitting}>
-                {form.formState.isSubmitting ? 'Guardando...' : (isEditing ? 'Guardar Cambios' : 'Crear Cliente')}
+                {form.formState.isSubmitting ? 'Guardando...' : (isEditing ? 'Guardar Cambios' : 'Crear Colaborador')}
               </Button>
             </DialogFooter>
           </form>
