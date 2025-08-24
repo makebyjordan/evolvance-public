@@ -51,8 +51,7 @@ export default function ClientsLoginPage() {
         title: "Acceso Concedido",
         description: "Redirigiendo al portal de clientes...",
       });
-      // TODO: Redirect to the actual client portal page
-      router.push('/dashboard'); 
+      router.push('/client-portal'); 
     } else {
       toast({
         variant: "destructive",
