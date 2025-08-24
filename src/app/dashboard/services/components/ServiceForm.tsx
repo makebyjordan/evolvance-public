@@ -32,9 +32,7 @@ import {
 } from "@/components/ui/select"
 import { useToast } from "@/hooks/use-toast";
 import { saveService, type Service } from "@/app/actions/services-actions";
-import { useEffect, useRef, useState, useActionState } from "react";
-import { useFormStatus } from "react-dom";
-import Image from "next/image";
+import { useEffect } from "react";
 
 const serviceTypes = [
     "Consultoría",
@@ -52,7 +50,6 @@ const formSchema = z.object({
   type: z.enum(serviceTypes, { required_error: "El tipo de servicio es requerido." }),
   estimatedTime: z.string().min(2, { message: "El tiempo estimado es requerido." }),
   description: z.string().optional(),
-  image: z.any().optional(),
 });
 
 type ServiceFormValues = z.infer<typeof formSchema>;
@@ -60,25 +57,13 @@ type ServiceFormValues = z.infer<typeof formSchema>;
 interface ServiceFormProps {
   isOpen: boolean;
   setIsOpen: (open: boolean) => void;
+  onFormSubmit: () => void;
   service: Service | null;
 }
 
-function SubmitButton({ isEditing }: { isEditing: boolean }) {
-  const { pending } = useFormStatus();
-  return (
-    <Button type="submit" disabled={pending}>
-      {pending ? 'Guardando...' : (isEditing ? 'Guardar Cambios' : 'Crear Servicio')}
-    </Button>
-  );
-}
-
-export function ServiceForm({ isOpen, setIsOpen, service }: ServiceFormProps) {
+export function ServiceForm({ isOpen, setIsOpen, onFormSubmit, service }: ServiceFormProps) {
   const { toast } = useToast();
   const isEditing = !!service;
-  const formRef = useRef<HTMLFormElement>(null);
-  const [imagePreview, setImagePreview] = useState<string | null>(service?.imageUrl || null);
-  
-  const [state, formAction] = useActionState(saveService, { success: false, message: '' });
 
   const form = useForm<ServiceFormValues>({
     resolver: zodResolver(formSchema),
@@ -107,7 +92,6 @@ export function ServiceForm({ isOpen, setIsOpen, service }: ServiceFormProps) {
         estimatedTime: service.estimatedTime,
         description: service.description,
       });
-       setImagePreview(service.imageUrl || null);
     } else {
       form.reset({
         name: "",
@@ -117,46 +101,39 @@ export function ServiceForm({ isOpen, setIsOpen, service }: ServiceFormProps) {
         estimatedTime: "",
         description: "",
       });
-      setImagePreview(null);
     }
   }, [isEditing, service, form]);
+  
+  const onSubmit = async (values: ServiceFormValues) => {
+    const serviceData = {
+      ...values,
+      description: values.description || "",
+      id: isEditing ? service!.id : undefined,
+    };
+    
+    const result = await saveService(serviceData);
 
-  useEffect(() => {
-    if (state.success) {
+    if (result.success) {
       toast({
         title: `Servicio ${isEditing ? 'Actualizado' : 'Creado'}`,
-        description: state.message,
+        description: `El servicio "${values.name}" ha sido guardado.`,
       });
+      onFormSubmit();
       handleOpenChange(false);
-    } else if (state.message && !state.success) {
-       toast({
+    } else {
+      toast({
         variant: "destructive",
         title: `Error al ${isEditing ? 'actualizar' : 'crear'}`,
-        description: state.error || 'Ocurrió un error desconocido.',
+        description: result.error || 'Ocurrió un error desconocido.',
       });
     }
-  }, [state, isEditing, toast]);
-  
+  };
   
   const handleOpenChange = (open: boolean) => {
     if (!open) {
       form.reset();
-      setImagePreview(null);
     }
     setIsOpen(open);
-  };
-  
-  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImagePreview(reader.result as string);
-      };
-      reader.readAsDataURL(file);
-    } else {
-      setImagePreview(service?.imageUrl || null);
-    }
   };
 
   return (
@@ -169,10 +146,7 @@ export function ServiceForm({ isOpen, setIsOpen, service }: ServiceFormProps) {
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
-          <form ref={formRef} action={formAction} className="space-y-4">
-             {isEditing && <input type="hidden" name="id" value={service.id} />}
-             <input type="hidden" name="currentImageUrl" value={service?.imageUrl || ''} />
-
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             <FormField
               control={form.control}
               name="name"
@@ -227,7 +201,7 @@ export function ServiceForm({ isOpen, setIsOpen, service }: ServiceFormProps) {
                   render={({ field }) => (
                     <FormItem>
                         <FormLabel>Tipo</FormLabel>
-                        <Select onValueChange={field.onChange} defaultValue={field.value} name={field.name}>
+                        <Select onValueChange={field.onChange} defaultValue={field.value}>
                             <FormControl>
                                 <SelectTrigger>
                                     <SelectValue placeholder="Selecciona un tipo" />
@@ -270,41 +244,14 @@ export function ServiceForm({ isOpen, setIsOpen, service }: ServiceFormProps) {
                 </FormItem>
               )}
             />
-            <FormField
-              control={form.control}
-              name="image"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Imagen del Servicio</FormLabel>
-                  <FormControl>
-                    <Input 
-                        type="file" 
-                        accept="image/*" 
-                        onChange={(e) => {
-                            field.onChange(e.target.files);
-                            handleImageChange(e);
-                        }}
-                     />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            {imagePreview && (
-              <div className="mt-4">
-                <FormLabel>Vista Previa</FormLabel>
-                <div className="mt-2 relative w-full h-48 rounded-md overflow-hidden border">
-                    <Image src={imagePreview} alt="Vista previa de la imagen" layout="fill" objectFit="cover" />
-                </div>
-              </div>
-            )}
-
+           
             <DialogFooter className="sticky bottom-0 bg-card py-4 -mx-6 px-6 border-t">
               <Button type="button" variant="outline" onClick={() => handleOpenChange(false)}>
                 Cancelar
               </Button>
-              <SubmitButton isEditing={isEditing} />
+              <Button type="submit" disabled={form.formState.isSubmitting}>
+                {form.formState.isSubmitting ? 'Guardando...' : (isEditing ? 'Guardar Cambios' : 'Crear Servicio')}
+              </Button>
             </DialogFooter>
           </form>
         </Form>
