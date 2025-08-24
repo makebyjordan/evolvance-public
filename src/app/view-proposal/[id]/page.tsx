@@ -2,6 +2,7 @@
 "use client";
 
 import { useState, useEffect } from 'react';
+import { useParams } from 'next/navigation';
 import { db } from '@/lib/firebase';
 import { doc, onSnapshot, DocumentData } from 'firebase/firestore';
 import { AlertTriangle, Loader2 } from 'lucide-react';
@@ -13,19 +14,21 @@ interface ProposalData {
     htmlText: string;
 }
 
-export default function ViewProposalPage({ params }: { params: { id: string } }) {
+export default function ViewProposalPage() {
+  const params = useParams();
+  const id = Array.isArray(params.id) ? params.id[0] : params.id;
   const [proposal, setProposal] = useState<ProposalData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!params.id) {
+    if (!id) {
         setError("No se ha proporcionado un ID de propuesta.");
         setLoading(false);
         return;
     }
 
-    const docRef = doc(db, "proposals", params.id);
+    const docRef = doc(db, "proposals", id);
     const unsubscribe = onSnapshot(docRef, 
       (docSnap) => {
         if (docSnap.exists()) {
@@ -49,7 +52,7 @@ export default function ViewProposalPage({ params }: { params: { id: string } })
     );
 
     return () => unsubscribe();
-  }, [params.id]);
+  }, [id]);
   
   if (loading) {
     return (
