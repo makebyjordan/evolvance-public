@@ -67,7 +67,15 @@ export default async function ViewProposalPage({ params }: { params: { id: strin
   }
   
   return (
-    <div dangerouslySetInnerHTML={{ __html: proposal.htmlText }} />
+    <iframe
+      srcDoc={proposal.htmlText}
+      style={{
+        width: '100%',
+        height: '100vh',
+        border: 'none',
+      }}
+      title={proposal.title}
+    />
   );
 }
 
