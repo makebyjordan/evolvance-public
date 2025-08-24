@@ -161,7 +161,7 @@ export function ServiceForm({ isOpen, setIsOpen, service }: ServiceFormProps) {
 
   return (
     <Dialog open={isOpen} onOpenChange={handleOpenChange}>
-      <DialogContent className="sm:max-w-[600px] bg-card">
+      <DialogContent className="sm:max-w-[600px] bg-card max-h-screen overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="font-headline text-primary">{isEditing ? 'Editar Servicio' : 'Nuevo Servicio'}</DialogTitle>
           <DialogDescription>
@@ -300,7 +300,7 @@ export function ServiceForm({ isOpen, setIsOpen, service }: ServiceFormProps) {
               </div>
             )}
 
-            <DialogFooter>
+            <DialogFooter className="sticky bottom-0 bg-card py-4 -mx-6 px-6 border-t">
               <Button type="button" variant="outline" onClick={() => handleOpenChange(false)}>
                 Cancelar
               </Button>
