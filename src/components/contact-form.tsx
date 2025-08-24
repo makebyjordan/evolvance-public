@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useFormState, useFormStatus } from 'react-dom';
+import { useActionState, useFormStatus } from 'react';
 import { useEffect, useRef } from 'react';
 import { Button } from "@/components/ui/button";
 import {
@@ -40,7 +40,7 @@ interface ContactFormProps {
 export function ContactForm({ isOpen, setIsOpen }: ContactFormProps) {
   const { toast } = useToast();
   const formRef = useRef<HTMLFormElement>(null);
-  const [state, formAction] = useFormState(sendContactEmail, initialState);
+  const [state, formAction] = useActionState(sendContactEmail, initialState);
 
   useEffect(() => {
     if (state.message) {
