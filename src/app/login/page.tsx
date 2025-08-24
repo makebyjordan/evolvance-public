@@ -8,6 +8,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "@/lib/firebase";
+import { ArrowLeft } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -65,9 +66,15 @@ export default function LoginPage() {
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-background">
-      <Card className="mx-auto max-w-sm w-full bg-card/80 backdrop-blur-sm">
-        <CardHeader>
-          <CardTitle className="text-2xl font-headline text-primary">Iniciar Sesión</CardTitle>
+      <Card className="mx-auto max-w-sm w-full bg-card/80 backdrop-blur-sm relative">
+        <Link href="/" passHref>
+           <Button variant="ghost" size="icon" className="absolute top-4 left-4">
+              <ArrowLeft className="h-5 w-5" />
+              <span className="sr-only">Volver a la web</span>
+            </Button>
+        </Link>
+        <CardHeader className="text-center">
+          <CardTitle className="text-2xl font-headline text-primary pt-8">Iniciar Sesión</CardTitle>
           <CardDescription>
             Accede a tu panel de control interno de Evol-vance.
           </CardDescription>
