@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useEffect } from 'react';
@@ -6,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { ContactModal } from '@/components/contact-modal';
 import { cn } from '@/lib/utils';
 import { Menu, X } from 'lucide-react';
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 
 const Logo = () => (
   <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -74,15 +75,18 @@ export default function Header() {
                   <span className="sr-only">Open menu</span>
                 </Button>
               </SheetTrigger>
-              <SheetContent side="right" className="bg-background/90 backdrop-blur-sm">
-                <div className="flex flex-col h-full">
-                  <div className="flex justify-between items-center p-4 border-b">
-                    <Link href="/" className="flex items-center gap-2" onClick={() => setMobileMenuOpen(false)}>
-                      <Logo />
-                      <span className="text-xl font-headline font-bold text-foreground">Evol-vance</span>
-                    </Link>
-                  </div>
-                  <nav className="flex-grow flex flex-col items-center justify-center gap-y-6">
+              <SheetContent side="right" className="bg-background/90 backdrop-blur-sm p-0">
+                 <SheetHeader className="p-4 border-b">
+                    <SheetTitle className="sr-only">Menú de Navegación</SheetTitle>
+                    <div className="flex justify-between items-center">
+                        <Link href="/" className="flex items-center gap-2" onClick={() => setMobileMenuOpen(false)}>
+                        <Logo />
+                        <span className="text-xl font-headline font-bold text-foreground">Evol-vance</span>
+                        </Link>
+                    </div>
+                </SheetHeader>
+                <div className="flex flex-col h-[calc(100%-4rem)]">
+                  <nav className="flex-grow flex flex-col items-center justify-center gap-y-6 px-4">
                     {navLinks.map(link => (
                       <a key={link.href} href={link.href} onClick={() => setMobileMenuOpen(false)} className="text-xl font-medium text-foreground hover:text-primary transition-colors">{link.label}</a>
                     ))}
