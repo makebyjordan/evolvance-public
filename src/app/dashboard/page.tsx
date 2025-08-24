@@ -1,6 +1,7 @@
 
 "use client";
 
+import { useState, useEffect } from 'react';
 import {
   Card,
   CardContent,
@@ -9,9 +10,74 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { useAuth } from "@/contexts/AuthContext";
+import { db } from "@/lib/firebase";
+import { collection, onSnapshot, query, where, Timestamp } from "firebase/firestore";
+
+interface Proposal {
+  createdAt: Timestamp;
+}
+
+interface Client {
+  createdAt: Timestamp;
+}
+
+interface Collaborator {
+  contractStatus: string;
+}
+
+interface Service {
+  salePrice: number;
+}
 
 export default function DashboardPage() {
   const { user } = useAuth();
+  const [stats, setStats] = useState({
+    proposalsLast30Days: 0,
+    newClientsLast30Days: 0,
+    activeCollaborators: 0,
+    potentialRevenue: 0,
+  });
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const now = new Date();
+    const thirtyDaysAgo = new Date(now.setDate(now.getDate() - 30));
+    const thirtyDaysAgoTimestamp = Timestamp.fromDate(thirtyDaysAgo);
+
+    const proposalsQuery = query(collection(db, "proposals"), where("createdAt", ">=", thirtyDaysAgoTimestamp));
+    const clientsQuery = query(collection(db, "clients"), where("createdAt", ">=", thirtyDaysAgoTimestamp));
+    const collaboratorsQuery = query(collection(db, "collaborators"), where("contractStatus", "==", "Firmado"));
+    const servicesQuery = query(collection(db, "services"));
+
+    const unsubscribers = [
+      onSnapshot(proposalsQuery, (snapshot) => {
+        setStats(prev => ({ ...prev, proposalsLast30Days: snapshot.size }));
+      }),
+      onSnapshot(clientsQuery, (snapshot) => {
+        setStats(prev => ({ ...prev, newClientsLast30Days: snapshot.size }));
+      }),
+      onSnapshot(collaboratorsQuery, (snapshot) => {
+        setStats(prev => ({ ...prev, activeCollaborators: snapshot.size }));
+      }),
+      onSnapshot(servicesQuery, (snapshot) => {
+        let totalRevenue = 0;
+        snapshot.forEach(doc => {
+            const service = doc.data() as Service;
+            totalRevenue += service.salePrice || 0;
+        });
+        setStats(prev => ({ ...prev, potentialRevenue: totalRevenue }));
+      })
+    ];
+    
+    setLoading(false);
+
+    return () => unsubscribers.forEach(unsub => unsub());
+  }, []);
+  
+   const formatCurrency = (amount: number) => {
+    return new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'EUR' }).format(amount);
+  };
+
 
   return (
     <div>
@@ -29,7 +95,7 @@ export default function DashboardPage() {
             <CardDescription>Últimos 30 días</CardDescription>
            </CardHeader>
            <CardContent>
-            <p className="text-4xl font-bold">0</p>
+            <p className="text-4xl font-bold">{loading ? '...' : stats.proposalsLast30Days}</p>
            </CardContent>
          </Card>
          <Card>
@@ -38,7 +104,7 @@ export default function DashboardPage() {
             <CardDescription>Últimos 30 días</CardDescription>
            </CardHeader>
            <CardContent>
-            <p className="text-4xl font-bold">0</p>
+            <p className="text-4xl font-bold">{loading ? '...' : stats.newClientsLast30Days}</p>
            </CardContent>
          </Card>
          <Card>
@@ -47,16 +113,16 @@ export default function DashboardPage() {
              <CardDescription>Estado "Firmado"</CardDescription>
            </CardHeader>
            <CardContent>
-            <p className="text-4xl font-bold">0</p>
+            <p className="text-4xl font-bold">{loading ? '...' : stats.activeCollaborators}</p>
            </CardContent>
          </Card>
           <Card>
            <CardHeader>
             <CardTitle className="text-lg">Ingresos Potenciales</CardTitle>
-            <CardDescription>Total de propuestas</CardDescription>
+            <CardDescription>Suma de servicios</CardDescription>
            </CardHeader>
            <CardContent>
-            <p className="text-4xl font-bold">0€</p>
+            <p className="text-4xl font-bold">{loading ? '...' : formatCurrency(stats.potentialRevenue)}</p>
            </CardContent>
          </Card>
       </div>
@@ -71,7 +137,7 @@ export default function DashboardPage() {
             </CardHeader>
             <CardContent>
                 <p className="text-muted-foreground">
-                    Empieza por crear tu primera propuesta, cliente o servicio para ver cómo funciona.
+                    Sigue creando propuestas, clientes o servicios para ver cómo las estadísticas cambian en tiempo real.
                 </p>
             </CardContent>
         </Card>
