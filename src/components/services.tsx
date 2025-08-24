@@ -1,6 +1,8 @@
 import { Card, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Bot, Megaphone, View, CalendarCheck } from 'lucide-react';
 import { FadeIn } from './fade-in';
+import { Button } from './ui/button';
+import Link from 'next/link';
 
 const services = [
   {
@@ -49,6 +51,13 @@ export default function Services() {
             </FadeIn>
           ))}
         </div>
+        <FadeIn>
+            <div className="mt-16 text-center">
+                <Button asChild size="lg">
+                    <Link href="/services">Nuestros Servicios</Link>
+                </Button>
+            </div>
+        </FadeIn>
       </div>
     </section>
   );
