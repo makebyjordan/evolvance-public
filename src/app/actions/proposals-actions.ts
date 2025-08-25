@@ -1,7 +1,8 @@
 
 'use server';
 
-import { db, isFirebaseAdminInitialized } from '@/lib/firebase-admin';
+import { db } from '@/lib/firebase';
+import { collection, doc, addDoc, updateDoc, deleteDoc, serverTimestamp } from 'firebase/firestore';
 import { revalidatePath } from 'next/cache';
 
 // Main Proposal Type
@@ -10,8 +11,8 @@ export interface Proposal {
   title: string;
   code: string;
   htmlText: string;
-  createdAt: string;
-  updatedAt: string;
+  createdAt: any;
+  updatedAt: any;
 }
 
 // Type for creating/updating a proposal
@@ -27,37 +28,31 @@ type ActionResult<T> = {
 };
 
 // Collection reference
-const proposalsCollection = db?.collection('proposals');
+const proposalsCollectionRef = collection(db, 'proposals');
 
 /**
  * Saves a new proposal or updates an existing one.
  */
 export async function saveProposal(data: ProposalInput): Promise<ActionResult<string>> {
-  if (!isFirebaseAdminInitialized() || !proposalsCollection) {
-    return { success: false, error: 'El servicio de Firebase no está inicializado en el servidor.' };
-  }
-
   try {
-    const now = new Date();
     let docId: string;
 
     if (data.id) {
       // Update
       docId = data.id;
-      const docRef = proposalsCollection.doc(docId);
-      await docRef.update({
+      const docRef = doc(db, 'proposals', docId);
+      await updateDoc(docRef, {
         ...data,
-        updatedAt: now,
+        updatedAt: serverTimestamp(),
       });
     } else {
       // Create
-      const docRef = proposalsCollection.doc();
-      docId = docRef.id;
-      await docRef.set({
+      const docRef = await addDoc(proposalsCollectionRef, {
         ...data,
-        createdAt: now,
-        updatedAt: now,
+        createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp(),
       });
+      docId = docRef.id;
     }
     
     revalidatePath('/dashboard/proposals');
@@ -73,12 +68,8 @@ export async function saveProposal(data: ProposalInput): Promise<ActionResult<st
  * Deletes a proposal by its ID.
  */
 export async function deleteProposal(id: string): Promise<ActionResult<null>> {
-  if (!isFirebaseAdminInitialized() || !proposalsCollection) {
-    return { success: false, error: 'El servicio de Firebase no está inicializado en el servidor.' };
-  }
-
   try {
-    await proposalsCollection.doc(id).delete();
+    await deleteDoc(doc(db, 'proposals', id));
     revalidatePath('/dashboard/proposals');
     return { success: true };
   } catch (error: any) {

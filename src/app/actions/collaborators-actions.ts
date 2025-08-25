@@ -1,7 +1,8 @@
 
 'use server';
 
-import { db, isFirebaseAdminInitialized } from '@/lib/firebase-admin';
+import { db } from '@/lib/firebase';
+import { collection, doc, addDoc, updateDoc, deleteDoc, serverTimestamp } from 'firebase/firestore';
 
 // Main Collaborator Type
 export interface Collaborator {
@@ -11,8 +12,8 @@ export interface Collaborator {
   email: string;
   contractStatus: string;
   description: string;
-  createdAt: string;
-  updatedAt: string;
+  createdAt: any;
+  updatedAt: any;
 }
 
 // Type for creating/updating a collaborator
@@ -28,35 +29,29 @@ type ActionResult<T> = {
 };
 
 // Collection reference
-const collaboratorsCollection = db?.collection('collaborators');
+const collaboratorsCollectionRef = collection(db, 'collaborators');
 
 /**
  * Saves a new collaborator or updates an existing one.
  */
 export async function saveCollaborator(data: CollaboratorInput): Promise<ActionResult<string>> {
-  if (!isFirebaseAdminInitialized() || !collaboratorsCollection) {
-    return { success: false, error: 'El servicio de Firebase no está inicializado en el servidor.' };
-  }
-
   try {
-    const now = new Date();
     let docId: string;
 
     if (data.id) {
       // Update
       docId = data.id;
-      const docRef = collaboratorsCollection.doc(docId);
-      await docRef.update({
+      const docRef = doc(db, 'collaborators', docId);
+      await updateDoc(docRef, {
         ...data,
-        updatedAt: now,
+        updatedAt: serverTimestamp(),
       });
     } else {
       // Create
-      const docRef = collaboratorsCollection.doc();
-      await docRef.set({
+      const docRef = await addDoc(collaboratorsCollectionRef, {
         ...data,
-        createdAt: now,
-        updatedAt: now,
+        createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp(),
       });
       docId = docRef.id;
     }
@@ -73,12 +68,8 @@ export async function saveCollaborator(data: CollaboratorInput): Promise<ActionR
  * Deletes a collaborator by its ID.
  */
 export async function deleteCollaborator(id: string): Promise<ActionResult<null>> {
-  if (!isFirebaseAdminInitialized() || !collaboratorsCollection) {
-    return { success: false, error: 'El servicio de Firebase no está inicializado en el servidor.' };
-  }
-
   try {
-    await collaboratorsCollection.doc(id).delete();
+    await deleteDoc(doc(db, 'collaborators', id));
     return { success: true };
   } catch (error: any) {
     console.error('Error deleting collaborator:', error);

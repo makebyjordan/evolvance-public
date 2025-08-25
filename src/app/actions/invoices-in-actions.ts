@@ -1,9 +1,9 @@
 
 'use server';
 
-import { db, isFirebaseAdminInitialized } from '@/lib/firebase-admin';
+import { db } from '@/lib/firebase';
+import { collection, doc, addDoc, updateDoc, deleteDoc, serverTimestamp } from 'firebase/firestore';
 import { revalidatePath } from 'next/cache';
-import { z } from 'zod';
 
 // Main InvoiceIn Type
 export interface InvoiceIn {
@@ -16,12 +16,12 @@ export interface InvoiceIn {
   total: number;
   vatType: number;
   description: string;
-  createdAt: string;
-  updatedAt: string;
+  createdAt: any;
+  updatedAt: any;
 }
 
 // Type for creating/updating
-export type InvoiceInInput = Omit<InvoiceIn, 'id' | 'createdAt' | 'updatedAt' | 'fileUrl'> & { id?: string };
+export type InvoiceInInput = Omit<InvoiceIn, 'id' | 'createdAt' | 'updatedAt'> & { id?: string };
 
 
 // Return type for our server actions
@@ -32,35 +32,29 @@ type ActionResult<T> = {
 };
 
 // Collection reference
-const invoicesInCollection = db?.collection('invoicesIn');
+const invoicesInCollectionRef = collection(db, 'invoicesIn');
 
 /**
  * Saves a new invoice or updates an existing one.
  */
 export async function saveInvoiceIn(data: InvoiceInInput): Promise<ActionResult<string>> {
-  if (!isFirebaseAdminInitialized() || !invoicesInCollection) {
-    return { success: false, error: 'El servicio de Firebase no está inicializado en el servidor.' };
-  }
-
   try {
-    const now = new Date();
     let docId: string;
     
     if (data.id) {
       // Update
       docId = data.id;
-      const docRef = invoicesInCollection.doc(docId);
-      await docRef.update({
+      const docRef = doc(db, 'invoicesIn', docId);
+      await updateDoc(docRef, {
         ...data,
-        updatedAt: now,
+        updatedAt: serverTimestamp(),
       });
     } else {
       // Create
-      const docRef = invoicesInCollection.doc();
-      await docRef.set({
+      const docRef = await addDoc(invoicesInCollectionRef, {
         ...data,
-        createdAt: now,
-        updatedAt: now,
+        createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp(),
       });
       docId = docRef.id;
     }
@@ -78,12 +72,8 @@ export async function saveInvoiceIn(data: InvoiceInInput): Promise<ActionResult<
  * Deletes an invoice by its ID.
  */
 export async function deleteInvoiceIn(id: string): Promise<ActionResult<null>> {
-  if (!isFirebaseAdminInitialized() || !invoicesInCollection) {
-    return { success: false, error: 'El servicio de Firebase no está inicializado en el servidor.' };
-  }
-
   try {
-    await invoicesInCollection.doc(id).delete();
+    await deleteDoc(doc(db, 'invoicesIn', id));
     revalidatePath('/dashboard/invoices-in');
     return { success: true };
   } catch (error: any) {

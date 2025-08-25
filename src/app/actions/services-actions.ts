@@ -1,7 +1,8 @@
 
 'use server';
 
-import { db, isFirebaseAdminInitialized } from '@/lib/firebase-admin';
+import { db } from '@/lib/firebase';
+import { collection, doc, addDoc, updateDoc, deleteDoc, serverTimestamp } from 'firebase/firestore';
 import { revalidatePath } from 'next/cache';
 
 // Main Service Type
@@ -13,8 +14,8 @@ export interface Service {
   type: string;
   estimatedTime: string;
   description: string;
-  createdAt: string;
-  updatedAt: string;
+  createdAt: any;
+  updatedAt: any;
 }
 
 // Type for creating/updating a service
@@ -30,35 +31,29 @@ type ActionResult<T> = {
 };
 
 // Collection reference
-const servicesCollection = db?.collection('services');
+const servicesCollectionRef = collection(db, 'services');
 
 /**
  * Saves a new service or updates an existing one.
  */
 export async function saveService(data: ServiceInput): Promise<ActionResult<string>> {
-  if (!isFirebaseAdminInitialized() || !servicesCollection) {
-    return { success: false, error: 'El servicio de Firebase no está inicializado en el servidor.' };
-  }
-
   try {
-    const now = new Date();
     let docId: string;
 
     if (data.id) {
       // Update
       docId = data.id;
-      const docRef = servicesCollection.doc(docId);
-      await docRef.update({
+      const docRef = doc(db, 'services', docId);
+      await updateDoc(docRef, {
         ...data,
-        updatedAt: now,
+        updatedAt: serverTimestamp(),
       });
     } else {
       // Create
-      const docRef = servicesCollection.doc();
-      await docRef.set({
+      const docRef = await addDoc(servicesCollectionRef, {
         ...data,
-        createdAt: now,
-        updatedAt: now,
+        createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp(),
       });
       docId = docRef.id;
     }
@@ -76,12 +71,8 @@ export async function saveService(data: ServiceInput): Promise<ActionResult<stri
  * Deletes a service by its ID.
  */
 export async function deleteService(id: string): Promise<ActionResult<null>> {
-  if (!isFirebaseAdminInitialized() || !servicesCollection) {
-    return { success: false, error: 'El servicio de Firebase no está inicializado en el servidor.' };
-  }
-
   try {
-    await servicesCollection.doc(id).delete();
+    await deleteDoc(doc(db, 'services', id));
     revalidatePath('/dashboard/services');
     return { success: true };
   } catch (error: any) {

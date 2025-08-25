@@ -1,7 +1,8 @@
 
 'use server';
 
-import { db, isFirebaseAdminInitialized } from '@/lib/firebase-admin';
+import { db } from '@/lib/firebase';
+import { collection, doc, addDoc, updateDoc, deleteDoc, serverTimestamp } from 'firebase/firestore';
 
 // Main Client Type
 export interface Client {
@@ -11,8 +12,8 @@ export interface Client {
   email: string;
   status: string;
   description: string;
-  createdAt: string;
-  updatedAt: string;
+  createdAt: any; // Firestore Timestamp
+  updatedAt: any; // Firestore Timestamp
 }
 
 // Type for creating/updating a client
@@ -28,35 +29,29 @@ type ActionResult<T> = {
 };
 
 // Collection reference
-const clientsCollection = db?.collection('clients');
+const clientsCollectionRef = collection(db, 'clients');
 
 /**
  * Saves a new client or updates an existing one.
  */
 export async function saveClient(data: ClientInput): Promise<ActionResult<string>> {
-  if (!isFirebaseAdminInitialized() || !clientsCollection) {
-    return { success: false, error: 'El servicio de Firebase no está inicializado en el servidor.' };
-  }
-
   try {
-    const now = new Date();
     let docId: string;
 
     if (data.id) {
       // Update
       docId = data.id;
-      const docRef = clientsCollection.doc(docId);
-      await docRef.update({
+      const docRef = doc(db, 'clients', docId);
+      await updateDoc(docRef, {
         ...data,
-        updatedAt: now,
+        updatedAt: serverTimestamp(),
       });
     } else {
       // Create
-      const docRef = clientsCollection.doc();
-      await docRef.set({
+      const docRef = await addDoc(clientsCollectionRef, {
         ...data,
-        createdAt: now,
-        updatedAt: now,
+        createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp(),
       });
       docId = docRef.id;
     }
@@ -73,12 +68,8 @@ export async function saveClient(data: ClientInput): Promise<ActionResult<string
  * Deletes a client by its ID.
  */
 export async function deleteClient(id: string): Promise<ActionResult<null>> {
-  if (!isFirebaseAdminInitialized() || !clientsCollection) {
-    return { success: false, error: 'El servicio de Firebase no está inicializado en el servidor.' };
-  }
-
   try {
-    await clientsCollection.doc(id).delete();
+    await deleteDoc(doc(db, 'clients', id));
     return { success: true };
   } catch (error: any) {
     console.error('Error deleting client:', error);
