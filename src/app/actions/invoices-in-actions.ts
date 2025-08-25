@@ -9,6 +9,7 @@ import { revalidatePath } from 'next/cache';
 export interface InvoiceIn {
   id: string;
   companyName: string;
+  cif: string;
   phone: string;
   address: string;
   email: string;

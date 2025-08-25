@@ -44,6 +44,7 @@ const vatTypes = [
 
 const formSchema = z.object({
   companyName: z.string().min(2, { message: "El nombre de la empresa es requerido." }),
+  cif: z.string().min(9, { message: "El CIF debe tener al menos 9 caracteres." }),
   phone: z.string().min(8, { message: "El teléfono es requerido." }),
   address: z.string().min(5, { message: "La dirección es requerida." }),
   email: z.string().email({ message: "El correo no es válido." }),
@@ -72,6 +73,7 @@ export function InvoiceForm({ isOpen, setIsOpen, onFormSubmit, invoice, invoiceT
         resolver: zodResolver(formSchema),
         defaultValues: {
             companyName: "",
+            cif: "",
             phone: "",
             address: "",
             email: "",
@@ -92,6 +94,7 @@ export function InvoiceForm({ isOpen, setIsOpen, onFormSubmit, invoice, invoiceT
         if (isEditing && invoice) {
         form.reset({
             companyName: invoice.companyName,
+            cif: invoice.cif,
             phone: invoice.phone,
             address: invoice.address,
             email: invoice.email,
@@ -103,6 +106,7 @@ export function InvoiceForm({ isOpen, setIsOpen, onFormSubmit, invoice, invoiceT
         } else {
         form.reset({
             companyName: "",
+            cif: "",
             phone: "",
             address: "",
             email: "",
@@ -123,7 +127,7 @@ export function InvoiceForm({ isOpen, setIsOpen, onFormSubmit, invoice, invoiceT
             id: isEditing ? invoice!.id : undefined,
         };
 
-        const result = await action(invoiceData);
+        const result = await action(invoiceData as any);
 
         if (result.success) {
             toast({
@@ -159,19 +163,34 @@ export function InvoiceForm({ isOpen, setIsOpen, onFormSubmit, invoice, invoiceT
             </DialogHeader>
             <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-                <FormField
-                    control={form.control}
-                    name="companyName"
-                    render={({ field }) => (
-                        <FormItem>
-                        <FormLabel>Nombre de la Empresa</FormLabel>
-                        <FormControl>
-                            <Input placeholder="Ej: Acme Inc." {...field} />
-                        </FormControl>
-                        <FormMessage />
-                        </FormItem>
-                    )}
-                />
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <FormField
+                        control={form.control}
+                        name="companyName"
+                        render={({ field }) => (
+                            <FormItem>
+                            <FormLabel>Nombre de la Empresa</FormLabel>
+                            <FormControl>
+                                <Input placeholder="Ej: Acme Inc." {...field} />
+                            </FormControl>
+                            <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                    <FormField
+                        control={form.control}
+                        name="cif"
+                        render={({ field }) => (
+                            <FormItem>
+                            <FormLabel>CIF</FormLabel>
+                            <FormControl>
+                                <Input placeholder="Ej: B12345678" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <FormField control={form.control} name="phone" render={({ field }) => (

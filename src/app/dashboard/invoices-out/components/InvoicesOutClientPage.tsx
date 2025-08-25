@@ -57,6 +57,7 @@ export function InvoicesOutClientPage() {
           invoicesData.push({
             id: doc.id,
             companyName: data.companyName,
+            cif: data.cif,
             phone: data.phone,
             address: data.address,
             email: data.email,
@@ -177,6 +178,7 @@ export function InvoicesOutClientPage() {
           <TableHeader>
             <TableRow>
               <TableHead>Empresa</TableHead>
+              <TableHead>CIF</TableHead>
               <TableHead>Total</TableHead>
               <TableHead>Fecha</TableHead>
               <TableHead className="text-right">Acciones</TableHead>
@@ -187,6 +189,7 @@ export function InvoicesOutClientPage() {
               invoices.map((invoice) => (
                 <TableRow key={invoice.id}>
                   <TableCell className="font-medium">{invoice.companyName}</TableCell>
+                   <TableCell>{invoice.cif}</TableCell>
                   <TableCell>{formatCurrency(invoice.total)}</TableCell>
                   <TableCell>{new Date(invoice.createdAt).toLocaleDateString()}</TableCell>
                   <TableCell className="text-right">
@@ -213,7 +216,7 @@ export function InvoicesOutClientPage() {
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={4} className="h-24 text-center">
+                <TableCell colSpan={5} className="h-24 text-center">
                   <FileText className="mx-auto h-12 w-12 text-gray-400" />
                   <h3 className="mt-2 text-sm font-medium text-gray-900 dark:text-gray-200">No hay facturas</h3>
                   <p className="mt-1 text-sm text-gray-500">Empieza por crear una nueva factura.</p>
