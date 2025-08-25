@@ -3,11 +3,12 @@
 
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { Home, FileText, Users, Briefcase, Settings, LogOut, Building, UserPlus, Handshake } from 'lucide-react';
+import { Home, FileText, Users, Briefcase, Settings, LogOut, Building, UserPlus, Handshake, ArrowDownCircle, ArrowUpCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/contexts/AuthContext';
 import { auth } from '@/lib/firebase';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import Image from 'next/image';
 
 const navItems = [
   { href: '/dashboard', icon: Home, label: 'Resumen' },
@@ -15,6 +16,8 @@ const navItems = [
   { href: '/dashboard/clients', icon: Building, label: 'Clientes' },
   { href: '/dashboard/collaborators', icon: Handshake, label: 'Colaboradores' },
   { href: '/dashboard/services', icon: Briefcase, label: 'Servicios' },
+  { href: '/dashboard/invoices-in', icon: ArrowDownCircle, label: 'Facturas In' },
+  { href: '/dashboard/invoices-out', icon: ArrowUpCircle, label: 'Facturas Out' },
 ];
 
 export default function DashboardLayout({
@@ -40,15 +43,7 @@ export default function DashboardLayout({
       <aside className="w-64 flex-shrink-0 border-r border-border/20 flex flex-col">
         <div className="h-20 flex items-center px-6 border-b border-border/20">
            <Link href="/" className="flex items-center gap-2">
-            <svg width="32" height="32" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M20 0L25.3301 14.6699L40 20L25.3301 25.3301L20 40L14.6699 25.3301L0 20L14.6699 14.6699L20 0Z" fill="url(#paint0_linear_layout)"/>
-                <defs>
-                <linearGradient id="paint0_linear_layout" x1="20" y1="0" x2="20" y2="40" gradientUnits="userSpaceOnUse">
-                    <stop stopColor="hsl(var(--primary))"/>
-                    <stop offset="1" stopColor="hsl(var(--accent))"/>
-                </linearGradient>
-                </defs>
-            </svg>
+            <Image src="https://placehold.co/40x40.png" alt="Evol-vance Logo" width={40} height={40} data-ai-hint="logo" />
             <span className="text-xl font-headline font-bold">Evol-vance</span>
           </Link>
         </div>

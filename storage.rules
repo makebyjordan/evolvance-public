@@ -3,17 +3,29 @@ rules_version = '2';
 
 service firebase.storage {
   match /b/{bucket}/o {
-    // Rules for the 'services' directory
-    match /services/{allPaths=**} {
-      // Allow public read access to all files in the 'services' directory
+    // Allow public read access to proposal files
+    match /proposals/{allPaths=**} {
       allow read;
-      // Allow write access only if the user is authenticated
-      allow write: if request.auth != null;
+    }
+    
+    // Allow public read access to service images
+     match /services/{allPaths=**} {
+      allow read;
     }
 
-    // You can add rules for other directories here
-    // match /users/{userId}/{allPaths=**} {
-    //   allow read, write: if request.auth != null && request.auth.uid == userId;
-    // }
+    // Allow authenticated users to write to their own folder
+    match /users/{userId}/{allPaths=**} {
+      allow write: if request.auth != null && request.auth.uid == userId;
+    }
+    
+     // Allow authenticated users to write to invoices folders
+    match /invoices-in/{allPaths=**} {
+      allow write: if request.auth != null;
+      allow read; 
+    }
+    match /invoices-out/{allPaths=**} {
+       allow write: if request.auth != null;
+       allow read;
+    }
   }
 }

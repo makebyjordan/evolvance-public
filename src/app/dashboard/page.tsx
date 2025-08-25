@@ -12,6 +12,7 @@ import {
 import { useAuth } from "@/contexts/AuthContext";
 import { db } from "@/lib/firebase";
 import { collection, onSnapshot, query, where, Timestamp } from "firebase/firestore";
+import { TrendingUp, TrendingDown, Scale } from 'lucide-react';
 
 interface Proposal {
   createdAt: Timestamp;
@@ -29,6 +30,10 @@ interface Service {
   salePrice: number;
 }
 
+interface Invoice {
+    total: number;
+}
+
 export default function DashboardPage() {
   const { user } = useAuth();
   const [stats, setStats] = useState({
@@ -36,6 +41,8 @@ export default function DashboardPage() {
     newClientsLast30Days: 0,
     activeCollaborators: 0,
     potentialRevenue: 0,
+    invoicesInTotal: 0,
+    invoicesOutTotal: 0,
   });
   const [loading, setLoading] = useState(true);
 
@@ -44,30 +51,26 @@ export default function DashboardPage() {
     const thirtyDaysAgo = new Date(now.setDate(now.getDate() - 30));
     const thirtyDaysAgoTimestamp = Timestamp.fromDate(thirtyDaysAgo);
 
-    const proposalsQuery = query(collection(db, "proposals"), where("createdAt", ">=", thirtyDaysAgoTimestamp));
-    const clientsQuery = query(collection(db, "clients"), where("createdAt", ">=", thirtyDaysAgoTimestamp));
-    const collaboratorsQuery = query(collection(db, "collaborators"), where("contractStatus", "==", "Firmado"));
-    const servicesQuery = query(collection(db, "services"));
-
-    const unsubscribers = [
-      onSnapshot(proposalsQuery, (snapshot) => {
-        setStats(prev => ({ ...prev, proposalsLast30Days: snapshot.size }));
-      }),
-      onSnapshot(clientsQuery, (snapshot) => {
-        setStats(prev => ({ ...prev, newClientsLast30Days: snapshot.size }));
-      }),
-      onSnapshot(collaboratorsQuery, (snapshot) => {
-        setStats(prev => ({ ...prev, activeCollaborators: snapshot.size }));
-      }),
-      onSnapshot(servicesQuery, (snapshot) => {
-        let totalRevenue = 0;
-        snapshot.forEach(doc => {
-            const service = doc.data() as Service;
-            totalRevenue += service.salePrice || 0;
-        });
-        setStats(prev => ({ ...prev, potentialRevenue: totalRevenue }));
-      })
+    const queries = [
+      { name: 'proposalsLast30Days', query: query(collection(db, "proposals"), where("createdAt", ">=", thirtyDaysAgoTimestamp)) },
+      { name: 'newClientsLast30Days', query: query(collection(db, "clients"), where("createdAt", ">=", thirtyDaysAgoTimestamp)) },
+      { name: 'activeCollaborators', query: query(collection(db, "collaborators"), where("contractStatus", "==", "Firmado")) },
+      { name: 'potentialRevenue', query: query(collection(db, "services")), reducer: (acc: number, doc: any) => acc + (doc.data().salePrice || 0) },
+      { name: 'invoicesInTotal', query: query(collection(db, "invoicesIn")), reducer: (acc: number, doc: any) => acc + (doc.data().total || 0) },
+      { name: 'invoicesOutTotal', query: query(collection(db, "invoicesOut")), reducer: (acc: number, doc: any) => acc + (doc.data().total || 0) },
     ];
+
+    const unsubscribers = queries.map(({ name, query: q, reducer }) => 
+      onSnapshot(q, (snapshot) => {
+        let value;
+        if (reducer) {
+            value = snapshot.docs.reduce(reducer, 0);
+        } else {
+            value = snapshot.size;
+        }
+        setStats(prev => ({ ...prev, [name]: value }));
+      })
+    );
     
     setLoading(false);
 
@@ -77,7 +80,8 @@ export default function DashboardPage() {
    const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'EUR' }).format(amount);
   };
-
+  
+  const balance = stats.invoicesOutTotal - stats.invoicesInTotal;
 
   return (
     <div>
@@ -126,18 +130,50 @@ export default function DashboardPage() {
            </CardContent>
          </Card>
       </div>
+      
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
+        <Card className="bg-green-600/10 border-green-600/30">
+            <CardHeader className="flex flex-row items-center justify-between pb-2">
+                <CardTitle className="text-sm font-medium">Total Facturado (Out)</CardTitle>
+                <TrendingUp className="h-5 w-5 text-green-500" />
+            </CardHeader>
+            <CardContent>
+                <p className="text-3xl font-bold">{loading ? '...' : formatCurrency(stats.invoicesOutTotal)}</p>
+            </CardContent>
+        </Card>
+        <Card className="bg-red-600/10 border-red-600/30">
+            <CardHeader className="flex flex-row items-center justify-between pb-2">
+                <CardTitle className="text-sm font-medium">Total Soportado (In)</CardTitle>
+                <TrendingDown className="h-5 w-5 text-red-500" />
+            </CardHeader>
+            <CardContent>
+                <p className="text-3xl font-bold">{loading ? '...' : formatCurrency(stats.invoicesInTotal)}</p>
+            </CardContent>
+        </Card>
+         <Card className="bg-blue-600/10 border-blue-600/30">
+            <CardHeader className="flex flex-row items-center justify-between pb-2">
+                <CardTitle className="text-sm font-medium">Balance</CardTitle>
+                <Scale className="h-5 w-5 text-blue-500" />
+            </CardHeader>
+            <CardContent>
+                <p className={`text-3xl font-bold ${balance >= 0 ? 'text-green-500' : 'text-red-500'}`}>
+                  {loading ? '...' : formatCurrency(balance)}
+                </p>
+            </CardContent>
+        </Card>
+      </div>
 
        <div className="mt-8">
         <Card>
             <CardHeader>
                 <CardTitle>Próximos Pasos</CardTitle>
                 <CardDescription>
-                    A medida que añadas datos en las otras secciones, este panel de resumen se irá poblando con métricas y gráficos útiles.
+                    Añade facturas en las nuevas secciones para ver cómo cambian las métricas financieras.
                 </CardDescription>
             </CardHeader>
             <CardContent>
                 <p className="text-muted-foreground">
-                    Sigue creando propuestas, clientes o servicios para ver cómo las estadísticas cambian en tiempo real.
+                    Sigue gestionando tu negocio para ver cómo las estadísticas evolucionan en tiempo real.
                 </p>
             </CardContent>
         </Card>
