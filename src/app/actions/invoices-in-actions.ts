@@ -1,7 +1,7 @@
 
 'use server';
 
-import { db, storage, isFirebaseAdminInitialized } from '@/lib/firebase-admin';
+import { db, isFirebaseAdminInitialized } from '@/lib/firebase-admin';
 import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
 
@@ -16,10 +16,13 @@ export interface InvoiceIn {
   total: number;
   vatType: number;
   description: string;
-  fileUrl?: string;
   createdAt: string;
   updatedAt: string;
 }
+
+// Type for creating/updating
+export type InvoiceInInput = Omit<InvoiceIn, 'id' | 'createdAt' | 'updatedAt' | 'fileUrl'> & { id?: string };
+
 
 // Return type for our server actions
 type ActionResult<T> = {
@@ -31,67 +34,34 @@ type ActionResult<T> = {
 // Collection reference
 const invoicesInCollection = db?.collection('invoicesIn');
 
-const formSchema = z.object({
-  companyName: z.string().min(1, "Nombre de empresa requerido"),
-  phone: z.string().min(1, "Teléfono requerido"),
-  address: z.string().min(1, "Dirección requerida"),
-  email: z.string().email("Email inválido"),
-  location: z.string().min(1, "Localización requerida"),
-  total: z.coerce.number(),
-  vatType: z.coerce.number(),
-  description: z.string().optional(),
-  file: z.instanceof(File).optional(),
-});
-
-
 /**
  * Saves a new invoice or updates an existing one.
  */
-export async function saveInvoiceIn(formData: FormData, id: string | null): Promise<ActionResult<string>> {
-  if (!isFirebaseAdminInitialized() || !invoicesInCollection || !storage) {
+export async function saveInvoiceIn(data: InvoiceInInput): Promise<ActionResult<string>> {
+  if (!isFirebaseAdminInitialized() || !invoicesInCollection) {
     return { success: false, error: 'El servicio de Firebase no está inicializado en el servidor.' };
   }
-
-  const validatedFields = formSchema.safeParse(Object.fromEntries(formData.entries()));
-
-  if (!validatedFields.success) {
-    return { success: false, error: 'Datos del formulario no válidos.' };
-  }
-  
-  const { file, ...data } = validatedFields.data;
 
   try {
     const now = new Date();
     let docId: string;
-    let fileUrl: string | undefined;
-
-    if (file && file.size > 0) {
-      const bucket = storage.bucket(process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET);
-      const filePath = `invoices-in/${now.getTime()}-${file.name}`;
-      const fileRef = bucket.file(filePath);
-      
-      const fileBuffer = Buffer.from(await file.arrayBuffer());
-
-      await fileRef.save(fileBuffer, {
-        metadata: { contentType: file.type },
-      });
-      
-      fileUrl = (await fileRef.getSignedUrl({
-        action: 'read',
-        expires: '03-09-2491'
-      }))[0];
-    }
     
-    const docData = { ...data, ...(fileUrl && { fileUrl }), updatedAt: now };
-
-    if (id) {
+    if (data.id) {
       // Update
-      docId = id;
+      docId = data.id;
       const docRef = invoicesInCollection.doc(docId);
-      await docRef.update(docData);
+      await docRef.update({
+        ...data,
+        updatedAt: now,
+      });
     } else {
       // Create
-      const docRef = await invoicesInCollection.add({ ...docData, createdAt: now });
+      const docRef = invoicesInCollection.doc();
+      await docRef.set({
+        ...data,
+        createdAt: now,
+        updatedAt: now,
+      });
       docId = docRef.id;
     }
     
@@ -113,7 +83,6 @@ export async function deleteInvoiceIn(id: string): Promise<ActionResult<null>> {
   }
 
   try {
-    // TODO: Delete associated file from storage
     await invoicesInCollection.doc(id).delete();
     revalidatePath('/dashboard/invoices-in');
     return { success: true };

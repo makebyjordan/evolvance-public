@@ -33,8 +33,7 @@ import {
 import { useToast } from "@/hooks/use-toast";
 import { saveInvoiceIn, type InvoiceIn } from "@/app/actions/invoices-in-actions";
 import { saveInvoiceOut, type InvoiceOut } from "@/app/actions/invoices-out-actions";
-import { useEffect, useRef } from "react";
-import { useFormStatus } from "react-dom";
+import { useEffect } from "react";
 import Link from 'next/link';
 
 const vatTypes = [
@@ -52,7 +51,6 @@ const formSchema = z.object({
   total: z.coerce.number().min(0, { message: "El total debe ser positivo." }),
   vatType: z.coerce.number().refine(val => [21, 10, 4].includes(val), { message: "Tipo de IVA no válido" }),
   description: z.string().optional(),
-  file: z.instanceof(File).optional(),
 });
 
 type InvoiceFormValues = z.infer<typeof formSchema>;
@@ -66,19 +64,9 @@ interface InvoiceFormProps {
   invoiceType: "in" | "out";
 }
 
-function SubmitButton({ isEditing }: { isEditing: boolean }) {
-    const { pending } = useFormStatus();
-    return (
-        <Button type="submit" disabled={pending}>
-            {pending ? 'Guardando...' : (isEditing ? 'Guardar Cambios' : 'Crear Factura')}
-        </Button>
-    );
-}
-
 export function InvoiceForm({ isOpen, setIsOpen, onFormSubmit, invoice, invoiceType }: InvoiceFormProps) {
     const { toast } = useToast();
     const isEditing = !!invoice;
-    const formRef = useRef<HTMLFormElement>(null);
 
     const form = useForm<InvoiceFormValues>({
         resolver: zodResolver(formSchema),
@@ -91,7 +79,6 @@ export function InvoiceForm({ isOpen, setIsOpen, onFormSubmit, invoice, invoiceT
             total: 0,
             vatType: 21,
             description: "",
-            file: undefined,
         },
     });
     
@@ -112,7 +99,6 @@ export function InvoiceForm({ isOpen, setIsOpen, onFormSubmit, invoice, invoiceT
             total: invoice.total,
             vatType: invoice.vatType,
             description: invoice.description,
-            file: undefined,
         });
         } else {
         form.reset({
@@ -124,14 +110,20 @@ export function InvoiceForm({ isOpen, setIsOpen, onFormSubmit, invoice, invoiceT
             total: 0,
             vatType: 21,
             description: "",
-            file: undefined,
         });
         }
     }, [isEditing, invoice, form]);
 
-    const handleFormAction = async (data: FormData) => {
+    const onSubmit = async (values: InvoiceFormValues) => {
         const action = invoiceType === 'in' ? saveInvoiceIn : saveInvoiceOut;
-        const result = await action(data, invoice?.id || null);
+        
+        const invoiceData = {
+            ...values,
+            description: values.description || "",
+            id: isEditing ? invoice!.id : undefined,
+        };
+
+        const result = await action(invoiceData);
 
         if (result.success) {
             toast({
@@ -166,7 +158,7 @@ export function InvoiceForm({ isOpen, setIsOpen, onFormSubmit, invoice, invoiceT
             </DialogDescription>
             </DialogHeader>
             <Form {...form}>
-            <form action={handleFormAction} ref={formRef} className="space-y-4">
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
                 <FormField
                     control={form.control}
                     name="companyName"
@@ -226,28 +218,14 @@ export function InvoiceForm({ isOpen, setIsOpen, onFormSubmit, invoice, invoiceT
                 <FormField control={form.control} name="description" render={({ field }) => (
                     <FormItem><FormLabel>Descripción</FormLabel><FormControl><Textarea rows={4} placeholder="Añade una descripción sobre la factura." {...field} /></FormControl><FormMessage /></FormItem>
                 )}/>
-
-                <FormField control={form.control} name="file" render={({ field: { onChange, value, ...rest } }) => (
-                    <FormItem>
-                        <FormLabel>Archivo Factura (PDF, JPG, PNG)</FormLabel>
-                        <FormControl>
-                            <Input type="file" accept=".pdf,.jpg,.jpeg,.png" onChange={(e) => onChange(e.target.files?.[0])} {...rest} />
-                        </FormControl>
-                        <FormMessage />
-                    </FormItem>
-                )}/>
-                 {isEditing && invoice?.fileUrl && (
-                    <div className="text-sm">
-                        <p>Archivo actual: <Button asChild variant="link" className="p-0 h-auto"><Link href={invoice.fileUrl} target="_blank" rel="noopener noreferrer">Ver/Descargar</Link></Button></p>
-                        <p className="text-muted-foreground text-xs">Sube un nuevo archivo para reemplazar el existente.</p>
-                    </div>
-                )}
             
                 <DialogFooter className="sticky bottom-0 bg-card py-4 -mx-6 px-6 border-t">
                     <Button type="button" variant="outline" onClick={() => handleOpenChange(false)}>
                         Cancelar
                     </Button>
-                    <SubmitButton isEditing={isEditing} />
+                    <Button type="submit" disabled={form.formState.isSubmitting}>
+                        {form.formState.isSubmitting ? 'Guardando...' : (isEditing ? 'Guardar Cambios' : 'Crear Factura')}
+                    </Button>
                 </DialogFooter>
             </form>
             </Form>

@@ -64,7 +64,6 @@ export function InvoicesInClientPage() {
             total: data.total,
             vatType: data.vatType,
             description: data.description,
-            fileUrl: data.fileUrl,
             createdAt: (data.createdAt as Timestamp).toDate().toISOString(),
             updatedAt: (data.updatedAt as Timestamp).toDate().toISOString(),
           });
