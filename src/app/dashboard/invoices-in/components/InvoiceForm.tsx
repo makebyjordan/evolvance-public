@@ -33,8 +33,8 @@ import {
 import { useToast } from "@/hooks/use-toast";
 import { saveInvoiceIn, type InvoiceIn } from "@/app/actions/invoices-in-actions";
 import { saveInvoiceOut, type InvoiceOut } from "@/app/actions/invoices-out-actions";
-import { useEffect, useState } from "react";
-import { useActionState, useFormStatus } from "react-dom";
+import { useEffect, useRef } from "react";
+import { useFormStatus } from "react-dom";
 import Link from 'next/link';
 
 const vatTypes = [
@@ -78,7 +78,7 @@ function SubmitButton({ isEditing }: { isEditing: boolean }) {
 export function InvoiceForm({ isOpen, setIsOpen, onFormSubmit, invoice, invoiceType }: InvoiceFormProps) {
     const { toast } = useToast();
     const isEditing = !!invoice;
-    const formRef = useState<HTMLFormElement>(null);
+    const formRef = useRef<HTMLFormElement>(null);
 
     const form = useForm<InvoiceFormValues>({
         resolver: zodResolver(formSchema),
@@ -247,9 +247,7 @@ export function InvoiceForm({ isOpen, setIsOpen, onFormSubmit, invoice, invoiceT
                     <Button type="button" variant="outline" onClick={() => handleOpenChange(false)}>
                         Cancelar
                     </Button>
-                    <Button type="submit">
-                        {isEditing ? 'Guardar Cambios' : 'Crear Factura'}
-                    </Button>
+                    <SubmitButton isEditing={isEditing} />
                 </DialogFooter>
             </form>
             </Form>
