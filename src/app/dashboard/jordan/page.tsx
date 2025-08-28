@@ -2,6 +2,9 @@
 import { Card, CardDescription, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { FileCode } from "lucide-react";
+import { HtmlsClientPage } from "./components/HtmlsClientPage";
+
+export const dynamic = 'force-dynamic';
 
 export default function JordanPage() {
   return (
@@ -37,10 +40,7 @@ export default function JordanPage() {
                 </div>
             </CardHeader>
             <CardContent>
-                {/* Aquí irá el contenido para la gestión de HTMLs, como una tabla y un botón para crear nuevos. */}
-                <p className="text-muted-foreground text-center py-8">
-                    Próximamente: Sistema de gestión de HTMLs.
-                </p>
+                <HtmlsClientPage />
             </CardContent>
         </Card>
       </TabsContent>
