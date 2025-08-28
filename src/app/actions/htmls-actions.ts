@@ -9,6 +9,7 @@ import { revalidatePath } from 'next/cache';
 export interface Html {
   id: string;
   title: string;
+  section: string;
   htmlText: string;
   createdAt: any;
   updatedAt: any;

@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { PlusCircle, MoreHorizontal, FileText, Trash2, Pencil, Eye, AlertTriangle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -36,6 +36,7 @@ import { deleteHtml } from "@/app/actions/htmls-actions";
 import { db } from "@/lib/firebase";
 import { collection, onSnapshot, query, orderBy, Timestamp } from "firebase/firestore";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Badge } from "@/components/ui/badge";
 
 export function HtmlsClientPage() {
   const [htmls, setHtmls] = useState<Html[]>([]);
@@ -56,6 +57,7 @@ export function HtmlsClientPage() {
           htmlsData.push({
             id: doc.id,
             title: data.title,
+            section: data.section,
             htmlText: data.htmlText,
             createdAt: (data.createdAt as Timestamp).toDate().toISOString(),
             updatedAt: (data.updatedAt as Timestamp).toDate().toISOString(),
@@ -73,6 +75,12 @@ export function HtmlsClientPage() {
 
     return () => unsubscribe();
   }, []);
+  
+  const existingSections = useMemo(() => {
+    const sections = new Set(htmls.map(h => h.section));
+    return Array.from(sections);
+  }, [htmls]);
+
 
   const handleFormSubmit = () => {
     // Real-time listener will handle the update
@@ -161,6 +169,7 @@ export function HtmlsClientPage() {
         setIsOpen={setIsFormOpen}
         onFormSubmit={handleFormSubmit}
         htmlDocument={selectedHtml}
+        existingSections={existingSections}
       />
       
       <div className="border rounded-lg">
@@ -168,6 +177,7 @@ export function HtmlsClientPage() {
           <TableHeader>
             <TableRow>
               <TableHead>Título</TableHead>
+              <TableHead>Sección</TableHead>
               <TableHead>Fecha Creación</TableHead>
               <TableHead className="text-right">Acciones</TableHead>
             </TableRow>
@@ -177,6 +187,9 @@ export function HtmlsClientPage() {
               htmls.map((html) => (
                 <TableRow key={html.id}>
                   <TableCell className="font-medium">{html.title}</TableCell>
+                   <TableCell>
+                    <Badge variant="secondary">{html.section}</Badge>
+                  </TableCell>
                   <TableCell>{new Date(html.createdAt).toLocaleDateString()}</TableCell>
                   <TableCell className="text-right">
                     <DropdownMenu>
@@ -206,7 +219,7 @@ export function HtmlsClientPage() {
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={3} className="h-24 text-center">
+                <TableCell colSpan={4} className="h-24 text-center">
                   <FileText className="mx-auto h-12 w-12 text-gray-400" />
                   <h3 className="mt-2 text-sm font-medium text-gray-900 dark:text-gray-200">No hay documentos HTML</h3>
                   <p className="mt-1 text-sm text-gray-500">Empieza por crear un nuevo documento.</p>

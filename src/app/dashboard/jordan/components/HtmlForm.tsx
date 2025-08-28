@@ -25,10 +25,12 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { saveHtml, type Html } from "@/app/actions/htmls-actions";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 const formSchema = z.object({
   title: z.string().min(2, { message: "El título es requerido." }),
+  section: z.string().min(2, { message: "La sección es requerida." }),
   htmlText: z.string().min(10, { message: "El contenido es requerido." }),
 });
 
@@ -39,9 +41,10 @@ interface HtmlFormProps {
   setIsOpen: (open: boolean) => void;
   onFormSubmit: () => void;
   htmlDocument: Html | null;
+  existingSections: string[];
 }
 
-export function HtmlForm({ isOpen, setIsOpen, onFormSubmit, htmlDocument }: HtmlFormProps) {
+export function HtmlForm({ isOpen, setIsOpen, onFormSubmit, htmlDocument, existingSections }: HtmlFormProps) {
   const { toast } = useToast();
   const isEditing = !!htmlDocument;
 
@@ -49,6 +52,7 @@ export function HtmlForm({ isOpen, setIsOpen, onFormSubmit, htmlDocument }: Html
     resolver: zodResolver(formSchema),
     defaultValues: {
       title: "",
+      section: "",
       htmlText: "",
     },
   });
@@ -57,11 +61,13 @@ export function HtmlForm({ isOpen, setIsOpen, onFormSubmit, htmlDocument }: Html
     if (isEditing && htmlDocument) {
       form.reset({
         title: htmlDocument.title,
+        section: htmlDocument.section,
         htmlText: htmlDocument.htmlText,
       });
     } else {
       form.reset({
         title: "",
+        section: "",
         htmlText: "",
       });
     }
@@ -110,19 +116,43 @@ export function HtmlForm({ isOpen, setIsOpen, onFormSubmit, htmlDocument }: Html
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-            <FormField
-              control={form.control}
-              name="title"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Título</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Ej: Plantilla de correo electrónico" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <FormField
+                control={form.control}
+                name="title"
+                render={({ field }) => (
+                    <FormItem>
+                    <FormLabel>Título</FormLabel>
+                    <FormControl>
+                        <Input placeholder="Ej: Plantilla de correo" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                    </FormItem>
+                )}
+                />
+                <FormField
+                control={form.control}
+                name="section"
+                render={({ field }) => (
+                    <FormItem>
+                    <FormLabel>Sección</FormLabel>
+                     <Select onValueChange={field.onChange} defaultValue={field.value}>
+                        <FormControl>
+                            <SelectTrigger>
+                                <SelectValue placeholder="Selecciona una sección" />
+                            </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                            {existingSections.map(section => (
+                                <SelectItem key={section} value={section}>{section}</SelectItem>
+                            ))}
+                        </SelectContent>
+                    </Select>
+                    <FormMessage />
+                    </FormItem>
+                )}
+                />
+            </div>
             <FormField
               control={form.control}
               name="htmlText"
