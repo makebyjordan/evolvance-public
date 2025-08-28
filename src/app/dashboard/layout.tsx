@@ -3,7 +3,7 @@
 
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { Home, FileText, Users, Briefcase, Settings, LogOut, Building, UserPlus, Handshake, ArrowDownCircle, ArrowUpCircle } from 'lucide-react';
+import { Home, FileText, Briefcase, Settings, LogOut, Building, User, Handshake, ArrowDownCircle, ArrowUpCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/contexts/AuthContext';
 import { auth } from '@/lib/firebase';
@@ -18,6 +18,12 @@ const navItems = [
   { href: '/dashboard/services', icon: Briefcase, label: 'Servicios' },
   { href: '/dashboard/invoices-in', icon: ArrowDownCircle, label: 'Facturas In' },
   { href: '/dashboard/invoices-out', icon: ArrowUpCircle, label: 'Facturas Out' },
+];
+
+const crmItems = [
+    { href: '/dashboard/sandra', icon: User, label: 'Sandra' },
+    { href: '/dashboard/julian', icon: User, label: 'Julian' },
+    { href: '/dashboard/jordan', icon: User, label: 'Jordan' },
 ];
 
 export default function DashboardLayout({
@@ -49,6 +55,23 @@ export default function DashboardLayout({
         </div>
         <nav className="flex-1 py-6 px-4 space-y-2">
           {navItems.map((item) => (
+            <Link
+              key={item.label}
+              href={item.href}
+              className={`flex items-center gap-3 rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
+                pathname === item.href
+                  ? 'bg-primary text-primary-foreground'
+                  : 'text-muted-foreground hover:bg-muted hover:text-foreground'
+              }`}
+            >
+              <item.icon className="h-5 w-5" />
+              <span>{item.label}</span>
+            </Link>
+          ))}
+            <div className="px-4 pt-4 pb-2">
+                <p className="text-xs font-semibold text-muted-foreground/80 uppercase">CRM</p>
+            </div>
+             {crmItems.map((item) => (
             <Link
               key={item.label}
               href={item.href}
