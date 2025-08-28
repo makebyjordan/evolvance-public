@@ -26,10 +26,6 @@ interface Collaborator {
   contractStatus: string;
 }
 
-interface Service {
-  salePrice: number;
-}
-
 interface Invoice {
     total: number;
 }
@@ -40,7 +36,6 @@ export default function DashboardPage() {
     proposalsLast30Days: 0,
     newClientsLast30Days: 0,
     activeCollaborators: 0,
-    potentialRevenue: 0,
     invoicesInTotal: 0,
     invoicesOutTotal: 0,
   });
@@ -55,7 +50,6 @@ export default function DashboardPage() {
       { name: 'proposalsLast30Days', query: query(collection(db, "proposals"), where("createdAt", ">=", thirtyDaysAgoTimestamp)) },
       { name: 'newClientsLast30Days', query: query(collection(db, "clients"), where("createdAt", ">=", thirtyDaysAgoTimestamp)) },
       { name: 'activeCollaborators', query: query(collection(db, "collaborators"), where("contractStatus", "==", "Firmado")) },
-      { name: 'potentialRevenue', query: query(collection(db, "services")), reducer: (acc: number, doc: any) => acc + (doc.data().salePrice || 0) },
       { name: 'invoicesInTotal', query: query(collection(db, "invoicesIn")), reducer: (acc: number, doc: any) => acc + (doc.data().total || 0) },
       { name: 'invoicesOutTotal', query: query(collection(db, "invoicesOut")), reducer: (acc: number, doc: any) => acc + (doc.data().total || 0) },
     ];
@@ -92,7 +86,7 @@ export default function DashboardPage() {
         Aquí tienes un resumen de la actividad reciente de tu negocio.
       </p>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
          <Card>
            <CardHeader>
             <CardTitle className="text-lg">Propuestas Enviadas</CardTitle>
@@ -118,15 +112,6 @@ export default function DashboardPage() {
            </CardHeader>
            <CardContent>
             <p className="text-4xl font-bold">{loading ? '...' : stats.activeCollaborators}</p>
-           </CardContent>
-         </Card>
-          <Card>
-           <CardHeader>
-            <CardTitle className="text-lg">Ingresos Potenciales</CardTitle>
-            <CardDescription>Suma de servicios</CardDescription>
-           </CardHeader>
-           <CardContent>
-            <p className="text-4xl font-bold">{loading ? '...' : formatCurrency(stats.potentialRevenue)}</p>
            </CardContent>
          </Card>
       </div>
