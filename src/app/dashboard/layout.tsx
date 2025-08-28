@@ -49,7 +49,7 @@ export default function DashboardLayout({
       <aside className="w-64 flex-shrink-0 border-r border-border/20 flex flex-col">
         <div className="h-20 flex items-center px-6 border-b border-border/20">
            <Link href="/" className="flex items-center gap-2">
-            <Image src="https://storage.googleapis.com/aipage-images/app-18151475734898516/evol-vance-logo.png" alt="Evol-vance Logo" width={40} height={40} data-ai-hint="logo" />
+            
             <span className="text-xl font-headline font-bold">Evol-vance</span>
           </Link>
         </div>

@@ -37,7 +37,7 @@ export default function Header() {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
           <Link href="/" className="flex items-center gap-2">
-            <Image src="https://storage.googleapis.com/aipage-images/app-18151475734898516/evol-vance-logo.png" alt="Evol-vance Logo" width={40} height={40} data-ai-hint="logo" />
+            
             <span className="text-xl font-headline font-bold text-foreground">Evol-vance</span>
           </Link>
           <nav className="hidden md:flex items-center space-x-6">
@@ -68,7 +68,7 @@ export default function Header() {
                     <SheetTitle className="sr-only">Menú de Navegación</SheetTitle>
                     <div className="flex justify-between items-center">
                         <Link href="/" className="flex items-center gap-2" onClick={() => setMobileMenuOpen(false)}>
-                            <Image src="https://storage.googleapis.com/aipage-images/app-18151475734898516/evol-vance-logo.png" alt="Evol-vance Logo" width={40} height={40} data-ai-hint="logo" />
+                            
                             <span className="text-xl font-headline font-bold text-foreground">Evol-vance</span>
                         </Link>
                     </div>

@@ -26,7 +26,7 @@ export default function Footer() {
           
           <div className="md:col-span-4 lg:col-span-5 flex flex-col items-center md:items-start text-center md:text-left">
             <Link href="/" className="flex items-center gap-3 mb-4">
-              <Image src="https://storage.googleapis.com/aipage-images/app-18151475734898516/evol-vance-logo.png" alt="Evol-vance Logo" width={40} height={40} data-ai-hint="logo" />
+              
               <span className="text-2xl font-headline font-bold text-foreground">Evol-vance</span>
             </Link>
             <p className="text-muted-foreground text-sm max-w-xs">
