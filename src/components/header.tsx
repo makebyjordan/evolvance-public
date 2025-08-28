@@ -8,19 +8,7 @@ import { ContactModal } from '@/components/contact-modal';
 import { cn } from '@/lib/utils';
 import { Menu, X } from 'lucide-react';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
-
-const Logo = () => (
-  <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M20 0L25.3301 14.6699L40 20L25.3301 25.3301L20 40L14.6699 25.3301L0 20L14.6699 14.6699L20 0Z" fill="url(#paint0_linear_header)"/>
-    <defs>
-      <linearGradient id="paint0_linear_header" x1="20" y1="0" x2="20" y2="40" gradientUnits="userSpaceOnUse">
-        <stop stopColor="hsl(var(--primary))"/>
-        <stop offset="1" stopColor="hsl(var(--accent))"/>
-      </linearGradient>
-    </defs>
-  </svg>
-);
-
+import Image from 'next/image';
 
 export default function Header() {
   const [scrolled, setScrolled] = useState(false);
@@ -49,7 +37,7 @@ export default function Header() {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
           <Link href="/" className="flex items-center gap-2">
-            <Logo />
+            <Image src="https://placehold.co/40x40.png" alt="Evol-vance Logo" width={40} height={40} data-ai-hint="logo" />
             <span className="text-xl font-headline font-bold text-foreground">Evol-vance</span>
           </Link>
           <nav className="hidden md:flex items-center space-x-6">
@@ -80,8 +68,8 @@ export default function Header() {
                     <SheetTitle className="sr-only">Menú de Navegación</SheetTitle>
                     <div className="flex justify-between items-center">
                         <Link href="/" className="flex items-center gap-2" onClick={() => setMobileMenuOpen(false)}>
-                        <Logo />
-                        <span className="text-xl font-headline font-bold text-foreground">Evol-vance</span>
+                            <Image src="https://placehold.co/40x40.png" alt="Evol-vance Logo" width={40} height={40} data-ai-hint="logo" />
+                            <span className="text-xl font-headline font-bold text-foreground">Evol-vance</span>
                         </Link>
                     </div>
                 </SheetHeader>
