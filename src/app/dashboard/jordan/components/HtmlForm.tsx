@@ -26,7 +26,6 @@ import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { saveHtml, type Html } from "@/app/actions/htmls-actions";
 import { useEffect } from "react";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 const formSchema = z.object({
   title: z.string().min(2, { message: "El título es requerido." }),
@@ -104,6 +103,8 @@ export function HtmlForm({ isOpen, setIsOpen, onFormSubmit, htmlDocument, existi
     }
     setIsOpen(open);
   };
+  
+  const sectionsDatalistId = "sections-list";
 
   return (
     <Dialog open={isOpen} onOpenChange={handleOpenChange}>
@@ -136,18 +137,14 @@ export function HtmlForm({ isOpen, setIsOpen, onFormSubmit, htmlDocument, existi
                 render={({ field }) => (
                     <FormItem>
                     <FormLabel>Sección</FormLabel>
-                     <Select onValueChange={field.onChange} defaultValue={field.value}>
-                        <FormControl>
-                            <SelectTrigger>
-                                <SelectValue placeholder="Selecciona una sección" />
-                            </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                            {existingSections.map(section => (
-                                <SelectItem key={section} value={section}>{section}</SelectItem>
-                            ))}
-                        </SelectContent>
-                    </Select>
+                     <FormControl>
+                        <Input list={sectionsDatalistId} placeholder="Elige o crea una sección" {...field} />
+                    </FormControl>
+                    <datalist id={sectionsDatalistId}>
+                        {existingSections.map(section => (
+                            <option key={section} value={section} />
+                        ))}
+                    </datalist>
                     <FormMessage />
                     </FormItem>
                 )}
