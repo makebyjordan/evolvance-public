@@ -40,7 +40,7 @@ export default function SandraPage() {
                 </div>
             </CardHeader>
             <CardContent>
-                <HtmlsClientPage />
+                <HtmlsClientPage owner="sandra" />
             </CardContent>
         </Card>
       </TabsContent>

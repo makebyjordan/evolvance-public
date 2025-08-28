@@ -34,11 +34,17 @@ import { HtmlForm } from "./HtmlForm";
 import type { Html } from "@/app/actions/htmls-actions";
 import { deleteHtml } from "@/app/actions/htmls-actions";
 import { db } from "@/lib/firebase";
-import { collection, onSnapshot, query, orderBy, Timestamp } from "firebase/firestore";
+import { collection, onSnapshot, query, where, orderBy, Timestamp } from "firebase/firestore";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Badge } from "@/components/ui/badge";
 
-export function HtmlsClientPage() {
+type Owner = 'sandra' | 'julian' | 'jordan';
+
+interface HtmlsClientPageProps {
+  owner: Owner;
+}
+
+export function HtmlsClientPage({ owner }: HtmlsClientPageProps) {
   const [htmls, setHtmls] = useState<Html[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -48,7 +54,12 @@ export function HtmlsClientPage() {
   const { toast } = useToast();
 
   useEffect(() => {
-    const q = query(collection(db, "htmls"), orderBy("createdAt", "desc"));
+    const q = query(
+      collection(db, "htmls"), 
+      where("owner", "==", owner),
+      orderBy("createdAt", "desc")
+    );
+
     const unsubscribe = onSnapshot(q, 
       (querySnapshot) => {
         const htmlsData: Html[] = [];
@@ -59,6 +70,7 @@ export function HtmlsClientPage() {
             title: data.title,
             section: data.section,
             htmlText: data.htmlText,
+            owner: data.owner,
             createdAt: (data.createdAt as Timestamp).toDate().toISOString(),
             updatedAt: (data.updatedAt as Timestamp).toDate().toISOString(),
           });
@@ -74,7 +86,7 @@ export function HtmlsClientPage() {
     );
 
     return () => unsubscribe();
-  }, []);
+  }, [owner]);
   
   const existingSections = useMemo(() => {
     const sections = new Set(htmls.map(h => h.section));
@@ -170,6 +182,7 @@ export function HtmlsClientPage() {
         onFormSubmit={handleFormSubmit}
         htmlDocument={selectedHtml}
         existingSections={existingSections}
+        owner={owner}
       />
       
       <div className="border rounded-lg">
@@ -222,7 +235,7 @@ export function HtmlsClientPage() {
                 <TableCell colSpan={4} className="h-24 text-center">
                   <FileText className="mx-auto h-12 w-12 text-gray-400" />
                   <h3 className="mt-2 text-sm font-medium text-gray-900 dark:text-gray-200">No hay documentos HTML</h3>
-                  <p className="mt-1 text-sm text-gray-500">Empieza por crear un nuevo documento.</p>
+                  <p className="mt-1 text-sm text-gray-500">Empieza por crear un nuevo documento para <span className="font-bold capitalize">{owner}</span>.</p>
                 </TableCell>
               </TableRow>
             )}

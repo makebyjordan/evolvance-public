@@ -40,7 +40,7 @@ export default function JordanPage() {
                 </div>
             </CardHeader>
             <CardContent>
-                <HtmlsClientPage />
+                <HtmlsClientPage owner="jordan" />
             </CardContent>
         </Card>
       </TabsContent>

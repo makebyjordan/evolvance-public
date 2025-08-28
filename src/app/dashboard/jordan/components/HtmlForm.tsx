@@ -34,6 +34,7 @@ const formSchema = z.object({
 });
 
 type HtmlFormValues = z.infer<typeof formSchema>;
+type Owner = 'sandra' | 'julian' | 'jordan';
 
 interface HtmlFormProps {
   isOpen: boolean;
@@ -41,9 +42,10 @@ interface HtmlFormProps {
   onFormSubmit: () => void;
   htmlDocument: Html | null;
   existingSections: string[];
+  owner: Owner;
 }
 
-export function HtmlForm({ isOpen, setIsOpen, onFormSubmit, htmlDocument, existingSections }: HtmlFormProps) {
+export function HtmlForm({ isOpen, setIsOpen, onFormSubmit, htmlDocument, existingSections, owner }: HtmlFormProps) {
   const { toast } = useToast();
   const isEditing = !!htmlDocument;
 
@@ -76,6 +78,7 @@ export function HtmlForm({ isOpen, setIsOpen, onFormSubmit, htmlDocument, existi
   const onSubmit = async (values: HtmlFormValues) => {
     const htmlData = {
       ...values,
+      owner: owner,
       id: isEditing ? htmlDocument!.id : undefined,
     };
     
@@ -112,7 +115,7 @@ export function HtmlForm({ isOpen, setIsOpen, onFormSubmit, htmlDocument, existi
         <DialogHeader>
           <DialogTitle className="font-headline text-primary">{isEditing ? 'Editar HTML' : 'Nuevo HTML'}</DialogTitle>
           <DialogDescription>
-            Rellena los campos para {isEditing ? 'actualizar' : 'crear'} un documento HTML.
+            Rellena los campos para {isEditing ? 'actualizar' : 'crear'} un documento HTML para <span className="capitalize font-bold">{owner}</span>.
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>

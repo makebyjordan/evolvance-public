@@ -11,6 +11,7 @@ export interface Html {
   title: string;
   section: string;
   htmlText: string;
+  owner: 'sandra' | 'julian' | 'jordan';
   createdAt: any;
   updatedAt: any;
 }
@@ -56,6 +57,8 @@ export async function saveHtml(data: HtmlInput): Promise<ActionResult<string>> {
     }
     
     revalidatePath('/dashboard/jordan');
+    revalidatePath('/dashboard/sandra');
+    revalidatePath('/dashboard/julian');
     return { success: true, data: docId };
 
   } catch (error: any) {
@@ -71,6 +74,8 @@ export async function deleteHtml(id: string): Promise<ActionResult<null>> {
   try {
     await deleteDoc(doc(db, 'htmls', id));
     revalidatePath('/dashboard/jordan');
+    revalidatePath('/dashboard/sandra');
+    revalidatePath('/dashboard/julian');
     return { success: true };
   } catch (error: any) {
     console.error('Error deleting html:', error);

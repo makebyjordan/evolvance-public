@@ -40,7 +40,7 @@ export default function JulianPage() {
                 </div>
             </CardHeader>
             <CardContent>
-                <HtmlsClientPage />
+                <HtmlsClientPage owner="julian" />
             </CardContent>
         </Card>
       </TabsContent>
