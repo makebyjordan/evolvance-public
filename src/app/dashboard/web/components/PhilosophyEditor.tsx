@@ -139,7 +139,7 @@ export function PhilosophyEditor({ initialContent }: PhilosophyEditorProps) {
                                     <FormLabel>Icono</FormLabel>
                                     <Select onValueChange={field.onChange} defaultValue={field.value}>
                                     <FormControl>
-                                        <SelectTrigger><SelectValue /></SelectValue>
+                                        <SelectTrigger><SelectValue /></SelectTrigger>
                                     </FormControl>
                                     <SelectContent>
                                         {iconOptions.map(iconName => (
