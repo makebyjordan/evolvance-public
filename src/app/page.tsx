@@ -4,6 +4,7 @@ import Services from '@/components/services';
 import Timeline from '@/components/timeline';
 import Philosophy from '@/components/philosophy';
 import Clients from '@/components/clients';
+import Faq from '@/components/faq';
 import Cta from '@/components/cta';
 import Footer from '@/components/footer';
 import Scene from '@/components/scene';
@@ -19,6 +20,7 @@ export default function Home() {
           <Services />
           <Timeline />
           <Philosophy />
+          <Faq />
           <Clients />
           <Cta />
         </main>

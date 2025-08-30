@@ -3,7 +3,7 @@
 
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { Home, FileText, Briefcase, Settings, LogOut, Building, User, Handshake, ArrowDownCircle, ArrowUpCircle } from 'lucide-react';
+import { Home, FileText, Briefcase, Settings, LogOut, Building, User, Handshake, ArrowDownCircle, ArrowUpCircle, Globe } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/contexts/AuthContext';
 import { auth } from '@/lib/firebase';
@@ -12,6 +12,7 @@ import Image from 'next/image';
 
 const navItems = [
   { href: '/dashboard', icon: Home, label: 'Resumen' },
+  { href: '/dashboard/web', icon: Globe, label: 'Web' },
   { href: '/dashboard/proposals', icon: FileText, label: 'Propuestas' },
   { href: '/dashboard/clients', icon: Building, label: 'Clientes' },
   { href: '/dashboard/collaborators', icon: Handshake, label: 'Colaboradores' },
@@ -76,7 +77,7 @@ export default function DashboardLayout({
               key={item.label}
               href={item.href}
               className={`flex items-center gap-3 rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
-                pathname === item.href
+                pathname.startsWith(item.href)
                   ? 'bg-primary text-primary-foreground'
                   : 'text-muted-foreground hover:bg-muted hover:text-foreground'
               }`}
