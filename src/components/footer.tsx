@@ -14,9 +14,9 @@ export default function Footer() {
   }, []);
 
   const navLinks = [
-    { href: '#services', label: 'Servicios' },
-    { href: '#timeline', label: 'Trayectoria' },
-    { href: '#philosophy', label: 'Filosofía' },
+    { href: '/#services', label: 'Servicios' },
+    { href: '/#timeline', label: 'Trayectoria' },
+    { href: '/#philosophy', label: 'Filosofía' },
   ];
 
   return (
@@ -51,8 +51,8 @@ export default function Footer() {
             <div className="text-center sm:text-left">
               <h3 className="font-headline font-semibold text-foreground mb-4">Legal</h3>
               <ul className="space-y-2">
-                <li><Link href="#" className="text-muted-foreground hover:text-primary transition-colors text-sm">Términos y Condiciones</Link></li>
-                <li><Link href="#" className="text-muted-foreground hover:text-primary transition-colors text-sm">Política de Privacidad</Link></li>
+                <li><Link href="/terms" className="text-muted-foreground hover:text-primary transition-colors text-sm">Términos y Condiciones</Link></li>
+                <li><Link href="/privacy" className="text-muted-foreground hover:text-primary transition-colors text-sm">Política de Privacidad</Link></li>
               </ul>
             </div>
 

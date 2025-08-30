@@ -52,9 +52,15 @@ export interface FaqContent {
     updatedAt?: string;
 }
 
+export interface PageContent {
+    title: string;
+    markdownContent: string;
+    updatedAt?: string;
+}
 
-export type WebContentSection = 'services' | 'timeline' | 'philosophy' | 'faq';
-export type WebContentData = ServicesContent | TimelineContent | PhilosophyContent | FaqContent;
+
+export type WebContentSection = 'services' | 'timeline' | 'philosophy' | 'faq' | 'terms' | 'privacy';
+export type WebContentData = ServicesContent | TimelineContent | PhilosophyContent | FaqContent | PageContent;
 
 
 // Return type for our server actions
@@ -102,6 +108,8 @@ export async function saveWebContent(section: WebContentSection, data: WebConten
     // Revalidate the home page to show the new content
     revalidatePath('/');
     revalidatePath('/dashboard/web');
+    revalidatePath('/terms');
+    revalidatePath('/privacy');
     
     return { success: true };
   } catch (error: any) {
