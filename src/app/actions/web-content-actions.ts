@@ -2,7 +2,7 @@
 'use server';
 
 import { db } from '@/lib/firebase';
-import { doc, getDoc, setDoc, serverTimestamp } from 'firebase/firestore';
+import { doc, getDoc, setDoc, serverTimestamp, Timestamp } from 'firebase/firestore';
 import { revalidatePath } from 'next/cache';
 
 export interface ServiceItem {
@@ -14,6 +14,7 @@ export interface ServiceItem {
 export interface ServicesContent {
   title: string;
   items: ServiceItem[];
+  updatedAt?: string;
 }
 
 export interface TimelineEvent {
@@ -25,6 +26,7 @@ export interface TimelineEvent {
 export interface TimelineContent {
     title: string;
     events: TimelineEvent[];
+    updatedAt?: string;
 }
 
 export interface PhilosophyPoint {
@@ -36,6 +38,7 @@ export interface PhilosophyPoint {
 export interface PhilosophyContent {
     title: string;
     points: PhilosophyPoint[];
+    updatedAt?: string;
 }
 
 export interface FaqItem {
@@ -46,6 +49,7 @@ export interface FaqItem {
 export interface FaqContent {
     title: string;
     items: FaqItem[];
+    updatedAt?: string;
 }
 
 
@@ -69,7 +73,12 @@ export async function getWebContent<T extends WebContentData>(section: WebConten
     const docSnap = await getDoc(docRef);
 
     if (docSnap.exists()) {
-      return docSnap.data() as T;
+      const data = docSnap.data();
+      // Convert Timestamp to a serializable format (ISO string)
+      if (data.updatedAt && data.updatedAt instanceof Timestamp) {
+        data.updatedAt = data.updatedAt.toDate().toISOString();
+      }
+      return data as T;
     } else {
       console.log(`No document found for section: ${section}`);
       return null;
@@ -86,10 +95,13 @@ export async function getWebContent<T extends WebContentData>(section: WebConten
 export async function saveWebContent(section: WebContentSection, data: WebContentData): Promise<ActionResult<null>> {
   try {
     const docRef = doc(db, 'webContent', section);
-    await setDoc(docRef, { ...data, updatedAt: serverTimestamp() }, { merge: true });
+    // Omit updatedAt from the data being saved, as it's managed by serverTimestamp
+    const { updatedAt, ...saveData } = data;
+    await setDoc(docRef, { ...saveData, updatedAt: serverTimestamp() }, { merge: true });
     
     // Revalidate the home page to show the new content
     revalidatePath('/');
+    revalidatePath('/dashboard/web');
     
     return { success: true };
   } catch (error: any) {
