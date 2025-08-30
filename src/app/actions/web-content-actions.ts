@@ -58,9 +58,20 @@ export interface PageContent {
     updatedAt?: string;
 }
 
+export interface SocialLink {
+    url: string;
+    iconSvg: string;
+}
 
-export type WebContentSection = 'services' | 'timeline' | 'philosophy' | 'faq' | 'terms' | 'privacy';
-export type WebContentData = ServicesContent | TimelineContent | PhilosophyContent | FaqContent | PageContent;
+export interface SiteConfigContent {
+    logoSvg: string;
+    socialLinks: SocialLink[];
+    updatedAt?: string;
+}
+
+
+export type WebContentSection = 'services' | 'timeline' | 'philosophy' | 'faq' | 'terms' | 'privacy' | 'siteConfig';
+export type WebContentData = ServicesContent | TimelineContent | PhilosophyContent | FaqContent | PageContent | SiteConfigContent;
 
 
 // Return type for our server actions
@@ -106,7 +117,7 @@ export async function saveWebContent(section: WebContentSection, data: WebConten
     await setDoc(docRef, { ...saveData, updatedAt: serverTimestamp() }, { merge: true });
     
     // Revalidate the home page to show the new content
-    revalidatePath('/');
+    revalidatePath('/', 'layout');
     revalidatePath('/dashboard/web');
     revalidatePath('/terms');
     revalidatePath('/privacy');

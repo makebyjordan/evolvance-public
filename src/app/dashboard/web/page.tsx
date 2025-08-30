@@ -1,14 +1,15 @@
 
 import { Card, CardDescription, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { FileText, Globe, HelpCircle, Bot, Milestone, ShieldCheck, FileType } from "lucide-react";
+import { FileText, Globe, HelpCircle, Bot, Milestone, ShieldCheck, FileType, Settings } from "lucide-react";
 import { ServicesEditor } from "./components/ServicesEditor";
 import { TimelineEditor } from "./components/TimelineEditor";
 import { PhilosophyEditor } from "./components/PhilosophyEditor";
 import { FaqEditor } from "./components/FaqEditor";
 import { PageEditor } from "./components/PageEditor";
+import { SiteConfigEditor } from "./components/SiteConfigEditor";
 
-import { getWebContent, type ServicesContent, type TimelineContent, type PhilosophyContent, type FaqContent, type PageContent } from "@/app/actions/web-content-actions";
+import { getWebContent, type ServicesContent, type TimelineContent, type PhilosophyContent, type FaqContent, type PageContent, type SiteConfigContent } from "@/app/actions/web-content-actions";
 
 export const dynamic = 'force-dynamic';
 
@@ -20,6 +21,7 @@ export default async function WebPage() {
   const faqContent = await getWebContent<FaqContent>('faq');
   const termsContent = await getWebContent<PageContent>('terms');
   const privacyContent = await getWebContent<PageContent>('privacy');
+  const siteConfigContent = await getWebContent<SiteConfigContent>('siteConfig');
 
   return (
     <div>
@@ -38,7 +40,8 @@ export default async function WebPage() {
       </Card>
 
       <Tabs defaultValue="services" className="w-full">
-        <TabsList className="grid w-full grid-cols-2 sm:grid-cols-3 md:grid-cols-5 max-w-4xl">
+        <TabsList className="grid w-full grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 max-w-5xl">
+          <TabsTrigger value="config"><Settings className="w-4 h-4 mr-2"/>General</TabsTrigger>
           <TabsTrigger value="services"><Bot className="w-4 h-4 mr-2"/>Servicios</TabsTrigger>
           <TabsTrigger value="timeline"><Milestone className="w-4 h-4 mr-2"/>Trayectoria</TabsTrigger>
           <TabsTrigger value="philosophy"><ShieldCheck className="w-4 h-4 mr-2"/>Filosofía</TabsTrigger>
@@ -46,6 +49,9 @@ export default async function WebPage() {
           <TabsTrigger value="pages"><FileType className="w-4 h-4 mr-2"/>Páginas</TabsTrigger>
         </TabsList>
 
+        <TabsContent value="config">
+          <SiteConfigEditor initialContent={siteConfigContent} />
+        </TabsContent>
         <TabsContent value="services">
           <ServicesEditor initialContent={servicesContent} />
         </TabsContent>

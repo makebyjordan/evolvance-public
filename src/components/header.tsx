@@ -6,19 +6,39 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { ContactModal } from '@/components/contact-modal';
 import { cn } from '@/lib/utils';
-import { Menu, X } from 'lucide-react';
+import { Menu } from 'lucide-react';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
-import Image from 'next/image';
+import type { SiteConfigContent } from '@/app/actions/web-content-actions';
+import { getWebContent } from '@/app/actions/web-content-actions';
+
+
+function SvgRenderer({ svgString, className }: { svgString: string, className?: string }) {
+    if (!svgString || typeof svgString !== 'string') return null;
+    const modifiedSvgString = svgString.replace('<svg', `<svg class="${className || ''}"`);
+    return <div dangerouslySetInnerHTML={{ __html: modifiedSvgString }} />;
+}
+
+const defaultLogoSvg = `<svg width="32" height="32" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="45" stroke="currentColor" stroke-width="10" fill="none" /></svg>`;
 
 export default function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [logoSvg, setLogoSvg] = useState(defaultLogoSvg);
 
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 10);
     };
     window.addEventListener('scroll', handleScroll);
+
+    async function fetchConfig() {
+      const config = await getWebContent<SiteConfigContent>('siteConfig');
+      if (config?.logoSvg) {
+        setLogoSvg(config.logoSvg);
+      }
+    }
+    fetchConfig();
+
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
@@ -36,9 +56,9 @@ export default function Header() {
     )}>
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
-          <Link href="/" className="flex items-center gap-2">
-            
-            <span className="text-xl font-headline font-bold text-foreground">Evol-vance</span>
+          <Link href="/" className="flex items-center gap-2 text-foreground">
+            <SvgRenderer svgString={logoSvg} className="w-8 h-8" />
+            <span className="text-xl font-headline font-bold">Evol-vance</span>
           </Link>
           <nav className="hidden md:flex items-center space-x-6">
             {navLinks.map(link => (
@@ -67,9 +87,9 @@ export default function Header() {
                  <SheetHeader className="p-4 border-b">
                     <SheetTitle className="sr-only">Menú de Navegación</SheetTitle>
                     <div className="flex justify-between items-center">
-                        <Link href="/" className="flex items-center gap-2" onClick={() => setMobileMenuOpen(false)}>
-                            
-                            <span className="text-xl font-headline font-bold text-foreground">Evol-vance</span>
+                        <Link href="/" className="flex items-center gap-2 text-foreground" onClick={() => setMobileMenuOpen(false)}>
+                            <SvgRenderer svgString={logoSvg} className="w-8 h-8" />
+                            <span className="text-xl font-headline font-bold">Evol-vance</span>
                         </Link>
                     </div>
                 </SheetHeader>
