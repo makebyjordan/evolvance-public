@@ -64,8 +64,7 @@ export default function ClientsLoginPage() {
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-background">
-       <div className="absolute top-0 left-0 w-full h-full -z-10 bg-grid-white/[0.05]" />
-        <Card className="mx-auto max-w-sm w-full bg-card/80 backdrop-blur-sm relative">
+        <Card className="mx-auto max-w-sm w-full relative">
             <Link href="/" passHref>
                 <Button variant="ghost" size="icon" className="absolute top-4 left-4">
                     <ArrowLeft className="h-5 w-5" />

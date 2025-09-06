@@ -18,7 +18,7 @@ function SvgRenderer({ svgString, className }: { svgString: string, className?: 
     return <div dangerouslySetInnerHTML={{ __html: modifiedSvgString }} />;
 }
 
-const defaultLogoSvg = `<svg width="32" height="32" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="45" stroke="currentColor" stroke-width="10" fill="none" /></svg>`;
+const defaultLogoSvg = `<svg class="w-8 h-8 text-primary" fill="currentColor" viewBox="0 0 20 20"><path d="M11.918 2.032a.75.75 0 00-1.24-.72L3.383 9.471a.75.75 0 00.938 1.146L8.25 7.912v3.338a.75.75 0 01-1.5 0V9.53l-2.454 3.033a.75.75 0 00.95 1.135l3.805-4.711v3.293a.75.75 0 01-1.5 0v-1.75l-1.81.724a.75.75 0 00-.6 1.342l3.864 1.932a.75.75 0 00.994-1.09L8.75 12.088V8.617l4.43 5.488a.75.75 0 00.949-1.135L9.75 6.94v-3.29l1.838 2.276a.75.75 0 001.24-.72L11.918 2.032z"></path></svg>`;
 
 export default function Header() {
   const [scrolled, setScrolled] = useState(false);
@@ -57,7 +57,7 @@ export default function Header() {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
           <Link href="/" className="flex items-center gap-2 text-foreground">
-            <SvgRenderer svgString={logoSvg} className="w-8 h-8" />
+            <span className="text-primary text-2xl font-bold">%</span>
             <span className="text-xl font-headline font-bold">Evol-vance</span>
           </Link>
           <nav className="hidden md:flex items-center space-x-6">
@@ -66,8 +66,8 @@ export default function Header() {
             ))}
           </nav>
           <div className="hidden md:flex items-center gap-2">
-            <Button asChild variant="outline">
-              <Link href="/login">Evol</Link>
+            <Button asChild variant="secondary">
+              <Link href="/login">Acceder</Link>
             </Button>
             <ContactModal>
               <Button variant="default">
@@ -88,7 +88,7 @@ export default function Header() {
                     <SheetTitle className="sr-only">Menú de Navegación</SheetTitle>
                     <div className="flex justify-between items-center">
                         <Link href="/" className="flex items-center gap-2 text-foreground" onClick={() => setMobileMenuOpen(false)}>
-                            <SvgRenderer svgString={logoSvg} className="w-8 h-8" />
+                            <span className="text-primary text-2xl font-bold">%</span>
                             <span className="text-xl font-headline font-bold">Evol-vance</span>
                         </Link>
                     </div>
@@ -98,8 +98,8 @@ export default function Header() {
                     {navLinks.map(link => (
                       <a key={link.href} href={link.href} onClick={() => setMobileMenuOpen(false)} className="text-xl font-medium text-foreground hover:text-primary transition-colors">{link.label}</a>
                     ))}
-                     <Button asChild variant="outline" className="w-full">
-                        <Link href="/login">Evol</Link>
+                     <Button asChild variant="secondary" className="w-full">
+                        <Link href="/login">Acceder</Link>
                       </Button>
                   </nav>
                   <div className="p-4 border-t">

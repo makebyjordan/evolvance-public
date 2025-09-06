@@ -8,12 +8,11 @@ import { ArrowLeft } from 'lucide-react';
 export default function ServicesPage() {
   return (
     <div className="relative isolate overflow-hidden bg-background">
-      <div className="absolute inset-0 -z-10 bg-grid-white/[0.05]" />
       <div className="relative z-10 flex flex-col min-h-screen">
         <Header />
         <main className="flex-grow flex items-center justify-center">
             <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-                 <Card className="max-w-2xl w-full text-center bg-card/80 backdrop-blur-sm mx-auto">
+                 <Card className="max-w-2xl w-full text-center mx-auto">
                     <CardHeader>
                         <CardTitle className="text-3xl font-headline text-primary">Nuestros Servicios</CardTitle>
                         <CardDescription>

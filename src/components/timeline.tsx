@@ -38,13 +38,13 @@ export default async function Timeline() {
     <section id="timeline" className="py-20 sm:py-32">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <FadeIn>
-          <h2 className="text-3xl md:text-4xl font-headline font-bold text-center text-foreground">
+          <h2 className="text-3xl md:text-4xl font-extrabold text-center text-foreground">
             {title}
           </h2>
         </FadeIn>
         <div className="mt-16 max-w-3xl mx-auto">
           <div className="relative">
-            <div className="absolute left-4 md:left-1/2 top-0 h-full w-0.5 bg-primary/30" aria-hidden="true"></div>
+            <div className="absolute left-4 md:left-1/2 top-0 h-full w-0.5 bg-border" aria-hidden="true"></div>
             
             <div className="space-y-12">
               {events.map((event, index) => (
@@ -53,9 +53,9 @@ export default async function Timeline() {
                     <div className="absolute left-4 md:left-1/2 top-1 -translate-x-1/2 w-4 h-4 bg-background border-2 border-primary rounded-full"></div>
                     <div className="md:flex md:items-center">
                       <div className={`w-full md:w-1/2 ${index % 2 === 0 ? 'md:pr-8' : 'md:pl-8 md:order-2'}`}>
-                        <div className="p-6 rounded-lg bg-card/50 backdrop-blur-sm border border-border/20 hover:border-primary/50 transition-all duration-300">
-                          <p className="text-2xl font-headline text-primary">{event.year}</p>
-                          <h3 className="text-xl font-bold font-headline mt-2 text-foreground">{event.title}</h3>
+                        <div className="p-6 rounded-lg bg-card border border-border/50 hover:border-primary/50 transition-colors duration-300">
+                          <p className="text-2xl font-bold text-primary">{event.year}</p>
+                          <h3 className="text-xl font-bold mt-2 text-foreground">{event.title}</h3>
                           <p className="mt-2 text-muted-foreground">{event.description}</p>
                         </div>
                       </div>

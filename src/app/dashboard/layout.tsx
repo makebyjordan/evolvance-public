@@ -47,10 +47,10 @@ export default function DashboardLayout({
 
   return (
     <div className="flex h-screen bg-background text-foreground">
-      <aside className="w-64 flex-shrink-0 border-r border-border/20 flex flex-col">
+      <aside className="w-64 flex-shrink-0 border-r bg-card border-border/20 flex flex-col">
         <div className="h-20 flex items-center px-6 border-b border-border/20">
            <Link href="/" className="flex items-center gap-2">
-            
+            <span className="text-xl font-headline font-bold text-primary">%</span>
             <span className="text-xl font-headline font-bold">Evol-vance</span>
           </Link>
         </div>

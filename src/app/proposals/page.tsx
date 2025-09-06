@@ -51,7 +51,6 @@ export default function ProposalsPage() {
 
   return (
     <div className="flex flex-col min-h-screen bg-background p-4 md:p-8">
-      <div className="absolute top-0 left-0 w-full h-full -z-10 bg-grid-white/[0.05]" />
       
       <header className="max-w-5xl w-full mx-auto mb-8">
         <div className="flex items-center justify-between">

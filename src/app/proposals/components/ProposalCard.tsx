@@ -47,7 +47,7 @@ export function ProposalCard({ proposal }: ProposalCardProps) {
   };
 
   return (
-    <Card className="bg-card/80 backdrop-blur-sm flex flex-col">
+    <Card className="flex flex-col">
       <CardHeader>
         <CardTitle className="font-headline">{proposal.title}</CardTitle>
         <CardDescription>

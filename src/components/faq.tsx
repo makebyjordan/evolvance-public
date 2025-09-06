@@ -37,24 +37,26 @@ export default async function Faq() {
   }
 
   return (
-    <section id="faq" className="py-20 sm:py-32 bg-background/50">
+    <section id="faq" className="py-20 sm:py-32">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-3xl">
         <FadeIn>
-          <h2 className="text-3xl md:text-4xl font-headline font-bold text-center text-foreground">
+          <h2 className="text-3xl md:text-4xl font-extrabold text-center text-foreground">
             {title}
           </h2>
         </FadeIn>
         <FadeIn delay={0.2}>
-          <Accordion type="single" collapsible className="w-full mt-12">
-            {items.map((item, index) => (
-                <AccordionItem value={`item-${index}`} key={index}>
-                    <AccordionTrigger className="text-left font-bold">{item.question}</AccordionTrigger>
-                    <AccordionContent className="text-muted-foreground">
-                        {item.answer}
-                    </AccordionContent>
-                </AccordionItem>
-            ))}
-          </Accordion>
+          <div className="mt-12 bg-card p-6 rounded-lg">
+            <Accordion type="single" collapsible className="w-full">
+              {items.map((item, index) => (
+                  <AccordionItem value={`item-${index}`} key={index}>
+                      <AccordionTrigger className="text-left font-bold text-lg">{item.question}</AccordionTrigger>
+                      <AccordionContent className="text-muted-foreground text-base">
+                          {item.answer}
+                      </AccordionContent>
+                  </AccordionItem>
+              ))}
+            </Accordion>
+          </div>
         </FadeIn>
       </div>
     </section>

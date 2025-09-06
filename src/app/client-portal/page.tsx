@@ -14,14 +14,13 @@ export default function ClientPortalPage() {
   return (
     <>
       <div className="flex flex-col items-center justify-center min-h-screen bg-background p-4">
-        <div className="absolute top-0 left-0 w-full h-full -z-10 bg-grid-white/[0.05]" />
           <div className="text-center mb-8">
               <h1 className="text-4xl font-headline font-bold text-primary">Portal del Cliente</h1>
               <p className="text-muted-foreground mt-2">Bienvenido a tu área privada. Aquí puedes gestionar tus proyectos.</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl w-full">
-              <Card className="bg-card/80 backdrop-blur-sm">
+              <Card>
                   <CardHeader>
                       <FileText className="h-8 w-8 text-primary mb-2" />
                       <CardTitle>Propuestas</CardTitle>
@@ -34,7 +33,7 @@ export default function ClientPortalPage() {
                   </CardContent>
               </Card>
 
-              <Card className="bg-card/80 backdrop-blur-sm">
+              <Card>
                   <CardHeader>
                       <Briefcase className="h-8 w-8 text-primary mb-2" />
                       <CardTitle>Proyectos</CardTitle>
@@ -47,7 +46,7 @@ export default function ClientPortalPage() {
                   </CardContent>
               </Card>
 
-              <Card className="bg-card/80 backdrop-blur-sm">
+              <Card>
                   <CardHeader>
                       <MessageSquare className="h-8 w-8 text-primary mb-2" />
                       <CardTitle>Contacto</CardTitle>

@@ -7,8 +7,7 @@ import { ArrowLeft } from "lucide-react";
 export default function ProjectsPage() {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-background p-4">
-      <div className="absolute top-0 left-0 w-full h-full -z-10 bg-grid-white/[0.05]" />
-        <Card className="max-w-2xl w-full text-center bg-card/80 backdrop-blur-sm">
+        <Card className="max-w-2xl w-full text-center">
           <CardHeader>
             <CardTitle className="text-3xl font-headline text-primary">Proyectos</CardTitle>
             <CardDescription>

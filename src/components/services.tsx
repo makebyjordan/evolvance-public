@@ -53,21 +53,23 @@ export default async function Services() {
     <section id="services" className="py-20 sm:py-32">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <FadeIn>
-          <h2 className="text-3xl md:text-4xl font-headline font-bold text-center text-foreground">
+          <h2 className="text-3xl md:text-4xl font-extrabold text-center text-foreground">
             {title}
           </h2>
         </FadeIn>
-        <div className="mt-16 grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="mt-16 grid grid-cols-1 md:grid-cols-2 gap-6">
           {items.map((service, index) => {
             return (
                 <FadeIn key={index} delay={index * 0.1}>
-                <Card className="h-full bg-card/50 backdrop-blur-sm border-border/20 hover:border-primary/50 transition-all duration-300 hover:scale-105">
-                    <CardHeader className="flex flex-col items-center text-center p-8">
-                    <div className="p-4 bg-primary/10 rounded-full mb-4">
-                        <SvgRenderer svgString={service.icon || defaultIconSVG} className="w-10 h-10 text-primary" />
-                    </div>
-                    <CardTitle className="font-headline text-xl text-foreground">{service.title}</CardTitle>
-                    <CardDescription className="mt-2 text-muted-foreground">{service.description}</CardDescription>
+                <Card className="h-full hover:border-primary/50 transition-colors duration-300">
+                    <CardHeader className="flex flex-row items-center gap-6 p-6">
+                      <div className="p-3 bg-primary/10 rounded-lg">
+                          <SvgRenderer svgString={service.icon || defaultIconSVG} className="w-8 h-8 text-primary" />
+                      </div>
+                      <div>
+                        <CardTitle className="font-bold text-lg text-foreground">{service.title}</CardTitle>
+                        <CardDescription className="mt-1 text-muted-foreground">{service.description}</CardDescription>
+                      </div>
                     </CardHeader>
                 </Card>
                 </FadeIn>
@@ -76,8 +78,8 @@ export default async function Services() {
         </div>
         <FadeIn>
             <div className="mt-16 text-center">
-                <Button asChild size="lg">
-                    <Link href="/services">Nuestros Servicios</Link>
+                <Button asChild size="lg" variant="secondary">
+                    <Link href="/services">Ver todos los Servicios</Link>
                 </Button>
             </div>
         </FadeIn>

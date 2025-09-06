@@ -11,7 +11,7 @@ export default function Clients() {
         <div className="grid grid-cols-1 gap-12 items-center">
             <FadeIn>
                 <div className="text-center">
-                    <h2 className="text-3xl md:text-4xl font-headline font-bold text-foreground">
+                    <h2 className="text-3xl md:text-4xl font-extrabold text-foreground">
                         Portal de Clientes
                     </h2>
                     <p className="mt-4 max-w-xl mx-auto text-lg text-muted-foreground">

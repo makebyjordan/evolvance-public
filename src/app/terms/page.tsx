@@ -31,12 +31,11 @@ Al acceder a este sitio web, asumimos que aceptas estos términos y condiciones.
 
     return (
         <div className="relative isolate overflow-hidden bg-background">
-            <div className="absolute inset-0 -z-10 bg-grid-white/[0.05]" />
             <div className="relative z-10 flex flex-col min-h-screen">
                 <Header />
                 <main className="flex-grow pt-32 pb-16">
                     <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-                        <Card className="max-w-4xl w-full bg-card/80 backdrop-blur-sm mx-auto">
+                        <Card className="max-w-4xl w-full mx-auto">
                             <CardContent className="py-8">
                                 <article className="prose dark:prose-invert prose-lg max-w-none">
                                     <ReactMarkdown remarkPlugins={[remarkGfm]}>

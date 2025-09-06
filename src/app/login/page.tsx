@@ -66,7 +66,7 @@ export default function LoginPage() {
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-background">
-      <Card className="mx-auto max-w-sm w-full bg-card/80 backdrop-blur-sm relative">
+      <Card className="mx-auto max-w-sm w-full relative">
         <Link href="/" passHref>
            <Button variant="ghost" size="icon" className="absolute top-4 left-4">
               <ArrowLeft className="h-5 w-5" />

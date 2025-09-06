@@ -41,23 +41,25 @@ export default async function Philosophy() {
   const { title, points } = content || defaultContent;
 
   return (
-    <section id="philosophy" className="py-20 sm:py-32 bg-background/50">
+    <section id="philosophy" className="py-20 sm:py-32">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <FadeIn>
-          <h2 className="text-3xl md:text-4xl font-headline font-bold text-center text-foreground">
+          <h2 className="text-3xl md:text-4xl font-extrabold text-center text-foreground">
             {title}
           </h2>
         </FadeIn>
-        <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-6">
           {points.map((point, index) => {
             return (
             <FadeIn key={index} delay={index * 0.1}>
-              <Card className="h-full bg-card/50 backdrop-blur-sm border-border/20 text-center p-6 transition-all duration-300 hover:border-primary/50 hover:scale-105">
+              <Card className="h-full text-center p-6 transition-all duration-300 hover:border-primary/50 hover:-translate-y-2">
                 <CardHeader>
                   <div className="flex justify-center mb-4">
-                    <SvgRenderer svgString={point.icon || defaultIconSVG} className="w-8 h-8 text-primary" />
+                     <div className="p-3 bg-primary/10 rounded-lg">
+                        <SvgRenderer svgString={point.icon || defaultIconSVG} className="w-8 h-8 text-primary" />
+                     </div>
                   </div>
-                  <CardTitle className="font-headline text-xl text-foreground">{point.title}</CardTitle>
+                  <CardTitle className="font-bold text-lg text-foreground">{point.title}</CardTitle>
                   <CardDescription className="mt-2 text-muted-foreground">{point.description}</CardDescription>
                 </CardHeader>
               </Card>

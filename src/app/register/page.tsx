@@ -88,7 +88,7 @@ export default function RegisterPage() {
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-background">
-      <Card className="mx-auto max-w-sm w-full bg-card/80 backdrop-blur-sm">
+      <Card className="mx-auto max-w-sm w-full">
         <CardHeader>
           <CardTitle className="text-2xl font-headline text-primary">Crear Cuenta</CardTitle>
           <CardDescription>

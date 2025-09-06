@@ -20,15 +20,15 @@ export default {
         DEFAULT: {
           css: {
             '--tw-prose-body': theme('colors.foreground'),
-            '--tw-prose-headings': theme('colors.primary'),
+            '--tw-prose-headings': theme('colors.primary.DEFAULT'),
             '--tw-prose-lead': theme('colors.muted.foreground'),
-            '--tw-prose-links': theme('colors.primary'),
+            '--tw-prose-links': theme('colors.primary.DEFAULT'),
             '--tw-prose-bold': theme('colors.foreground'),
             '--tw-prose-counters': theme('colors.muted.foreground'),
-            '--tw-prose-bullets': theme('colors.primary'),
+            '--tw-prose-bullets': theme('colors.primary.DEFAULT'),
             '--tw-prose-hr': theme('colors.border'),
             '--tw-prose-quotes': theme('colors.foreground'),
-            '--tw-prose-quote-borders': theme('colors.primary'),
+            '--tw-prose-quote-borders': theme('colors.primary.DEFAULT'),
             '--tw-prose-captions': theme('colors.muted.foreground'),
             '--tw-prose-code': theme('colors.foreground'),
             '--tw-prose-pre-code': theme('colors.card.foreground'),
@@ -36,15 +36,15 @@ export default {
             '--tw-prose-th-borders': theme('colors.border'),
             '--tw-prose-td-borders': theme('colors.border'),
             '--tw-prose-invert-body': theme('colors.foreground'),
-            '--tw-prose-invert-headings': theme('colors.primary'),
+            '--tw-prose-invert-headings': theme('colors.primary.DEFAULT'),
             '--tw-prose-invert-lead': theme('colors.muted.foreground'),
-            '--tw-prose-invert-links': theme('colors.primary'),
+            '--tw-prose-invert-links': theme('colors.primary.DEFAULT'),
             '--tw-prose-invert-bold': theme('colors.foreground'),
             '--tw-prose-invert-counters': theme('colors.muted.foreground'),
-            '--tw-prose-invert-bullets': theme('colors.primary'),
+            '--tw-prose-invert-bullets': theme('colors.primary.DEFAULT'),
             '--tw-prose-invert-hr': theme('colors.border'),
             '--tw-prose-invert-quotes': theme('colors.foreground'),
-            '--tw-prose-invert-quote-borders': theme('colors.primary'),
+            '--tw-prose-invert-quote-borders': theme('colors.primary.DEFAULT'),
             '--tw-prose-invert-captions': theme('colors.muted.foreground'),
             '--tw-prose-invert-code': theme('colors.foreground'),
             '--tw-prose-invert-pre-code': theme('colors.card.foreground'),
@@ -65,7 +65,7 @@ export default {
       }),
       fontFamily: {
         body: ['Inter', 'sans-serif'],
-        headline: ['Poppins', 'sans-serif'],
+        headline: ['Inter', 'sans-serif'],
       },
       colors: {
         background: 'hsl(var(--background))',
@@ -129,24 +129,10 @@ export default {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
       },
-       backgroundImage: {
-        'grid-white/[0.05]': 'linear-gradient(to right, rgb(255 255 255 / 0.05) 1px, transparent 1px), linear-gradient(to bottom, rgb(255 255 255 / 0.05) 1px, transparent 1px)',
-      },
-      backgroundSize: {
-        'grid': '40px 40px',
-      },
     },
   },
   plugins: [
     require('tailwindcss-animate'),
     require('@tailwindcss/typography'),
-    function ({ addUtilities }: { addUtilities: any }) {
-      addUtilities({
-        '.bg-grid-white\\[\\[0\\.05\\]\\]': {
-          'background-image': 'linear-gradient(to right, rgb(255 255 255 / 0.05) 1px, transparent 1px), linear-gradient(to bottom, rgb(255 255 255 / 0.05) 1px, transparent 1px)',
-          'background-size': '40px 40px',
-        },
-      })
-    }
   ],
 } satisfies Config;
