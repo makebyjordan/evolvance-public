@@ -28,7 +28,7 @@ export function InteractiveCard({ children, className, ...props }: InteractiveCa
     <Card
       ref={cardRef}
       onMouseMove={handleMouseMove}
-      className={cn("group card-gradient-hover", className)}
+      className={cn("group", className)}
       {...props}
     >
       {children}

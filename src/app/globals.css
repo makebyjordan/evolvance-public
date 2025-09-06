@@ -10,19 +10,19 @@
     --card-foreground: 210 40% 98%;
     --popover: 230 21% 11%;
     --popover-foreground: 210 40% 98%;
-    --primary: 235 30% 28%;
+    --primary: 235 30% 58%;
     --primary-foreground: 210 40% 98%;
     --secondary: 240 4% 26%;
     --secondary-foreground: 210 40% 98%;
     --muted: 240 4% 20%;
     --muted-foreground: 215 28% 65%;
-    --accent: 235 30% 28%;
+    --accent: 235 30% 58%;
     --accent-foreground: 210 40% 98%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
     --border: 240 4% 26%;
     --input: 240 4% 26%;
-    --ring: 235 30% 28%;
+    --ring: 235 30% 58%;
     --radius: 1.5rem;
   }
  
@@ -33,19 +33,19 @@
     --card-foreground: 210 40% 98%;
     --popover: 230 21% 11%;
     --popover-foreground: 210 40% 98%;
-    --primary: 235 30% 28%;
+    --primary: 235 30% 58%;
     --primary-foreground: 210 40% 98%;
     --secondary: 240 4% 26%;
     --secondary-foreground: 210 40% 98%;
     --muted: 240 4% 20%;
     --muted-foreground: 215 28% 65%;
-    --accent: 235 30% 28%;
+    --accent: 235 30% 58%;
     --accent-foreground: 210 40% 98%;
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 0% 98%;
     --border: 240 4% 26%;
     --input: 240 4% 26%;
-    --ring: 235 30% 28%;
+    --ring: 235 30% 58%;
   }
 }
  
@@ -79,11 +79,19 @@
   }
 
   .card-gradient-hover::before {
-    content: '';
-    @apply absolute -top-1/2 -left-1/2 w-[200%] h-[200%] bg-[radial-gradient(circle_at_var(--x,_50%)_var(--y,_50%),hsl(var(--primary)/0.2),transparent_25%)] opacity-0 transition-opacity duration-500 group-hover:opacity-100 z-0;
-    pointer-events: none;
-    transform: translate(calc(var(--x, 0.5) * -50%), calc(var(--y, 0.5) * -50%));
+    content: "";
+    @apply absolute inset-0 z-0 opacity-0 transition-opacity duration-500;
+    background: radial-gradient(
+      300px circle at var(--x) var(--y),
+      hsl(var(--primary) / 0.2),
+      transparent 80%
+    );
   }
+
+  .card-gradient-hover:hover::before {
+    @apply opacity-100;
+  }
+
   .card-gradient-hover > * {
     @apply relative z-10;
   }

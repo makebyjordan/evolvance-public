@@ -53,7 +53,7 @@ export default async function Philosophy() {
           {points.map((point, index) => {
             return (
             <FadeIn key={index} delay={index * 0.1}>
-              <InteractiveCard className="h-full text-center p-6 transition-all duration-300">
+              <InteractiveCard className="h-full text-center p-6 transition-all duration-300 card-gradient-hover">
                 <CardHeader>
                   <div className="flex justify-center mb-4">
                      <div className="p-3 bg-primary/10 rounded-lg">

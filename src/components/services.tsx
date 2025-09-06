@@ -62,7 +62,7 @@ export default async function Services() {
           {items.map((service, index) => {
             return (
                 <FadeIn key={index} delay={index * 0.1}>
-                <InteractiveCard className="h-full">
+                <InteractiveCard className="h-full card-gradient-hover">
                     <CardHeader className="flex flex-row items-center gap-6 p-6">
                       <div className="p-3 bg-primary/10 rounded-lg">
                           <SvgRenderer svgString={service.icon || defaultIconSVG} className="w-8 h-8 text-primary" />
