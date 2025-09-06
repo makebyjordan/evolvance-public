@@ -13,13 +13,13 @@ export function SectionSeparator({ position, align = 'left' }: SectionSeparatorP
     <div
       aria-hidden="true"
       className={cn(
-        "pointer-events-none absolute inset-x-0 -z-10 transform-gpu overflow-hidden blur-3xl",
+        "pointer-events-none absolute inset-x-0 -z-10 transform-gpu overflow-hidden blur-2xl",
         position === 'top' ? 'top-0 -translate-y-1/2' : 'bottom-0 translate-y-1/2'
       )}
     >
       <div
         className={cn(
-            "relative aspect-[1155/678] w-[36.125rem] -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-primary/70 to-secondary/70 opacity-30 sm:w-[72.1875rem]",
+            "relative aspect-[1155/678] w-[36.125rem] -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-primary/80 to-secondary/70 opacity-50 sm:w-[72.1875rem]",
              align === 'left' ? 'left-1/3' : 'left-2/3'
         )}
         style={{
