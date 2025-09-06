@@ -5,6 +5,7 @@ import { Button } from './ui/button';
 import Link from 'next/link';
 import { getWebContent, type ServicesContent } from '@/app/actions/web-content-actions';
 import { Zap } from 'lucide-react';
+import { InteractiveCard } from './interactive-card';
 
 // Helper component to safely render SVG
 function SvgRenderer({ svgString, className }: { svgString: string, className: string }) {
@@ -61,7 +62,7 @@ export default async function Services() {
           {items.map((service, index) => {
             return (
                 <FadeIn key={index} delay={index * 0.1}>
-                <Card className="h-full hover:border-primary/50 transition-colors duration-300">
+                <InteractiveCard className="h-full">
                     <CardHeader className="flex flex-row items-center gap-6 p-6">
                       <div className="p-3 bg-primary/10 rounded-lg">
                           <SvgRenderer svgString={service.icon || defaultIconSVG} className="w-8 h-8 text-primary" />
@@ -71,7 +72,7 @@ export default async function Services() {
                         <CardDescription className="mt-1 text-muted-foreground">{service.description}</CardDescription>
                       </div>
                     </CardHeader>
-                </Card>
+                </InteractiveCard>
                 </FadeIn>
             )
           })}

@@ -72,3 +72,19 @@
     @apply border-primary;
   }
 }
+
+@layer components {
+  .card-gradient-hover {
+    @apply relative overflow-hidden;
+  }
+
+  .card-gradient-hover::before {
+    content: '';
+    @apply absolute -top-1/2 -left-1/2 w-[200%] h-[200%] bg-[radial-gradient(circle_at_var(--x,_50%)_var(--y,_50%),hsl(var(--primary)/0.2),transparent_25%)] opacity-0 transition-opacity duration-500 group-hover:opacity-100 z-0;
+    pointer-events: none;
+    transform: translate(calc(var(--x, 0.5) * -50%), calc(var(--y, 0.5) * -50%));
+  }
+  .card-gradient-hover > * {
+    @apply relative z-10;
+  }
+}

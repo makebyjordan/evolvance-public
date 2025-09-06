@@ -3,6 +3,7 @@ import { Card, CardHeader, CardTitle, CardDescription } from '@/components/ui/ca
 import { FadeIn } from './fade-in';
 import { getWebContent, type PhilosophyContent } from '@/app/actions/web-content-actions';
 import { Zap } from 'lucide-react';
+import { InteractiveCard } from './interactive-card';
 
 // Helper component to safely render SVG
 function SvgRenderer({ svgString, className }: { svgString: string, className: string }) {
@@ -52,7 +53,7 @@ export default async function Philosophy() {
           {points.map((point, index) => {
             return (
             <FadeIn key={index} delay={index * 0.1}>
-              <Card className="h-full text-center p-6 transition-all duration-300 hover:border-primary/50 hover:-translate-y-2">
+              <InteractiveCard className="h-full text-center p-6 transition-all duration-300">
                 <CardHeader>
                   <div className="flex justify-center mb-4">
                      <div className="p-3 bg-primary/10 rounded-lg">
@@ -62,7 +63,7 @@ export default async function Philosophy() {
                   <CardTitle className="font-bold text-lg text-foreground">{point.title}</CardTitle>
                   <CardDescription className="mt-2 text-muted-foreground">{point.description}</CardDescription>
                 </CardHeader>
-              </Card>
+              </InteractiveCard>
             </FadeIn>
           )})}
         </div>
