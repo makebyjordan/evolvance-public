@@ -6,6 +6,7 @@ import Philosophy from '@/components/philosophy';
 import Clients from '@/components/clients';
 import Faq from '@/components/faq';
 import Cta from '@/components/cta';
+import Footer from '@/components/footer';
 
 export default function Home() {
   return (
