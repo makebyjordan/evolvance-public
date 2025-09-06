@@ -11,26 +11,26 @@ import { SectionSeparator } from '@/components/section-separator';
 
 export default function Home() {
   return (
-    <div className="relative isolate overflow-hidden bg-background">
-      
-      {/* Separators are positioned absolutely relative to this container */}
-      <SectionSeparator position="top" />
-
-      <div className="relative z-10 flex flex-col min-h-screen">
-        <Header />
-        <main className="flex-grow">
-          <Hero />
-          <Services />
-          <Timeline />
-          <Philosophy />
-          <Faq />
-          <Clients />
-          <Cta />
-        </main>
-        <Footer />
-      </div>
-      
-      <SectionSeparator position="bottom" />
+    <div className="flex flex-col min-h-screen bg-background">
+      <Header />
+      <main className="flex-grow">
+        <div className="relative isolate">
+           <SectionSeparator position="top" />
+           <Hero />
+           <SectionSeparator position="bottom" />
+        </div>
+        <Services />
+        <Timeline />
+         <div className="relative isolate">
+            <SectionSeparator position="top" />
+            <Philosophy />
+            <SectionSeparator position="bottom" />
+        </div>
+        <Faq />
+        <Clients />
+        <Cta />
+      </main>
+      <Footer />
     </div>
   );
 }
