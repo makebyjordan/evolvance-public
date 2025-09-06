@@ -15,20 +15,33 @@ export default function Home() {
       <Header />
       <main className="flex-grow">
         <div className="relative isolate">
-           <SectionSeparator position="top" />
+           <SectionSeparator position="top" align="left" />
            <Hero />
-           <SectionSeparator position="bottom" />
         </div>
-        <Services />
-        <Timeline />
-         <div className="relative isolate">
-            <SectionSeparator position="top" />
+        <div className="relative isolate">
+          <SectionSeparator position="top" align="right" />
+          <Services />
+        </div>
+        <div className="relative isolate">
+          <SectionSeparator position="top" align="left" />
+          <Timeline />
+        </div>
+        <div className="relative isolate">
+            <SectionSeparator position="top" align="right" />
             <Philosophy />
-            <SectionSeparator position="bottom" />
         </div>
-        <Faq />
-        <Clients />
-        <Cta />
+         <div className="relative isolate">
+            <SectionSeparator position="top" align="left" />
+            <Faq />
+        </div>
+         <div className="relative isolate">
+            <SectionSeparator position="top" align="right" />
+            <Clients />
+        </div>
+         <div className="relative isolate">
+            <SectionSeparator position="top" align="left" />
+            <Cta />
+        </div>
       </main>
       <Footer />
     </div>
