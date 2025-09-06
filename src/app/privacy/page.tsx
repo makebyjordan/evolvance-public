@@ -1,7 +1,6 @@
 
 import Header from '@/components/header';
 import Footer from '@/components/footer';
-import Scene from '@/components/scene';
 import { Card, CardContent } from '@/components/ui/card';
 import { getWebContent, type PageContent } from '@/app/actions/web-content-actions';
 import ReactMarkdown from 'react-markdown';
@@ -31,8 +30,8 @@ Usamos la información que recopilamos para proporcionar, mantener, proteger y m
     const { title, markdownContent } = content || defaultContent;
 
     return (
-        <div className="relative isolate overflow-hidden">
-            <Scene />
+        <div className="relative isolate overflow-hidden bg-background">
+            <div className="absolute inset-0 -z-10 bg-grid-white/[0.05]" />
             <div className="relative z-10 flex flex-col min-h-screen">
                 <Header />
                 <main className="flex-grow pt-32 pb-16">

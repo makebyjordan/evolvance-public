@@ -1,6 +1,5 @@
 import Header from '@/components/header';
 import Footer from '@/components/footer';
-import Scene from '@/components/scene';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
@@ -8,8 +7,8 @@ import { ArrowLeft } from 'lucide-react';
 
 export default function ServicesPage() {
   return (
-    <div className="relative isolate overflow-hidden">
-      <Scene />
+    <div className="relative isolate overflow-hidden bg-background">
+      <div className="absolute inset-0 -z-10 bg-grid-white/[0.05]" />
       <div className="relative z-10 flex flex-col min-h-screen">
         <Header />
         <main className="flex-grow flex items-center justify-center">

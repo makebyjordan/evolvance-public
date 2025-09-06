@@ -129,10 +129,24 @@ export default {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
       },
+       backgroundImage: {
+        'grid-white/[0.05]': 'linear-gradient(to right, rgb(255 255 255 / 0.05) 1px, transparent 1px), linear-gradient(to bottom, rgb(255 255 255 / 0.05) 1px, transparent 1px)',
+      },
+      backgroundSize: {
+        'grid': '40px 40px',
+      },
     },
   },
   plugins: [
     require('tailwindcss-animate'),
     require('@tailwindcss/typography'),
+    function ({ addUtilities }: { addUtilities: any }) {
+      addUtilities({
+        '.bg-grid-white\\[\\[0\\.05\\]\\]': {
+          'background-image': 'linear-gradient(to right, rgb(255 255 255 / 0.05) 1px, transparent 1px), linear-gradient(to bottom, rgb(255 255 255 / 0.05) 1px, transparent 1px)',
+          'background-size': '40px 40px',
+        },
+      })
+    }
   ],
 } satisfies Config;
