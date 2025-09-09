@@ -114,7 +114,7 @@
         left: 50%;
         width: 200%;
         height: 200%;
-        background: conic-gradient(from 0deg, hsl(32, 96%, 54%), hsl(262, 85%, 66%), hsl(325, 79%, 66%), hsl(32, 96%, 54%));
+        background: conic-gradient(from 0deg, #f97316, #fde047, #84cc16, #22d3ee, #8b5cf6, #d946ef, #f97316);
         transform-origin: center;
         transform: translate(-50%, -50%);
         animation: animated-gradient-border 6s linear infinite;
