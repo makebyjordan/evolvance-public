@@ -57,6 +57,9 @@ export default async function Services() {
     if (lowerCaseTitle.includes('desarrollo de software')) {
       return "https://6000-firebase-evol-vance-landing2-1755906508125.cluster-cbeiita7rbe7iuwhvjs5zww2i4.cloudworkstations.dev/view-service/software";
     }
+     if (lowerCaseTitle.includes('marketing digital')) {
+      return "/view-service/marketing";
+    }
     return "/services";
   };
 
