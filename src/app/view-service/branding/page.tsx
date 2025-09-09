@@ -13,6 +13,7 @@ import { ContactModal } from "@/components/contact-modal";
 import { FadeIn } from "@/components/fade-in";
 import { SectionSeparator } from "@/components/section-separator";
 import Link from 'next/link';
+import { Target, PenTool, Lightbulb, PartyPopper } from 'lucide-react';
 
 export default function BrandingPage() {
 
@@ -62,6 +63,29 @@ export default function BrandingPage() {
             ]
         }
     ];
+    
+     const creativeProcess = [
+        {
+            icon: <Target className="w-8 h-8 text-primary" />,
+            title: "1. Inmersión y Estrategia",
+            description: "Todo empieza contigo. Realizamos una sesión profunda para entender tu visión, tu público y tus metas. Analizamos tu competencia y definimos los pilares estratégicos de tu marca."
+        },
+        {
+            icon: <Lightbulb className="w-8 h-8 text-primary" />,
+            title: "2. Conceptualización y Diseño",
+            description: "Nuestro equipo creativo traduce la estrategia en conceptos visuales. Exploramos diferentes caminos y te presentamos las propuestas de diseño más potentes que reflejan la esencia de tu marca."
+        },
+        {
+            icon: <PenTool className="w-8 h-8 text-primary" />,
+            title: "3. Desarrollo y Refinamiento",
+            description: "Una vez elegido el concepto, lo desarrollamos y perfeccionamos. Creamos el logotipo, la paleta de colores, la tipografía y todos los elementos visuales, trabajando con tus comentarios."
+        },
+        {
+            icon: <PartyPopper className="w-8 h-8 text-primary" />,
+            title: "4. Entrega y Lanzamiento",
+            description: "Te entregamos un completo manual de marca y todos los archivos que necesitas para empezar a usar tu nueva identidad. Te acompañamos en el lanzamiento para asegurar una implementación exitosa."
+        }
+    ];
 
   return (
     <>
@@ -104,6 +128,17 @@ export default function BrandingPage() {
             </div>
            </FadeIn>
         </section>
+        
+        {/* New Section: Copywriting */}
+        <section>
+          <FadeIn>
+            <div className="text-center max-w-4xl mx-auto">
+                <h3 className="text-3xl font-bold text-primary">Copywriting: La Voz de tu Marca</h3>
+                <p className="mt-4 text-muted-foreground">Un gran diseño necesita un mensaje potente que lo acompañe. El <strong>copywriting</strong> es el arte de escribir textos persuasivos que no solo informan, sino que también emocionan, conectan y, en última instancia, impulsan a la acción.</p>
+                <p className="mt-4 text-muted-foreground">Definimos un <strong>tono de voz</strong> único para tu marca que resuene con tu audiencia. Ya sea en tu sitio web, en redes sociales o en una campaña de email, las palabras que usamos son cruciales para construir una personalidad de marca consistente y atractiva.</p>
+            </div>
+          </FadeIn>
+        </section>
 
         <section>
             <FadeIn>
@@ -143,6 +178,29 @@ export default function BrandingPage() {
               </div>
             </FadeIn>
         </section>
+        
+        {/* New Section: Creative Process */}
+        <section>
+            <FadeIn>
+                <div className="text-center max-w-4xl mx-auto">
+                    <h3 className="text-3xl font-bold text-primary">Nuestro Proceso Creativo</h3>
+                    <p className="mt-4 text-muted-foreground">Crear una marca excepcional requiere un proceso estructurado y colaborativo. Así es como lo hacemos:</p>
+                </div>
+            </FadeIn>
+            <FadeIn delay={0.2}>
+                <div className="mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    {creativeProcess.map((step, index) => (
+                        <Card key={index} className="text-center p-6 bg-card/80 backdrop-blur-sm">
+                            <div className="flex justify-center mb-4">
+                                {step.icon}
+                            </div>
+                            <h4 className="font-bold text-lg text-foreground">{step.title}</h4>
+                            <p className="text-muted-foreground mt-2 text-sm">{step.description}</p>
+                        </Card>
+                    ))}
+                </div>
+            </FadeIn>
+        </section>
 
         <section>
             <FadeIn>
@@ -162,3 +220,5 @@ export default function BrandingPage() {
     </>
   );
 }
+
+    
