@@ -1,10 +1,11 @@
 
+
 import { Card, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
 import { FadeIn } from './fade-in';
 import { Button } from './ui/button';
 import Link from 'next/link';
 import { getWebContent, type ServicesContent } from '@/app/actions/web-content-actions';
-import { Zap, ArrowRight } from 'lucide-react';
+import { Zap, ArrowRight, Orbit } from 'lucide-react';
 import { InteractiveCard } from './interactive-card';
 
 // Helper component to safely render SVG
@@ -49,6 +50,11 @@ export default async function Services() {
         title: 'Webs, Apps, CRMs y mucho más',
         description: 'Desarrollamos software a medida y ofrecemos ciberseguridad de élite. Creamos CRM, apps y webs de gestión para optimizar tus procesos y potenciar tu negocio. Además, protegemos tus datos con análisis de vulnerabilidades, pruebas de penetración y monitoreo 24/7 para que te centres en lo que de verdad importa: el crecimiento de tu empresa.',
       },
+      {
+        icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-orbit"><circle cx="12" cy="12" r="2"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m4.93 19.07 1.41-1.41"/><path d="m17.66 6.34 1.41-1.41"/></svg>`,
+        title: 'Realidad Virtual',
+        description: 'Ofrecemos experiencias inmersivas que cautivan y conectan. Desde eventos y publicidad hasta formación y turismo, la Realidad Virtual transforma la manera en que tu público interactúa con tu marca, creando un impacto memorable que va más allá de la pantalla.',
+      },
     ]
   };
 
@@ -70,6 +76,9 @@ export default async function Services() {
     }
      if (lowerCaseTitle.includes('ayuntamientos')) {
         return "/view-service/ayuntamientos";
+    }
+    if (lowerCaseTitle.includes('realidad virtual')) {
+        return "/view-service/vr";
     }
     return "/services";
   };
