@@ -50,10 +50,11 @@ export default async function Services() {
   const { title, items } = content || defaultContent;
 
   const getServiceLink = (serviceTitle: string) => {
-    if (serviceTitle === 'Inteligencia Artificial y Automatizaciones') {
+    const lowerCaseTitle = serviceTitle.toLowerCase();
+    if (lowerCaseTitle === 'inteligencia artificial y automatizaciones') {
       return "/view-service/ia";
     }
-    if (serviceTitle === 'Desarrollo de software') {
+    if (lowerCaseTitle === 'desarrollo de software') {
       return "/view-service/software";
     }
     return "/services";
