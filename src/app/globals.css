@@ -104,7 +104,7 @@
     }
 
     .card-animated-border {
-        @apply relative p-[2px] overflow-hidden;
+        @apply relative p-[3px] overflow-hidden;
     }
 
     .card-animated-border::before {
@@ -119,6 +119,7 @@
         transform: translate(-50%, -50%);
         animation: animated-gradient-border 6s linear infinite;
         z-index: 1;
+        filter: blur(5px);
     }
 
     .card-animated-border > * {
