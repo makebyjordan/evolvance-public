@@ -26,13 +26,13 @@ export default async function Services() {
     items: [
       {
         icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-bot"><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v-2a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v2"/><path d="M12 13h2"/></svg>`,
-        title: 'IA y Automatización',
-        description: 'Eleva tu eficiencia con chatbots inteligentes, asistentes de voz y automatización integral de procesos.',
+        title: 'Inteligencia Artificial y Automatizaciones',
+        description: 'Transformamos tu negocio con tecnología de vanguardia. Utilizamos la Inteligencia Artificial a través de chatbots, asistentes de voz y análisis de datos para optimizar procesos y tomar decisiones más inteligentes. Complementamos esto con la automatización de tareas repetitivas como reservas, facturación e inventario, lo que te permite ser más ágiles y centrarte en lo que realmente importa.',
       },
       {
         icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-megaphone"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg>`,
-        title: 'Marketing y Gestión de Redes',
-        description: 'Conquista tu mercado digital con estrategias de contenido, SEO y campañas de ads que convierten.',
+        title: 'Marketing Digital',
+        description: 'Convierte tu presencia digital en un activo estratégico. Diseñamos y ejecutamos campañas que atraen a tu audiencia y convierten visitas en clientes leales, llevando tu marca a la cima de su sector. Dominamos el mercado digital con estrategias de contenido, Desarrollo web profesional Branding, Diseño gráfico y copywriting SEO y SEM, Campañas de ads Gestión y creación de contenido en redes.',
       },
       {
         icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-view"><path d="M5 12s2.545-5 7-5 7 5 7 5-2.545 5-7 5-7-5-7-5z"/><path d="M12 13a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"/></svg>`,
@@ -40,9 +40,9 @@ export default async function Services() {
         description: 'Crea mundos que cautivan. Desarrollamos desde tours virtuales hasta simulaciones de producto que marcan la diferencia.',
       },
       {
-        icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-calendar-check"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/><path d="m9 16 2 2 4-4"/></svg>`,
-        title: 'Gestión de Eventos con Soporte Tecnológico',
-        description: 'Potenciamos tus eventos con tecnología de punta: apps personalizadas, streaming interactivo y logística automatizada.',
+        icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-zap"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2z"/></svg>`,
+        title: 'Programación y Ciberseguridad.',
+        description: 'Soluciones de programación personalizadas para tu negocio. - Creación de CRM a medida para gestionar clientes - Aplicaciones móviles para tu público o para tus empleados - Ciberseguridad para proteger tus activos digitales.',
       },
     ]
   };
@@ -60,12 +60,12 @@ export default async function Services() {
         </FadeIn>
         <div className="mt-16 grid grid-cols-1 md:grid-cols-2 gap-6">
           {items.map((service, index) => {
-            const isAIService = service.title === 'IA y Automatización';
+            const isAIService = service.title === 'Inteligencia Artificial y Automatizaciones';
             return (
                 <FadeIn key={index} delay={index * 0.1}>
                 <InteractiveCard className="h-full card-gradient-hover flex flex-col">
                     <CardHeader className="flex flex-row items-start gap-6 p-6">
-                      <div className="p-3 bg-primary/10 rounded-lg shrink-0">
+                      <div className="p-3 bg-primary/10 rounded-full shrink-0">
                           <SvgRenderer svgString={service.icon || defaultIconSVG} className="w-8 h-8 text-primary" />
                       </div>
                       <div>
@@ -96,3 +96,4 @@ export default async function Services() {
     </section>
   );
 }
+
