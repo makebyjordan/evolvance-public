@@ -22,97 +22,111 @@ const defaultLogoSvg = `<svg class="w-8 h-8 text-primary" fill="currentColor" vi
 
 export default function Header() {
   const [scrolled, setScrolled] = useState(false);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [logoSvg, setLogoSvg] = useState(defaultLogoSvg);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [config, setConfig] = useState<SiteConfigContent | null>(null);
 
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 10);
     };
     window.addEventListener('scroll', handleScroll);
-
-    async function fetchConfig() {
-      const config = await getWebContent<SiteConfigContent>('siteConfig');
-      if (config?.logoSvg) {
-        setLogoSvg(config.logoSvg);
-      }
-    }
-    fetchConfig();
-
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  useEffect(() => {
+    async function fetchConfig() {
+      const loadedConfig = await getWebContent<SiteConfigContent>('siteConfig');
+      setConfig(loadedConfig);
+    }
+    fetchConfig();
+  }, []);
+
+  const logoSvg = config?.logoSvg || defaultLogoSvg;
+
   const navLinks = [
-    { href: '#services', label: 'Servicios' },
-    { href: '#timeline', label: 'Trayectoria' },
-    { href: '#philosophy', label: 'Filosofía' },
-    { href: '#clients', label: 'Clientes' },
+    { href: '/#services', label: 'Servicios' },
+    { href: '/#timeline', label: 'Trayectoria' },
+    { href: '/#philosophy', label: 'Filosofía' },
+    { href: '/#faq', label: 'FAQ' },
+    { href: '/dashboard', label: 'Intranet' },
   ];
 
   return (
-    <header className={cn(
-      "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
-      scrolled || mobileMenuOpen ? "bg-background/80 backdrop-blur-sm border-b border-border/20" : "bg-transparent"
-    )}>
+    <header
+      className={cn(
+        "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
+        scrolled ? "bg-card/80 backdrop-blur-sm shadow-md" : "bg-transparent"
+      )}
+    >
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
           <Link href="/" className="flex items-center gap-2 text-foreground">
-            <span className="text-primary text-2xl font-bold">%</span>
+             <span className="text-primary text-2xl font-bold">%</span>
             <span className="text-xl font-headline font-bold">Evol-vance</span>
           </Link>
-          <nav className="hidden md:flex items-center space-x-6">
-            {navLinks.map(link => (
-              <a key={link.href} href={link.href} className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors">{link.label}</a>
+
+          {/* Desktop Navigation */}
+          <nav className="hidden md:flex items-center gap-6">
+            {navLinks.map((link) => (
+              <Link
+                key={link.label}
+                href={link.href}
+                className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
+              >
+                {link.label}
+              </Link>
             ))}
           </nav>
+          
           <div className="hidden md:flex items-center gap-2">
-            <Button asChild variant="secondary">
-              <Link href="/login">Acceder</Link>
-            </Button>
-            <ContactModal>
-              <Button variant="default">
-                Agendar Asesoría
-              </Button>
+             <ContactModal>
+                <Button>
+                    Agendar Sesión
+                </Button>
             </ContactModal>
           </div>
+          
+          {/* Mobile Navigation */}
           <div className="md:hidden">
-            <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
+             <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
               <SheetTrigger asChild>
                 <Button variant="ghost" size="icon">
-                  <Menu className="h-6 w-6" />
-                  <span className="sr-only">Open menu</span>
+                  <Menu />
+                  <span className="sr-only">Abrir menú</span>
                 </Button>
               </SheetTrigger>
-              <SheetContent side="right" className="bg-background/90 backdrop-blur-sm p-0">
-                 <SheetHeader className="p-4 border-b">
-                    <SheetTitle className="sr-only">Menú de Navegación</SheetTitle>
-                    <div className="flex justify-between items-center">
-                        <Link href="/" className="flex items-center gap-2 text-foreground" onClick={() => setMobileMenuOpen(false)}>
-                            <span className="text-primary text-2xl font-bold">%</span>
-                            <span className="text-xl font-headline font-bold">Evol-vance</span>
-                        </Link>
-                    </div>
+              <SheetContent side="left">
+                <SheetHeader>
+                   <SheetTitle>
+                     <Link href="/" className="flex items-center gap-2 text-foreground" onClick={() => setIsMobileMenuOpen(false)}>
+                        <span className="text-primary text-2xl font-bold">%</span>
+                        <span className="text-xl font-headline font-bold">Evol-vance</span>
+                    </Link>
+                  </SheetTitle>
                 </SheetHeader>
-                <div className="flex flex-col h-[calc(100%-4rem)]">
-                  <nav className="flex-grow flex flex-col items-center justify-center gap-y-6 px-4">
-                    {navLinks.map(link => (
-                      <a key={link.href} href={link.href} onClick={() => setMobileMenuOpen(false)} className="text-xl font-medium text-foreground hover:text-primary transition-colors">{link.label}</a>
-                    ))}
-                     <Button asChild variant="secondary" className="w-full">
-                        <Link href="/login">Acceder</Link>
-                      </Button>
-                  </nav>
-                  <div className="p-4 border-t">
-                    <ContactModal>
-                       <Button variant="default" className="w-full">
-                         Agendar Asesoría
-                       </Button>
+                <div className="mt-8 flex flex-col gap-4">
+                  {navLinks.map((link) => (
+                    <Link
+                      key={link.label}
+                      href={link.href}
+                      className="text-lg font-medium text-muted-foreground hover:text-primary transition-colors"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                      {link.label}
+                    </Link>
+                  ))}
+                   <div className="pt-4">
+                     <ContactModal>
+                        <Button className="w-full">
+                            Agendar Sesión
+                        </Button>
                     </ContactModal>
-                  </div>
+                   </div>
                 </div>
               </SheetContent>
             </Sheet>
           </div>
+
         </div>
       </div>
     </header>
