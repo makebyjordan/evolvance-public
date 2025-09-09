@@ -35,13 +35,13 @@ export default async function Services() {
         description: 'Convierte tu presencia digital en un activo estratégico. Diseñamos y ejecutamos campañas que atraen a tu audiencia y convierten visitas en clientes leales, llevando tu marca a la cima de su sector. Dominamos el mercado digital con estrategias de contenido, Desarrollo web profesional Branding, Diseño gráfico y copywriting SEO y SEM, Campañas de ads Gestión y creación de contenido en redes.',
       },
       {
-        icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-view"><path d="M5 12s2.545-5 7-5 7 5 7 5-2.545 5-7 5-7-5-7-5z"/><path d="M12 13a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"/></svg>`,
-        title: 'Realidad Virtual y Experiencias Inmersivas',
-        description: 'Crea mundos que cautivan. Desarrollamos desde tours virtuales hasta simulaciones de producto que marcan la diferencia.',
+        icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-brush"><path d="M21.7 10c.3-1 .3-2.1 0-3.1C21.4 6 21.1 5 20 4.2c-1.1-.9-2.5-1.2-4-1.2s-2.9.3-4 1.2c-1 .8-1.4 1.8-1.7 2.8C10 11 10 12.1 10.3 13c.3 1 .7 1.9 1.4 2.6.7.7 1.5 1.3 2.3 1.6.8.3 1.7.5 2.5.5s1.7-.2 2.5-.5c.8-.3 1.6-.9 2.3-1.6.7-.7 1.1-1.6 1.4-2.6z"/><path d="M12 13.5V22"/><path d="M9 12a3 3 0 0 0-3-3H4a2 2 0 0 0-2 2v2a2 2 0 0 0 2 2h2a3 3 0 0 0 3-3z"/></svg>`,
+        title: 'Branding, diseño grafico y copywriting',
+        description: 'La identidad visual es clave. Colaboramos contigo para forjar una imagen distintiva e inolvidable. Tu marca es más que un logo; es la primera experiencia de tu cliente. Nos ocupamos de todos los detalles, desde la paleta de colores hasta la comunicación visual unificada.',
       },
       {
         icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-zap"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2z"></polygon></svg>`,
-        title: 'Webs, apps, CRMs y mucho más',
+        title: 'Desarrollo de software',
         description: 'Desarrollamos software a medida y ofrecemos ciberseguridad de élite. Creamos CRM, apps y webs de gestión para optimizar tus procesos y potenciar tu negocio. Además, protegemos tus datos con análisis de vulnerabilidades, pruebas de penetración y monitoreo 24/7 para que te centres en lo que de verdad importa: el crecimiento de tu empresa.',
       },
     ]
@@ -54,11 +54,14 @@ export default async function Services() {
     if (lowerCaseTitle.includes('inteligencia artificial')) {
       return "/view-service/ia";
     }
-    if (lowerCaseTitle.includes('webs, apps, crms')) {
-      return "/view-service/software";
+    if (lowerCaseTitle.includes('desarrollo de software')) {
+      return "https://6000-firebase-evol-vance-landing2-1755906508125.cluster-cbeiita7rbe7iuwhvjs5zww2i4.cloudworkstations.dev/view-service/software";
     }
      if (lowerCaseTitle.includes('marketing digital')) {
       return "/view-service/marketing";
+    }
+    if (lowerCaseTitle.includes('branding')) {
+        return "/view-service/branding";
     }
     return "/services";
   };

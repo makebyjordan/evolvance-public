@@ -1,7 +1,7 @@
 
 import { Card, CardDescription, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { FileText, Globe, HelpCircle, Bot, Milestone, ShieldCheck, FileType, Settings, ExternalLink } from "lucide-react";
+import { FileText, Globe, HelpCircle, Bot, Milestone, ShieldCheck, FileType, Settings, ExternalLink, Brush } from "lucide-react";
 import { ServicesEditor } from "./components/ServicesEditor";
 import { TimelineEditor } from "./components/TimelineEditor";
 import { PhilosophyEditor } from "./components/PhilosophyEditor";
@@ -96,6 +96,14 @@ export default async function WebPage() {
                   <p className="font-medium">Marketing Digital</p>
                   <Button asChild variant="outline" size="sm">
                     <Link href="/view-service/marketing" target="_blank">
+                      Ver página <ExternalLink className="ml-2 h-4 w-4" />
+                    </Link>
+                  </Button>
+                </div>
+                <div className="flex items-center justify-between p-3 border rounded-lg">
+                  <p className="font-medium">Branding y Diseño</p>
+                   <Button asChild variant="outline" size="sm">
+                    <Link href="/view-service/branding" target="_blank">
                       Ver página <ExternalLink className="ml-2 h-4 w-4" />
                     </Link>
                   </Button>
