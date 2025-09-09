@@ -41,7 +41,7 @@ export default async function Services() {
       },
       {
         icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-zap"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2z"></polygon></svg>`,
-        title: 'Desarrollo de software',
+        title: 'Webs, Apps, CRMs y mucho más',
         description: 'Desarrollamos software a medida y ofrecemos ciberseguridad de élite. Creamos CRM, apps y webs de gestión para optimizar tus procesos y potenciar tu negocio. Además, protegemos tus datos con análisis de vulnerabilidades, pruebas de penetración y monitoreo 24/7 para que te centres en lo que de verdad importa: el crecimiento de tu empresa.',
       },
     ]
@@ -54,8 +54,8 @@ export default async function Services() {
     if (lowerCaseTitle.includes('inteligencia artificial')) {
       return "/view-service/ia";
     }
-    if (lowerCaseTitle.includes('desarrollo de software')) {
-      return "https://6000-firebase-evol-vance-landing2-1755906508125.cluster-cbeiita7rbe7iuwhvjs5zww2i4.cloudworkstations.dev/view-service/software";
+    if (lowerCaseTitle.includes('webs, apps, crms')) {
+      return "/view-service/software";
     }
      if (lowerCaseTitle.includes('marketing digital')) {
       return "/view-service/marketing";
