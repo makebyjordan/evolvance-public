@@ -66,18 +66,19 @@ export default function BrandingPage() {
   return (
     <>
       {/* Hero Section */}
-      <section className="relative isolate bg-card/40 pt-32 pb-20 md:pt-40 md:pb-24">
+      <section className="relative isolate pt-32 pb-20 md:pt-40 md:pb-24">
           <SectionSeparator position="top" align="left" />
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid md:grid-cols-2 gap-12 items-center">
+            <div className="max-w-4xl mx-auto text-center">
                 <FadeIn>
-                    <h1 className="text-3xl md:text-4xl font-extrabold text-foreground">Branding y Diseño Gráfico</h1>
-                    <p className="mt-4 text-muted-foreground">Nuestros servicios de branding y diseño gráfico van más allá de lo convencional. Comprendemos que la identidad visual es <strong>clave para el éxito de tu marca</strong>, por lo que colaboramos contigo para forjar una <strong>imagen distintiva e inolvidable.</strong></p>
-                    <p className="mt-4 text-muted-foreground">Tu marca es más que un logo; es la primera experiencia de tu cliente. Nos ocupamos de todos los detalles, desde la paleta de colores hasta la <strong>comunicación visual unificada</strong>. El objetivo es que tu marca destaque visualmente en cada punto de contacto.</p>
-                </FadeIn>
-                <FadeIn delay={0.2}>
-                     <div className="w-full h-80 bg-card rounded-lg flex items-center justify-center">
-                        <p className="text-muted-foreground">Aquí va una imagen</p>
+                    <h1 className="text-4xl md:text-5xl font-extrabold text-foreground">Branding y Diseño que Conectan</h1>
+                    <p className="mt-4 text-lg text-muted-foreground">Creamos identidades visuales que cuentan tu historia, te diferencian de la competencia y construyen una relación duradera con tus clientes.</p>
+                     <div className="mt-8">
+                        <ContactModal>
+                            <Button size="lg" className="font-bold">
+                                Iniciar Mi Proyecto de Branding
+                            </Button>
+                        </ContactModal>
                     </div>
                 </FadeIn>
             </div>
@@ -87,7 +88,7 @@ export default function BrandingPage() {
       {/* Quote Section */}
       <section className="text-center py-20 md:py-28">
           <FadeIn>
-            <p className="text-4xl md:text-5xl font-medium text-foreground">«Convertimos conceptos en experiencias visuales que perduran»</p>
+            <p className="text-4xl md:text-5xl font-medium text-foreground max-w-4xl mx-auto">«Convertimos conceptos en experiencias visuales que perduran»</p>
           </FadeIn>
       </section>
 
