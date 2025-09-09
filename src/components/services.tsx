@@ -39,6 +39,11 @@ export default async function Services() {
         title: 'Branding, Diseño Gráfico y Copywriting',
         description: 'La identidad visual es clave. Colaboramos contigo para forjar una imagen distintiva e inolvidable. Tu marca es más que un logo; es la primera experiencia de tu cliente. Nos ocupamos de todos los detalles, desde la paleta de colores hasta la comunicación visual unificada.',
       },
+       {
+        icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-building-2"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/><path d="M10 6h4"/><path d="M10 10h4"/><path d="M10 14h4"/><path d="M10 18h4"/></svg>`,
+        title: 'Tecnología Inmersiva en Ayuntamientos',
+        description: 'Transformamos la gestión y promoción de municipios con tecnología de vanguardia. Desde tours virtuales y reconstrucciones históricas hasta simuladores para urbanismo y seguridad, creamos experiencias que potencian el turismo, la cultura y la eficiencia de los servicios públicos.',
+      },
       {
         icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-zap"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2z"></polygon></svg>`,
         title: 'Webs, Apps, CRMs y mucho más',
@@ -62,6 +67,9 @@ export default async function Services() {
     }
     if (lowerCaseTitle.includes('branding')) {
         return "/view-service/branding";
+    }
+     if (lowerCaseTitle.includes('ayuntamientos')) {
+        return "/view-service/ayuntamientos";
     }
     return "/services";
   };
