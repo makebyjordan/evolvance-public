@@ -12,7 +12,7 @@ function SvgRenderer({ svgString, className }: { svgString: string, className: s
     return <div dangerouslySetInnerHTML={{ __html: modifiedSvgString }} />;
 }
 
-const defaultIconSVG = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-zap"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>`;
+const defaultIconSVG = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-zap"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2z"></polygon></svg>`;
 
 export default async function Philosophy() {
 
@@ -53,17 +53,19 @@ export default async function Philosophy() {
           {points.map((point, index) => {
             return (
             <FadeIn key={index} delay={index * 0.1}>
-              <InteractiveCard className="h-full text-center p-6 transition-all duration-300 card-gradient-hover">
-                <CardHeader>
-                  <div className="flex justify-center mb-4">
-                     <div className="p-3 bg-primary/10 rounded-lg">
-                        <SvgRenderer svgString={point.icon || defaultIconSVG} className="w-8 h-8 text-primary" />
-                     </div>
-                  </div>
-                  <CardTitle className="font-bold text-lg text-foreground">{point.title}</CardTitle>
-                  <CardDescription className="mt-2 text-muted-foreground">{point.description}</CardDescription>
-                </CardHeader>
-              </InteractiveCard>
+              <div className="card-animated-border h-full">
+                <InteractiveCard className="h-full text-center p-6 transition-all duration-300 card-gradient-hover">
+                  <CardHeader>
+                    <div className="flex justify-center mb-4">
+                       <div className="p-3 bg-primary/10 rounded-lg">
+                          <SvgRenderer svgString={point.icon || defaultIconSVG} className="w-8 h-8 text-primary" />
+                       </div>
+                    </div>
+                    <CardTitle className="font-bold text-lg text-foreground">{point.title}</CardTitle>
+                    <CardDescription className="mt-2 text-muted-foreground">{point.description}</CardDescription>
+                  </CardHeader>
+                </InteractiveCard>
+              </div>
             </FadeIn>
           )})}
         </div>

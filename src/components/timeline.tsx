@@ -54,11 +54,13 @@ export default async function Timeline() {
                     <div className="absolute left-4 md:left-1/2 top-1 -translate-x-1/2 w-4 h-4 bg-background border-2 border-primary rounded-full"></div>
                     <div className="md:flex md:items-center">
                       <div className={`w-full md:w-1/2 ${index % 2 === 0 ? 'md:pr-8' : 'md:pl-8 md:order-2'}`}>
-                         <InteractiveCard className="h-full p-6 transition-all duration-300 card-gradient-hover border-border/50 hover:border-primary/50">
-                            <p className="text-2xl font-bold text-primary">{event.year}</p>
-                            <h3 className="text-xl font-bold mt-2 text-foreground">{event.title}</h3>
-                            <p className="mt-2 text-muted-foreground">{event.description}</p>
-                         </InteractiveCard>
+                         <div className="card-animated-border h-full">
+                            <InteractiveCard className="h-full p-6 transition-all duration-300 card-gradient-hover border-border/50 hover:border-primary/50">
+                                <p className="text-2xl font-bold text-primary">{event.year}</p>
+                                <h3 className="text-xl font-bold mt-2 text-foreground">{event.title}</h3>
+                                <p className="mt-2 text-muted-foreground">{event.description}</p>
+                            </InteractiveCard>
+                         </div>
                       </div>
                       <div className={`hidden md:block w-1/2 ${index % 2 === 0 ? '' : 'order-1'}`}></div>
                     </div>
