@@ -50,20 +50,7 @@ export default function DashboardLayout({
       <aside className="w-64 flex-shrink-0 border-r bg-card border-border/20 flex flex-col">
         <div className="h-20 flex items-center px-6 border-b border-border/20">
            <Link href="/" className="flex items-center gap-2">
-            <svg
-              width="32"
-              height="32"
-              viewBox="0 0 32 32"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-              className="w-8 h-8 text-primary"
-            >
-              <path
-                d="M6.66669 25.3333V4H10.6667L20.1334 16.5333V4H24.0001V25.3333H20.0001L10.5334 12.8V25.3333H6.66669Z"
-                fill="currentColor"
-              />
-            </svg>
-            <span className="text-xl font-headline font-bold">Evol-vance</span>
+            <span className="text-xl font-headline font-bold text-primary">Evol-vance</span>
           </Link>
         </div>
         <nav className="flex-1 py-6 px-4 space-y-2">
