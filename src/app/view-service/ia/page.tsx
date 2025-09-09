@@ -1,4 +1,6 @@
 
+'use client';
+
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
@@ -90,24 +92,26 @@ export default function IaPage() {
                             <TabsContent key={key} value={key} className="mt-12">
                                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                                     {solutionList.map(sol => (
-                                        <Card key={sol.title} className="flex flex-col">
-                                            <CardHeader>
-                                                <CardTitle>{sol.title}</CardTitle>
-                                            </CardHeader>
-                                            <CardContent className="flex-grow space-y-4">
-                                                <p className="text-muted-foreground">{sol.description}</p>
-                                                {sol.whatIs && (
+                                        <div key={sol.title} className="card-animated-border h-full">
+                                            <Card className="flex flex-col h-full">
+                                                <CardHeader>
+                                                    <CardTitle>{sol.title}</CardTitle>
+                                                </CardHeader>
+                                                <CardContent className="flex-grow space-y-4">
+                                                    <p className="text-muted-foreground">{sol.description}</p>
+                                                    {sol.whatIs && (
+                                                        <div>
+                                                            <h4 className="font-semibold text-foreground mb-1">¿Qué es?</h4>
+                                                            <p className="text-muted-foreground text-sm">{sol.whatIs}</p>
+                                                        </div>
+                                                    )}
                                                     <div>
-                                                        <h4 className="font-semibold text-foreground mb-1">¿Qué es?</h4>
-                                                        <p className="text-muted-foreground text-sm">{sol.whatIs}</p>
+                                                        <h4 className="font-semibold text-foreground mb-1">¿Qué problema resuelve?</h4>
+                                                        <p className="text-muted-foreground text-sm">{sol.problemSolved}</p>
                                                     </div>
-                                                )}
-                                                 <div>
-                                                    <h4 className="font-semibold text-foreground mb-1">¿Qué problema resuelve?</h4>
-                                                    <p className="text-muted-foreground text-sm">{sol.problemSolved}</p>
-                                                </div>
-                                            </CardContent>
-                                        </Card>
+                                                </CardContent>
+                                            </Card>
+                                        </div>
                                     ))}
                                 </div>
                             </TabsContent>

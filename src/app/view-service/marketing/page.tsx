@@ -41,8 +41,10 @@ export default function MarketingPage() {
             </FadeIn>
              <FadeIn className="md:order-1">
                 {/* Placeholder for image */}
-                <div className="w-full h-80 bg-card rounded-lg flex items-center justify-center">
-                    <p className="text-muted-foreground">Aquí va una imagen</p>
+                <div className="card-animated-border">
+                    <div className="w-full h-80 bg-card rounded-lg flex items-center justify-center">
+                        <p className="text-muted-foreground">Aquí va una imagen</p>
+                    </div>
                 </div>
             </FadeIn>
         </section>
@@ -64,9 +66,11 @@ export default function MarketingPage() {
                 </div>
             </FadeIn>
             <FadeIn>
-                 <div className="w-full h-80 bg-card rounded-lg flex items-center justify-center">
-                    <p className="text-muted-foreground">Aquí va otra imagen</p>
-                </div>
+                 <div className="card-animated-border">
+                    <div className="w-full h-80 bg-card rounded-lg flex items-center justify-center">
+                        <p className="text-muted-foreground">Aquí va otra imagen</p>
+                    </div>
+                 </div>
             </FadeIn>
         </section>
 
@@ -103,59 +107,65 @@ export default function MarketingPage() {
             <FadeIn delay={0.2}>
               <div className="max-w-3xl mx-auto space-y-4">
                  <Accordion type="single" collapsible className="w-full">
-                    <AccordionItem value="item-1" className="border-b-0">
-                      <div className="bg-card/80 backdrop-blur-sm rounded-lg shadow-md">
-                        <AccordionTrigger className="w-full text-left p-6 flex justify-between items-center hover:no-underline">
-                            <span className="text-lg font-medium text-foreground">Campaña Básica (1-2 objetivos)</span>
-                        </AccordionTrigger>
-                        <AccordionContent className="px-6 pb-6">
-                            <ul className="list-disc list-inside space-y-2 text-muted-foreground">
-                                <li>Definición de 1 a 2 objetivos claros (tráfico, leads o ventas).</li>
-                                <li>Creación y configuración de campañas en Meta Ads o Google Ads.</li>
-                                <li>Diseño de piezas gráficas personalizadas.</li>
-                                <li>Segmentación de audiencia básica.</li>
-                                <li>Optimización semanal de anuncios.</li>
-                                <li>Informe mensual con resultados clave y recomendaciones.</li>
-                            </ul>
-                        </AccordionContent>
-                      </div>
-                    </AccordionItem>
-                    <AccordionItem value="item-2" className="border-b-0">
-                      <div className="bg-card/80 backdrop-blur-sm rounded-lg shadow-md mt-4">
-                        <AccordionTrigger className="w-full text-left p-6 flex justify-between items-center hover:no-underline">
-                            <span className="text-lg font-medium text-foreground">Campaña Completa (funnels + retargeting)</span>
-                        </AccordionTrigger>
-                        <AccordionContent className="px-6 pb-6">
-                            <ul className="list-disc list-inside space-y-2 text-muted-foreground">
-                                <li>Estrategia integral con embudos de conversión (funnels).</li>
-                                <li>Configuración de campañas de remarketing para recuperar clientes.</li>
-                                <li>Creación de landing pages optimizadas.</li>
-                                <li>Desarrollo de creatividades avanzadas: imágenes, videos y copies.</li>
-                                <li>Integración con herramientas de automatización y CRM.</li>
-                                <li>Optimización continua basada en datos.</li>
-                                <li>Reporte detallado con métricas de conversión, ROI y recomendaciones.</li>
-                            </ul>
-                        </AccordionContent>
-                      </div>
-                    </AccordionItem>
-                    <AccordionItem value="item-3" className="border-b-0">
-                       <div className="bg-card/80 backdrop-blur-sm rounded-lg shadow-md mt-4">
-                        <AccordionTrigger className="w-full text-left p-6 flex justify-between items-center hover:no-underline">
-                            <span className="text-lg font-medium text-foreground">Campaña Multicanal (Meta + Google)</span>
-                        </AccordionTrigger>
-                        <AccordionContent className="px-6 pb-6">
-                            <ul className="list-disc list-inside space-y-2 text-muted-foreground">
-                                <li>Estrategia 360° en múltiples plataformas: Meta, Google, YouTube y Display.</li>
-                                <li>Gestión de varios objetivos simultáneos (branding, tráfico, leads y ventas).</li>
-                                <li>Integración avanzada de funnels, retargeting y lookalike audiences.</li>
-                                <li>Creación de contenidos dinámicos: videos, carruseles y anuncios interactivos.</li>
-                                <li>Test A/B constante para maximizar resultados.</li>
-                                <li>Panel de control personalizado en tiempo real con métricas clave.</li>
-                                <li>Reuniones estratégicas mensuales para ajustar la inversión y optimizar el ROI.</li>
-                            </ul>
-                        </AccordionContent>
-                       </div>
-                    </AccordionItem>
+                    <div className="card-animated-border">
+                        <AccordionItem value="item-1" className="border-b-0">
+                        <div className="bg-card/80 backdrop-blur-sm rounded-lg shadow-md">
+                            <AccordionTrigger className="w-full text-left p-6 flex justify-between items-center hover:no-underline">
+                                <span className="text-lg font-medium text-foreground">Campaña Básica (1-2 objetivos)</span>
+                            </AccordionTrigger>
+                            <AccordionContent className="px-6 pb-6">
+                                <ul className="list-disc list-inside space-y-2 text-muted-foreground">
+                                    <li>Definición de 1 a 2 objetivos claros (tráfico, leads o ventas).</li>
+                                    <li>Creación y configuración de campañas en Meta Ads o Google Ads.</li>
+                                    <li>Diseño de piezas gráficas personalizadas.</li>
+                                    <li>Segmentación de audiencia básica.</li>
+                                    <li>Optimización semanal de anuncios.</li>
+                                    <li>Informe mensual con resultados clave y recomendaciones.</li>
+                                </ul>
+                            </AccordionContent>
+                        </div>
+                        </AccordionItem>
+                    </div>
+                    <div className="card-animated-border mt-4">
+                        <AccordionItem value="item-2" className="border-b-0">
+                        <div className="bg-card/80 backdrop-blur-sm rounded-lg shadow-md">
+                            <AccordionTrigger className="w-full text-left p-6 flex justify-between items-center hover:no-underline">
+                                <span className="text-lg font-medium text-foreground">Campaña Completa (funnels + retargeting)</span>
+                            </AccordionTrigger>
+                            <AccordionContent className="px-6 pb-6">
+                                <ul className="list-disc list-inside space-y-2 text-muted-foreground">
+                                    <li>Estrategia integral con embudos de conversión (funnels).</li>
+                                    <li>Configuración de campañas de remarketing para recuperar clientes.</li>
+                                    <li>Creación de landing pages optimizadas.</li>
+                                    <li>Desarrollo de creatividades avanzadas: imágenes, videos y copies.</li>
+                                    <li>Integración con herramientas de automatización y CRM.</li>
+                                    <li>Optimización continua basada en datos.</li>
+                                    <li>Reporte detallado con métricas de conversión, ROI y recomendaciones.</li>
+                                </ul>
+                            </AccordionContent>
+                        </div>
+                        </AccordionItem>
+                    </div>
+                    <div className="card-animated-border mt-4">
+                        <AccordionItem value="item-3" className="border-b-0">
+                        <div className="bg-card/80 backdrop-blur-sm rounded-lg shadow-md">
+                            <AccordionTrigger className="w-full text-left p-6 flex justify-between items-center hover:no-underline">
+                                <span className="text-lg font-medium text-foreground">Campaña Multicanal (Meta + Google)</span>
+                            </AccordionTrigger>
+                            <AccordionContent className="px-6 pb-6">
+                                <ul className="list-disc list-inside space-y-2 text-muted-foreground">
+                                    <li>Estrategia 360° en múltiples plataformas: Meta, Google, YouTube y Display.</li>
+                                    <li>Gestión de varios objetivos simultáneos (branding, tráfico, leads y ventas).</li>
+                                    <li>Integración avanzada de funnels, retargeting y lookalike audiences.</li>
+                                    <li>Creación de contenidos dinámicos: videos, carruseles y anuncios interactivos.</li>
+                                    <li>Test A/B constante para maximizar resultados.</li>
+                                    <li>Panel de control personalizado en tiempo real con métricas clave.</li>
+                                    <li>Reuniones estratégicas mensuales para ajustar la inversión y optimizar el ROI.</li>
+                                </ul>
+                            </AccordionContent>
+                        </div>
+                        </AccordionItem>
+                    </div>
                 </Accordion>
               </div>
             </FadeIn>

@@ -150,29 +150,31 @@ export default function BrandingPage() {
               <div className="max-w-3xl mx-auto space-y-4">
                  <Accordion type="single" collapsible className="w-full">
                     {brandingServices.map((service) => (
-                        <AccordionItem value={service.value} key={service.value} className="border-b-0">
-                            <div className="bg-card/80 backdrop-blur-sm rounded-lg shadow-md mt-4">
-                                <AccordionTrigger className="w-full text-left p-6 flex justify-between items-center hover:no-underline">
-                                    <span className="text-lg font-medium text-foreground">{service.title}</span>
-                                </AccordionTrigger>
-                                <AccordionContent className="px-6 pb-6">
-                                    <div className="space-y-6">
-                                        <div>
-                                            <h5 className="font-bold mb-2 text-foreground">Incluye:</h5>
-                                            <ul className="list-disc list-inside space-y-2 text-muted-foreground">
-                                                {service.includes.map((item, i) => <li key={i} dangerouslySetInnerHTML={{ __html: item.replace(/<strong>/g, '<strong class="text-foreground/80">') }} />)}
-                                            </ul>
+                        <div key={service.value} className="card-animated-border">
+                            <AccordionItem value={service.value} className="border-b-0">
+                                <div className="bg-card/80 backdrop-blur-sm rounded-lg shadow-md mt-4">
+                                    <AccordionTrigger className="w-full text-left p-6 flex justify-between items-center hover:no-underline">
+                                        <span className="text-lg font-medium text-foreground">{service.title}</span>
+                                    </AccordionTrigger>
+                                    <AccordionContent className="px-6 pb-6">
+                                        <div className="space-y-6">
+                                            <div>
+                                                <h5 className="font-bold mb-2 text-foreground">Incluye:</h5>
+                                                <ul className="list-disc list-inside space-y-2 text-muted-foreground">
+                                                    {service.includes.map((item, i) => <li key={i} dangerouslySetInnerHTML={{ __html: item.replace(/<strong>/g, '<strong class="text-foreground/80">') }} />)}
+                                                </ul>
+                                            </div>
+                                            <div>
+                                                <h5 className="font-bold mb-2 text-foreground">Beneficios clave:</h5>
+                                                <ul className="list-disc list-inside space-y-2 text-muted-foreground">
+                                                    {service.benefits.map((item, i) => <li key={i}>{item}</li>)}
+                                                </ul>
+                                            </div>
                                         </div>
-                                        <div>
-                                            <h5 className="font-bold mb-2 text-foreground">Beneficios clave:</h5>
-                                            <ul className="list-disc list-inside space-y-2 text-muted-foreground">
-                                                 {service.benefits.map((item, i) => <li key={i}>{item}</li>)}
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </AccordionContent>
-                            </div>
-                        </AccordionItem>
+                                    </AccordionContent>
+                                </div>
+                            </AccordionItem>
+                        </div>
                     ))}
                 </Accordion>
               </div>
@@ -190,13 +192,15 @@ export default function BrandingPage() {
             <FadeIn delay={0.2}>
                 <div className="mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                     {creativeProcess.map((step, index) => (
-                        <Card key={index} className="text-center p-6 bg-card/80 backdrop-blur-sm">
-                            <div className="flex justify-center mb-4">
-                                {step.icon}
-                            </div>
-                            <h4 className="font-bold text-lg text-foreground">{step.title}</h4>
-                            <p className="text-muted-foreground mt-2 text-sm">{step.description}</p>
-                        </Card>
+                        <div key={index} className="card-animated-border">
+                            <Card className="text-center p-6 bg-card/80 backdrop-blur-sm h-full">
+                                <div className="flex justify-center mb-4">
+                                    {step.icon}
+                                </div>
+                                <h4 className="font-bold text-lg text-foreground">{step.title}</h4>
+                                <p className="text-muted-foreground mt-2 text-sm">{step.description}</p>
+                            </Card>
+                        </div>
                     ))}
                 </div>
             </FadeIn>
@@ -220,5 +224,3 @@ export default function BrandingPage() {
     </>
   );
 }
-
-    
