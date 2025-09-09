@@ -14,7 +14,7 @@ function SvgRenderer({ svgString, className }: { svgString: string, className: s
     return <div dangerouslySetInnerHTML={{ __html: modifiedSvgString }} />;
 }
 
-const defaultIconSVG = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-zap"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>`;
+const defaultIconSVG = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-zap"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2z"/></svg>`;
 
 
 export default async function Services() {
@@ -42,7 +42,7 @@ export default async function Services() {
       {
         icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-zap"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2z"/></svg>`,
         title: 'Programación y Ciberseguridad',
-        description: 'Soluciones de programación personalizadas para tu negocio. - Creación de CRM a medida para gestionar clientes - Aplicaciones móviles para tu público o para tus empleados - Ciberseguridad para proteger tus activos digitales.',
+        description: 'Desarrollamos software a medida y ofrecemos ciberseguridad de élite. Creamos CRM, apps y webs de gestión para optimizar tus procesos y potenciar tu negocio. Además, protegemos tus datos con análisis de vulnerabilidades, pruebas de penetración y monitoreo 24/7 para que te centres en lo que de verdad importa: el crecimiento de tu empresa.',
       },
     ]
   };
