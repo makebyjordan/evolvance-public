@@ -1,10 +1,10 @@
 
-import { Card, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Card, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
 import { FadeIn } from './fade-in';
 import { Button } from './ui/button';
 import Link from 'next/link';
 import { getWebContent, type ServicesContent } from '@/app/actions/web-content-actions';
-import { Zap } from 'lucide-react';
+import { Zap, ArrowRight } from 'lucide-react';
 import { InteractiveCard } from './interactive-card';
 
 // Helper component to safely render SVG
@@ -60,11 +60,12 @@ export default async function Services() {
         </FadeIn>
         <div className="mt-16 grid grid-cols-1 md:grid-cols-2 gap-6">
           {items.map((service, index) => {
+            const isAIService = service.title === 'IA y Automatización';
             return (
                 <FadeIn key={index} delay={index * 0.1}>
-                <InteractiveCard className="h-full card-gradient-hover">
-                    <CardHeader className="flex flex-row items-center gap-6 p-6">
-                      <div className="p-3 bg-primary/10 rounded-lg">
+                <InteractiveCard className="h-full card-gradient-hover flex flex-col">
+                    <CardHeader className="flex flex-row items-start gap-6 p-6">
+                      <div className="p-3 bg-primary/10 rounded-lg shrink-0">
                           <SvgRenderer svgString={service.icon || defaultIconSVG} className="w-8 h-8 text-primary" />
                       </div>
                       <div>
@@ -72,6 +73,13 @@ export default async function Services() {
                         <CardDescription className="mt-1 text-muted-foreground">{service.description}</CardDescription>
                       </div>
                     </CardHeader>
+                    {isAIService && (
+                      <CardFooter className="mt-auto p-6 pt-0">
+                        <Button asChild variant="link" className="p-0 h-auto text-primary">
+                          <Link href="/view-service/ia">Saber más... <ArrowRight className="ml-2 h-4 w-4" /></Link>
+                        </Button>
+                      </CardFooter>
+                    )}
                 </InteractiveCard>
                 </FadeIn>
             )
