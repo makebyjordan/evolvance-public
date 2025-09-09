@@ -72,14 +72,16 @@ export default function SoftwarePage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {services.map((service, index) => (
               <FadeIn key={service.title} delay={index * 0.1}>
-                <Card className="p-8 h-full">
-                  <CardContent className="p-0">
-                    <h3 className="text-2xl font-bold mb-3 text-primary">{service.title}</h3>
-                    <p className="text-muted-foreground mb-4">{service.description}</p>
-                    <p className="text-sm"><strong className="text-foreground">Resuelve:</strong> <span className="text-muted-foreground">{service.problem}</span></p>
-                    <p className="text-sm"><strong className="text-foreground">Beneficio:</strong> <span className="text-muted-foreground">{service.benefit}</span></p>
-                  </CardContent>
-                </Card>
+                <div className="card-animated-border rounded-lg h-full">
+                    <Card className="p-8 h-full">
+                        <CardContent className="p-0">
+                            <h3 className="text-2xl font-bold mb-3 text-primary">{service.title}</h3>
+                            <p className="text-muted-foreground mb-4">{service.description}</p>
+                            <p className="text-sm"><strong className="text-foreground">Resuelve:</strong> <span className="text-muted-foreground">{service.problem}</span></p>
+                            <p className="text-sm"><strong className="text-foreground">Beneficio:</strong> <span className="text-muted-foreground">{service.benefit}</span></p>
+                        </CardContent>
+                    </Card>
+                </div>
               </FadeIn>
             ))}
           </div>
@@ -112,16 +114,18 @@ export default function SoftwarePage() {
             <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 text-foreground">Preguntas Frecuentes</h2>
           </FadeIn>
           <FadeIn delay={0.2}>
-            <Accordion type="single" collapsible className="w-full bg-card p-4 rounded-lg">
-              {faqs.map((faq, index) => (
-                <AccordionItem key={index} value={`item-${index}`}>
-                  <AccordionTrigger className="text-left font-semibold text-lg hover:no-underline">{faq.question}</AccordionTrigger>
-                  <AccordionContent className="text-muted-foreground">
-                    {faq.answer}
-                  </AccordionContent>
-                </AccordionItem>
-              ))}
-            </Accordion>
+            <div className="card-animated-border rounded-lg">
+                <Accordion type="single" collapsible className="w-full bg-card p-4 rounded-lg">
+                {faqs.map((faq, index) => (
+                    <AccordionItem key={index} value={`item-${index}`}>
+                    <AccordionTrigger className="text-left font-semibold text-lg hover:no-underline">{faq.question}</AccordionTrigger>
+                    <AccordionContent className="text-muted-foreground">
+                        {faq.answer}
+                    </AccordionContent>
+                    </AccordionItem>
+                ))}
+                </Accordion>
+            </div>
           </FadeIn>
         </div>
       </section>
