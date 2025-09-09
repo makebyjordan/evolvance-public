@@ -1,15 +1,18 @@
 
 import { Card, CardDescription, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { FileText, Globe, HelpCircle, Bot, Milestone, ShieldCheck, FileType, Settings } from "lucide-react";
+import { FileText, Globe, HelpCircle, Bot, Milestone, ShieldCheck, FileType, Settings, ExternalLink } from "lucide-react";
 import { ServicesEditor } from "./components/ServicesEditor";
 import { TimelineEditor } from "./components/TimelineEditor";
 import { PhilosophyEditor } from "./components/PhilosophyEditor";
 import { FaqEditor } from "./components/FaqEditor";
 import { PageEditor } from "./components/PageEditor";
 import { SiteConfigEditor } from "./components/SiteConfigEditor";
+import { Button } from "@/components/ui/button";
+import Link from 'next/link';
 
 import { getWebContent, type ServicesContent, type TimelineContent, type PhilosophyContent, type FaqContent, type PageContent, type SiteConfigContent } from "@/app/actions/web-content-actions";
+import { Separator } from "@/components/ui/separator";
 
 export const dynamic = 'force-dynamic';
 
@@ -65,6 +68,35 @@ export default async function WebPage() {
           <FaqEditor initialContent={faqContent} />
         </TabsContent>
         <TabsContent value="pages" className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>Páginas de Servicios</CardTitle>
+                <CardDescription>
+                  Previsualiza las páginas de aterrizaje de los servicios principales. Se abrirán en una nueva pestaña.
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="flex items-center justify-between p-3 border rounded-lg">
+                  <p className="font-medium">Inteligencia Artificial y Automatización</p>
+                  <Button asChild variant="outline" size="sm">
+                    <Link href="/view-service/ia" target="_blank">
+                      Ver página <ExternalLink className="ml-2 h-4 w-4" />
+                    </Link>
+                  </Button>
+                </div>
+                 <div className="flex items-center justify-between p-3 border rounded-lg">
+                  <p className="font-medium">Desarrollo de Software y Ciberseguridad</p>
+                  <Button asChild variant="outline" size="sm">
+                    <Link href="/view-service/software" target="_blank">
+                      Ver página <ExternalLink className="ml-2 h-4 w-4" />
+                    </Link>
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Separator />
+           
            <PageEditor 
               pageName="Términos y Condiciones"
               sectionId="terms"
