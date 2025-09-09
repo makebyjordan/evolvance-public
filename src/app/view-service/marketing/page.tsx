@@ -7,16 +7,31 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { Button } from "@/components/ui/button";
 import { FadeIn } from "@/components/fade-in";
+import { SectionSeparator } from "@/components/section-separator";
+import Link from 'next/link';
 
 export default function MarketingPage() {
   return (
-    <div className="bg-background text-foreground">
+    <>
+      {/* Hero Section */}
+      <section className="relative isolate bg-card/40 pt-32 pb-20 md:pt-40 md:pb-24">
+          <SectionSeparator position="top" align="left" />
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
+              <h1 className="text-4xl md:text-5xl font-extrabold leading-tight mb-4 text-foreground">Publicidad y Analítica que Impulsan tu Crecimiento</h1>
+              <p className="text-lg md:text-xl mb-8 max-w-3xl mx-auto text-muted-foreground">Creamos campañas de alto impacto en Meta, Google y TikTok, respaldadas por un análisis de datos preciso para maximizar tu ROI.</p>
+              <Button asChild size="lg">
+                  <Link href="#sem-intro">Descubre Nuestras Estrategias</Link>
+              </Button>
+          </div>
+      </section>
+
       {/* Main Content */}
       <main className="container mx-auto px-6 py-20 md:py-32">
 
         {/* Section 1: Social Media Ads Intro */}
-        <section className="grid md:grid-cols-2 gap-12 items-center">
+        <section id="sem-intro" className="grid md:grid-cols-2 gap-12 items-center">
             <FadeIn className="md:order-2">
                 <div className="text-center md:text-left">
                     <h2 className="text-3xl md:text-4xl font-bold text-primary">SEM: Conecta con tu Audiencia</h2>
@@ -146,6 +161,6 @@ export default function MarketingPage() {
             </FadeIn>
         </section>
       </main>
-    </div>
+    </>
   );
 }
