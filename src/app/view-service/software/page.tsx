@@ -1,136 +1,130 @@
 
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Button } from '@/components/ui/button';
+'use client';
+
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { ContactModal } from "@/components/contact-modal";
+import { FadeIn } from "@/components/fade-in";
 import Link from 'next/link';
-import { SectionSeparator } from '@/components/section-separator';
-
-const programmingSolutions = [
-    {
-        title: "CRM a Medida",
-        description: "Un CRM hecho solo para ti. Te ayuda a organizar la información de tus clientes y automatizar ventas, marketing y servicio.",
-        problemSolved: "Aumenta tu rentabilidad y fideliza a tus clientes. Tu equipo podrá cerrar más ventas y ofrecer un servicio excepcional.",
-        howWeDoIt: "Analizamos tu negocio, diseñamos y programamos un CRM a medida, sin funciones innecesarias, para que se adapte a ti."
-    },
-    {
-        title: "Aplicación Móvil",
-        description: "Desarrollamos una app para tus clientes o empleados, para que estés siempre en el bolsillo de tu público.",
-        problemSolved: "Mejora la experiencia de tus clientes o aumenta la productividad de tu equipo, centralizando todo en una herramienta.",
-        howWeDoIt: "Definimos el objetivo, la diseñamos para que sea fácil de usar, la programamos y la publicamos en las tiendas de Google y Apple."
-    },
-    {
-        title: "Web de Gestión de Proyectos",
-        description: "Crea una web privada para tu empresa. Centraliza proyectos, documentos y tareas en un solo lugar para un trabajo más organizado.",
-        problemSolved: "Mejora la comunicación y elimina la pérdida de tiempo. Tu equipo siempre sabrá en qué punto está cada proyecto.",
-        howWeDoIt: "Estudiamos tu forma de trabajar, diseñamos una plataforma intuitiva y programamos las funcionalidades que necesitas."
-    },
-    {
-        title: "Web + CRM Integrado",
-        description: "Combina una web profesional con un CRM adaptado. Cada cliente que llegue a tu web quedará registrado automáticamente.",
-        problemSolved: "Aumenta la eficiencia al automatizar la captación de datos, permitiendo un seguimiento inmediato y más conversiones.",
-        howWeDoIt: "Diseñamos una web atractiva y la unimos a un CRM a medida para que la web alimente al CRM de forma automática."
-    }
-];
-
-const cybersecuritySolutions = [
-    {
-        title: "Pruebas de Penetración",
-        description: "Actuamos como un hacker ético para encontrar y reportar las debilidades en tus sistemas antes de que lo haga alguien malintencionado.",
-        problemSolved: "Te da una visión clara de tu seguridad, permitiéndote solucionar vulnerabilidades antes de que un ataque cause pérdidas o daños.",
-        howWeDoIt: "Simulamos un ataque controlado y te entregamos un informe detallado con las vulnerabilidades y recomendaciones para solucionarlas."
-    },
-    {
-        title: "Seguridad Gestionada (MSS)",
-        description: "Monitoreamos tus sistemas 24/7 para detectar actividades sospechosas y responder a las amenazas de inmediato.",
-        problemSolved: "Minimiza el riesgo de un ciberataque al detectarlo en sus primeras etapas, evitando que un incidente menor se convierta en una crisis.",
-        howWeDoIt: "Implementamos una plataforma de monitoreo avanzada y nuestro equipo de expertos actúa en caso de una alerta para contener la amenaza."
-    },
-    {
-        title: "Servicios de Ciberseguridad",
-        description: "Te ayudamos a proteger tu negocio de ataques, virus y robos de información para que tus datos y los de tus clientes estén seguros.",
-        problemSolved: "Evita pérdidas económicas, protege tu reputación y asegura que tus operaciones no se vean interrumpidas por un ataque.",
-        howWeDoIt: "Hacemos una auditoría, implementamos soluciones de protección y capacitamos a tu equipo para mantener la seguridad a largo plazo."
-    }
-];
-
 
 export default function SoftwarePage() {
-    return (
-        <>
-            {/* Hero Section */}
-            <section className="relative isolate bg-card/40 pt-32 pb-20 md:pt-40 md:pb-24">
-                <SectionSeparator position="top" align="left" />
-                <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
-                    <h1 className="text-4xl md:text-5xl font-extrabold leading-tight mb-4 text-foreground">Especialistas en Programación y Ciberseguridad</h1>
-                    <p className="text-lg md:text-xl mb-8 max-w-3xl mx-auto text-muted-foreground">Desarrollamos software a medida para potenciar tu negocio y lo protegemos con las mejores soluciones de ciberseguridad.</p>
-                    <Button asChild size="lg">
-                        <Link href="#solutions">Descubre Nuestras Soluciones</Link>
-                    </Button>
-                </div>
-            </section>
+  const services = [
+    { title: "CRM a Medida", description: "Deja de usar hojas de cálculo. Centraliza toda la información de tus clientes en un sistema hecho solo para ti.", problem: "la falta de organización.", benefit: "cierra más ventas y fideliza a tus clientes." },
+    { title: "Aplicación Móvil", description: "Desarrollamos una app para tus clientes o empleados para mejorar su experiencia, optimizar procesos y reducir errores.", problem: "la desconexión con tu público.", benefit: "aumenta tu productividad y presencia." },
+    { title: "Web de Gestión de Proyectos", description: "Organiza tu equipo y tus proyectos en una plataforma privada. Centraliza tareas, documentos y la comunicación.", problem: "la falta de comunicación y la pérdida de tiempo.", benefit: "un equipo más eficiente y proyectos que avanzan." },
+    { title: "Web + CRM Integrado", description: "Combinamos una web profesional con un CRM a medida. Cada cliente que llegue a tu web quedará registrado automáticamente.", problem: "el seguimiento manual de clientes.", benefit: "automatiza la captación y aumenta tus ventas." }
+  ];
 
-            {/* Solutions Section */}
-            <section id="solutions" className="py-20 sm:py-24">
-                <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-                     <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 text-foreground">Nuestras Áreas de Especialización</h2>
-                    
-                    <Tabs defaultValue="programacion" className="w-full">
-                        <div className="flex justify-center">
-                            <TabsList className="grid grid-cols-2 gap-2 h-auto">
-                                <TabsTrigger value="programacion" className="text-sm md:text-base px-4 py-2">Programación a Medida</TabsTrigger>
-                                <TabsTrigger value="ciberseguridad" className="text-sm md:text-base px-4 py-2">Ciberseguridad</TabsTrigger>
-                            </TabsList>
-                        </div>
-                        
-                        <TabsContent value="programacion" className="mt-12">
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                                {programmingSolutions.map(sol => (
-                                    <Card key={sol.title} className="flex flex-col">
-                                        <CardHeader>
-                                            <CardTitle>{sol.title}</CardTitle>
-                                        </CardHeader>
-                                        <CardContent className="flex-grow space-y-4">
-                                            <p className="text-muted-foreground">{sol.description}</p>
-                                            <div>
-                                                <h4 className="font-semibold text-foreground mb-1">¿Qué problema resuelve?</h4>
-                                                <p className="text-muted-foreground text-sm">{sol.problemSolved}</p>
-                                            </div>
-                                            <div>
-                                                <h4 className="font-semibold text-foreground mb-1">¿Cómo lo hacemos?</h4>
-                                                <p className="text-muted-foreground text-sm">{sol.howWeDoIt}</p>
-                                            </div>
-                                        </CardContent>
-                                    </Card>
-                                ))}
-                            </div>
-                        </TabsContent>
-                        
-                        <TabsContent value="ciberseguridad" className="mt-12">
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                                {cybersecuritySolutions.map(sol => (
-                                    <Card key={sol.title} className="flex flex-col">
-                                        <CardHeader>
-                                            <CardTitle>{sol.title}</CardTitle>
-                                        </CardHeader>
-                                        <CardContent className="flex-grow space-y-4">
-                                            <p className="text-muted-foreground">{sol.description}</p>
-                                            <div>
-                                                <h4 className="font-semibold text-foreground mb-1">¿Qué problema resuelve?</h4>
-                                                <p className="text-muted-foreground text-sm">{sol.problemSolved}</p>
-                                            </div>
-                                            <div>
-                                                <h4 className="font-semibold text-foreground mb-1">¿Cómo lo hacemos?</h4>
-                                                <p className="text-muted-foreground text-sm">{sol.howWeDoIt}</p>
-                                            </div>
-                                        </CardContent>
-                                    </Card>
-                                ))}
-                            </div>
-                        </TabsContent>
+  const whyUs = [
+    { title: "Enfoque Personalizado", description: "No ofrecemos soluciones genéricas. Nos sentamos contigo y entendemos tu negocio para crear una herramienta a tu medida." },
+    { title: "Resultados Comprobados", description: "Nos enfocamos en soluciones que ofrezcan un retorno de inversión real y medible para tu éxito." },
+    { title: "Transparencia Total", description: "Te mantenemos informado en cada etapa del proyecto. Sin sorpresas, sin costes ocultos." },
+    { title: "Soporte Dedicado", description: "Ofrecemos soporte post-lanzamiento para que tu nueva herramienta funcione perfectamente a largo plazo." }
+  ];
 
-                    </Tabs>
+  const faqs = [
+    { question: "¿Cuánto cuesta un proyecto de programación a medida?", answer: "El precio depende de la complejidad y funcionalidades. Por eso, hacemos una consultoría inicial gratuita para entender tu proyecto y darte un presupuesto exacto y sin compromiso." },
+    { question: "¿Qué tan largo es el proceso?", answer: "Cada proyecto es único. En la consultoría inicial te daremos una estimación clara del tiempo de desarrollo, con hitos definidos para que sepas en todo momento en qué fase estamos." },
+    { question: "¿Cómo garantizan que la solución se adapte a mi negocio?", answer: "Nuestro proceso comienza con una inmersión completa en tu empresa. Trabajamos contigo codo a codo para entender tus retos y diseñar una solución que los resuelva de la manera más eficiente." }
+  ];
+
+  return (
+    <>
+      {/* Hero Section */}
+      <section className="bg-primary/90 text-primary-foreground py-20 md:py-32">
+        <div className="container mx-auto px-6 text-center">
+          <FadeIn>
+            <h1 className="text-4xl md:text-6xl font-bold leading-tight mb-4">Haz que la tecnología trabaje para ti, no al revés.</h1>
+            <p className="text-lg md:text-xl mb-8 max-w-3xl mx-auto text-primary-foreground/80">Creamos soluciones digitales personalizadas que resuelven tus problemas de negocio, automatizan tareas y te dan una ventaja competitiva.</p>
+            <ContactModal>
+              <Button size="lg" variant="secondary" className="font-bold">
+                Agenda una consultoría gratuita
+              </Button>
+            </ContactModal>
+          </FadeIn>
+        </div>
+      </section>
+
+      {/* Quiénes Somos Section */}
+      <section id="nosotros" className="py-20 bg-background">
+        <div className="container mx-auto px-6">
+          <FadeIn>
+            <div className="text-center max-w-4xl mx-auto">
+              <h2 className="text-3xl md:text-4xl font-bold mb-4 text-foreground">Tu socio tecnológico de confianza.</h2>
+              <p className="text-muted-foreground leading-relaxed">Nos apasiona transformar ideas de negocio en herramientas digitales que funcionan. Nacimos de la necesidad de ofrecer soluciones que se adapten de verdad a cada empresa, sin los altos costes ni la rigidez de los productos genéricos. Creemos que la tecnología debe ser una herramienta para crecer, no un obstáculo. Nuestra misión es simple: crear software que impulse tu eficiencia, aumente tus ventas y te permita enfocarte en lo que mejor sabes hacer.</p>
+            </div>
+          </FadeIn>
+        </div>
+      </section>
+
+      {/* Servicios Section */}
+      <section id="servicios" className="py-20 bg-card/40">
+        <div className="container mx-auto px-6">
+          <FadeIn>
+            <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 text-foreground">¿Cómo podemos ayudarte?</h2>
+          </FadeIn>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {services.map((service, index) => (
+              <FadeIn key={service.title} delay={index * 0.1}>
+                <Card className="p-8 h-full">
+                  <CardContent className="p-0">
+                    <h3 className="text-2xl font-bold mb-3 text-primary">{service.title}</h3>
+                    <p className="text-muted-foreground mb-4">{service.description}</p>
+                    <p className="text-sm"><strong className="text-foreground">Resuelve:</strong> <span className="text-muted-foreground">{service.problem}</span></p>
+                    <p className="text-sm"><strong className="text-foreground">Beneficio:</strong> <span className="text-muted-foreground">{service.benefit}</span></p>
+                  </CardContent>
+                </Card>
+              </FadeIn>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Por qué Elegirnos Section */}
+      <section id="proceso" className="py-20 bg-background">
+        <div className="container mx-auto px-6 text-center">
+          <FadeIn>
+            <h2 className="text-3xl md:text-4xl font-bold mb-12 text-foreground">La diferencia está en nuestro proceso.</h2>
+          </FadeIn>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
+            {whyUs.map((item, index) => (
+              <FadeIn key={item.title} delay={index * 0.1}>
+                <div>
+                  <h3 className="text-xl font-bold mb-2 text-primary">{item.title}</h3>
+                  <p className="text-muted-foreground">{item.description}</p>
                 </div>
-            </section>
-        </>
-    );
+              </FadeIn>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ Section */}
+      <section id="faq" className="py-20 bg-card/40">
+        <div className="container mx-auto px-6 max-w-3xl">
+          <FadeIn>
+            <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 text-foreground">Preguntas Frecuentes</h2>
+          </FadeIn>
+          <FadeIn delay={0.2}>
+            <Accordion type="single" collapsible className="w-full bg-card p-4 rounded-lg">
+              {faqs.map((faq, index) => (
+                <AccordionItem key={index} value={`item-${index}`}>
+                  <AccordionTrigger className="text-left font-semibold text-lg hover:no-underline">{faq.question}</AccordionTrigger>
+                  <AccordionContent className="text-muted-foreground">
+                    {faq.answer}
+                  </AccordionContent>
+                </AccordionItem>
+              ))}
+            </Accordion>
+          </FadeIn>
+        </div>
+      </section>
+    </>
+  );
 }
