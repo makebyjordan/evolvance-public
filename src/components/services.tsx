@@ -32,11 +32,11 @@ export default async function Services() {
       {
         icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-megaphone"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg>`,
         title: 'Marketing Digital',
-        description: 'Convierte tu presencia digital en un activo estratégico. Diseñamos y ejecutamos campañas que atraen a tu audiencia y convierten visitas en clientes leales, llevando tu marca a la cima de su sector. Dominamos el mercado digital con estrategias de contenido, Desarrollo web profesional Branding, Diseño gráfico y copywriting SEO y SEM, Campañas de ads Gestión y creación de contenido en redes.',
+        description: 'Convierte tu presencia digital en un activo estratégico. Diseñamos y ejecutamos campañas que atraen a tu audiencia y convierten visitas en clientes leales, llevando tu marca a la cima de su sector. Dominamos el mercado digital con estrategias de contenido, SEO, SEM, y gestión de redes sociales.',
       },
       {
         icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-brush"><path d="M21.7 10c.3-1 .3-2.1 0-3.1C21.4 6 21.1 5 20 4.2c-1.1-.9-2.5-1.2-4-1.2s-2.9.3-4 1.2c-1 .8-1.4 1.8-1.7 2.8C10 11 10 12.1 10.3 13c.3 1 .7 1.9 1.4 2.6.7.7 1.5 1.3 2.3 1.6.8.3 1.7.5 2.5.5s1.7-.2 2.5-.5c.8-.3 1.6-.9 2.3-1.6.7-.7 1.1-1.6 1.4-2.6z"/><path d="M12 13.5V22"/><path d="M9 12a3 3 0 0 0-3-3H4a2 2 0 0 0-2 2v2a2 2 0 0 0 2 2h2a3 3 0 0 0 3-3z"/></svg>`,
-        title: 'Branding, diseño grafico y copywriting',
+        title: 'Branding, Diseño Gráfico y Copywriting',
         description: 'La identidad visual es clave. Colaboramos contigo para forjar una imagen distintiva e inolvidable. Tu marca es más que un logo; es la primera experiencia de tu cliente. Nos ocupamos de todos los detalles, desde la paleta de colores hasta la comunicación visual unificada.',
       },
       {
@@ -75,26 +75,28 @@ export default async function Services() {
             {title}
           </h2>
         </FadeIn>
-        <div className="mt-16 grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="mt-16 grid grid-cols-1 md:grid-cols-2 gap-8">
           {items.map((service, index) => {
             return (
                 <FadeIn key={index} delay={index * 0.1}>
-                <InteractiveCard className="h-full card-gradient-hover flex flex-col">
-                    <CardHeader className="flex flex-row items-start gap-6 p-6">
-                      <div className="p-3 bg-primary/10 rounded-full shrink-0">
-                          <SvgRenderer svgString={service.icon || defaultIconSVG} className="w-8 h-8 text-primary" />
-                      </div>
-                      <div>
-                        <CardTitle className="font-bold text-lg text-foreground">{service.title}</CardTitle>
-                        <CardDescription className="mt-1 text-muted-foreground">{service.description}</CardDescription>
-                      </div>
-                    </CardHeader>
-                    <CardFooter className="mt-auto p-6 pt-0">
-                      <Button asChild variant="link" className="p-0 h-auto text-primary">
-                          <Link href={getServiceLink(service.title)}>Saber más... <ArrowRight className="ml-2 h-4 w-4" /></Link>
-                      </Button>
-                    </CardFooter>
-                </InteractiveCard>
+                  <div className="card-animated-border h-full">
+                    <InteractiveCard className="h-full card-gradient-hover flex flex-col bg-card text-card-foreground shadow-sm">
+                        <CardHeader className="flex flex-row items-start gap-6 p-6">
+                          <div className="p-3 bg-primary/10 rounded-full shrink-0">
+                              <SvgRenderer svgString={service.icon || defaultIconSVG} className="w-8 h-8 text-primary" />
+                          </div>
+                          <div>
+                            <CardTitle className="font-bold text-lg text-foreground">{service.title}</CardTitle>
+                            <CardDescription className="mt-1 text-muted-foreground">{service.description}</CardDescription>
+                          </div>
+                        </CardHeader>
+                        <CardFooter className="mt-auto p-6 pt-0">
+                          <Button asChild variant="link" className="p-0 h-auto text-primary">
+                              <Link href={getServiceLink(service.title)}>Saber más... <ArrowRight className="ml-2 h-4 w-4" /></Link>
+                          </Button>
+                        </CardFooter>
+                    </InteractiveCard>
+                  </div>
                 </FadeIn>
             )
           })}

@@ -47,41 +47,43 @@ export function ProposalCard({ proposal }: ProposalCardProps) {
   };
 
   return (
-    <Card className="flex flex-col">
-      <CardHeader>
-        <CardTitle className="font-headline">{proposal.title}</CardTitle>
-        <CardDescription>
-          Para ver esta propuesta, introduce el código de acceso.
-        </CardDescription>
-      </CardHeader>
-      <CardContent className="flex-grow space-y-4">
-        <div className="flex gap-2">
-          <Input
-            type="text"
-            placeholder="Código de acceso"
-            value={inputCode}
-            onChange={(e) => {
-                setInputCode(e.target.value);
-                if(isVerified) setIsVerified(false);
-            }}
-            disabled={isVerified}
-          />
-          {!isVerified && (
-             <Button onClick={handleVerifyCode} variant="secondary">
-                Verificar
-             </Button>
-          )}
-        </div>
-      </CardContent>
-      <CardFooter>
-        <Button 
-            className="w-full" 
-            disabled={!isVerified} 
-            onClick={handleViewProposal}>
-          <Eye className="mr-2 h-4 w-4" />
-          Ver Propuesta
-        </Button>
-      </CardFooter>
-    </Card>
+    <div className="card-animated-border h-full">
+      <Card className="flex flex-col h-full">
+        <CardHeader>
+          <CardTitle className="font-headline">{proposal.title}</CardTitle>
+          <CardDescription>
+            Para ver esta propuesta, introduce el código de acceso.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="flex-grow space-y-4">
+          <div className="flex gap-2">
+            <Input
+              type="text"
+              placeholder="Código de acceso"
+              value={inputCode}
+              onChange={(e) => {
+                  setInputCode(e.target.value);
+                  if(isVerified) setIsVerified(false);
+              }}
+              disabled={isVerified}
+            />
+            {!isVerified && (
+               <Button onClick={handleVerifyCode} variant="secondary">
+                  Verificar
+               </Button>
+            )}
+          </div>
+        </CardContent>
+        <CardFooter>
+          <Button 
+              className="w-full" 
+              disabled={!isVerified} 
+              onClick={handleViewProposal}>
+            <Eye className="mr-2 h-4 w-4" />
+            Ver Propuesta
+          </Button>
+        </CardFooter>
+      </Card>
+    </div>
   );
 }

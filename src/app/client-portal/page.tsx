@@ -20,44 +20,50 @@ export default function ClientPortalPage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl w-full">
-              <Card>
-                  <CardHeader>
-                      <FileText className="h-8 w-8 text-primary mb-2" />
-                      <CardTitle>Propuestas</CardTitle>
-                      <CardDescription>Consulta el estado y los detalles de las propuestas que te hemos enviado.</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <Button asChild variant="outline" className="w-full">
-                      <Link href="/proposals">Ver Propuestas</Link>
-                    </Button>
-                  </CardContent>
-              </Card>
-
-              <Card>
-                  <CardHeader>
-                      <Briefcase className="h-8 w-8 text-primary mb-2" />
-                      <CardTitle>Proyectos</CardTitle>
-                      <CardDescription>Sigue el avance de tus proyectos en ejecución y accede a la documentación.</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <Button asChild variant="outline" className="w-full">
-                        <Link href="/projects">Ver Proyectos</Link>
-                    </Button>
-                  </CardContent>
-              </Card>
-
-              <Card>
-                  <CardHeader>
-                      <MessageSquare className="h-8 w-8 text-primary mb-2" />
-                      <CardTitle>Contacto</CardTitle>
-                      <CardDescription>Comunícate directamente con nuestro equipo para cualquier consulta.</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                      <Button variant="outline" className="w-full" onClick={() => setIsContactFormOpen(true)}>
-                        Contactar
+              <div className="card-animated-border">
+                <Card className="h-full">
+                    <CardHeader>
+                        <FileText className="h-8 w-8 text-primary mb-2" />
+                        <CardTitle>Propuestas</CardTitle>
+                        <CardDescription>Consulta el estado y los detalles de las propuestas que te hemos enviado.</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <Button asChild variant="outline" className="w-full">
+                        <Link href="/proposals">Ver Propuestas</Link>
                       </Button>
-                  </CardContent>
-              </Card>
+                    </CardContent>
+                </Card>
+              </div>
+
+              <div className="card-animated-border">
+                <Card className="h-full">
+                    <CardHeader>
+                        <Briefcase className="h-8 w-8 text-primary mb-2" />
+                        <CardTitle>Proyectos</CardTitle>
+                        <CardDescription>Sigue el avance de tus proyectos en ejecución y accede a la documentación.</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <Button asChild variant="outline" className="w-full">
+                          <Link href="/projects">Ver Proyectos</Link>
+                      </Button>
+                    </CardContent>
+                </Card>
+              </div>
+
+              <div className="card-animated-border">
+                <Card className="h-full">
+                    <CardHeader>
+                        <MessageSquare className="h-8 w-8 text-primary mb-2" />
+                        <CardTitle>Contacto</CardTitle>
+                        <CardDescription>Comunícate directamente con nuestro equipo para cualquier consulta.</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        <Button variant="outline" className="w-full" onClick={() => setIsContactFormOpen(true)}>
+                          Contactar
+                        </Button>
+                    </CardContent>
+                </Card>
+              </div>
           </div>
 
           <div className="mt-12">

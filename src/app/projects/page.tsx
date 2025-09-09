@@ -7,6 +7,7 @@ import { ArrowLeft } from "lucide-react";
 export default function ProjectsPage() {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-background p-4">
+      <div className="card-animated-border">
         <Card className="max-w-2xl w-full text-center">
           <CardHeader>
             <CardTitle className="text-3xl font-headline text-primary">Proyectos</CardTitle>
@@ -26,6 +27,7 @@ export default function ProjectsPage() {
             </Button>
           </CardContent>
         </Card>
+      </div>
     </div>
   );
 }

@@ -104,7 +104,7 @@
     }
 
     .card-animated-border {
-        @apply relative p-[3px] overflow-hidden;
+        @apply relative p-[3px] overflow-hidden rounded-lg;
     }
 
     .card-animated-border::before {
