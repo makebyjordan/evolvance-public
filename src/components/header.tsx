@@ -61,7 +61,19 @@ export default function Header() {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
           <Link href="/" className="flex items-center gap-2 text-foreground">
-             <SvgRenderer svgString={logoSvg} className="w-8 h-8 text-primary" />
+             <svg
+                width="32"
+                height="32"
+                viewBox="0 0 32 32"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                className="w-8 h-8 text-primary"
+              >
+                <path
+                  d="M6.66669 25.3333V4H10.6667L20.1334 16.5333V4H24.0001V25.3333H20.0001L10.5334 12.8V25.3333H6.66669Z"
+                  fill="currentColor"
+                />
+              </svg>
             <span className="text-xl font-headline font-bold">Evol-vance</span>
           </Link>
 
@@ -99,7 +111,19 @@ export default function Header() {
                 <SheetHeader>
                    <SheetTitle>
                      <Link href="/" className="flex items-center gap-2 text-foreground" onClick={() => setIsMobileMenuOpen(false)}>
-                        <SvgRenderer svgString={logoSvg} className="w-8 h-8 text-primary" />
+                        <svg
+                            width="32"
+                            height="32"
+                            viewBox="0 0 32 32"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="w-8 h-8 text-primary"
+                        >
+                            <path
+                            d="M6.66669 25.3333V4H10.6667L20.1334 16.5333V4H24.0001V25.3333H20.0001L10.5334 12.8V25.3333H6.66669Z"
+                            fill="currentColor"
+                            />
+                        </svg>
                         <span className="text-xl font-headline font-bold">Evol-vance</span>
                     </Link>
                   </SheetTitle>
