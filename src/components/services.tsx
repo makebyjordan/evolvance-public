@@ -41,7 +41,7 @@ export default async function Services() {
       },
       {
         icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-zap"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2z"/></svg>`,
-        title: 'Programación y Ciberseguridad.',
+        title: 'Programación y Ciberseguridad',
         description: 'Soluciones de programación personalizadas para tu negocio. - Creación de CRM a medida para gestionar clientes - Aplicaciones móviles para tu público o para tus empleados - Ciberseguridad para proteger tus activos digitales.',
       },
     ]
@@ -61,6 +61,7 @@ export default async function Services() {
         <div className="mt-16 grid grid-cols-1 md:grid-cols-2 gap-6">
           {items.map((service, index) => {
             const isAIService = service.title === 'Inteligencia Artificial y Automatizaciones';
+            const isSoftwareService = service.title === 'Programación y Ciberseguridad';
             return (
                 <FadeIn key={index} delay={index * 0.1}>
                 <InteractiveCard className="h-full card-gradient-hover flex flex-col">
@@ -73,10 +74,10 @@ export default async function Services() {
                         <CardDescription className="mt-1 text-muted-foreground">{service.description}</CardDescription>
                       </div>
                     </CardHeader>
-                    {isAIService && (
+                    {(isAIService || isSoftwareService) && (
                       <CardFooter className="mt-auto p-6 pt-0">
                         <Button asChild variant="link" className="p-0 h-auto text-primary">
-                          <Link href="/view-service/ia">Saber más... <ArrowRight className="ml-2 h-4 w-4" /></Link>
+                           <Link href={isAIService ? "/view-service/ia" : "/view-service/software"}>Saber más... <ArrowRight className="ml-2 h-4 w-4" /></Link>
                         </Button>
                       </CardFooter>
                     )}
@@ -96,4 +97,3 @@ export default async function Services() {
     </section>
   );
 }
-
