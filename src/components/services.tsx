@@ -92,13 +92,6 @@ export default async function Services() {
             )
           })}
         </div>
-        <FadeIn>
-            <div className="mt-16 text-center">
-                <Button asChild size="lg" variant="secondary">
-                    <Link href="/services">Ver todos los Servicios</Link>
-                </Button>
-            </div>
-        </FadeIn>
       </div>
     </section>
   );
