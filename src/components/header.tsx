@@ -18,7 +18,7 @@ function SvgRenderer({ svgString, className }: { svgString: string, className?: 
     return <div dangerouslySetInnerHTML={{ __html: modifiedSvgString }} />;
 }
 
-const defaultLogoSvg = `<svg class="w-8 h-8 text-primary" fill="currentColor" viewBox="0 0 20 20"><path d="M11.918 2.032a.75.75 0 00-1.24-.72L3.383 9.471a.75.75 0 00.938 1.146L8.25 7.912v3.338a.75.75 0 01-1.5 0V9.53l-2.454 3.033a.75.75 0 00.95 1.135l3.805-4.711v3.293a.75.75 0 01-1.5 0v-1.75l-1.81.724a.75.75 0 00-.6 1.342l3.864 1.932a.75.75 0 00.994-1.09L8.75 12.088V8.617l4.43 5.488a.75.75 0 00.949-1.135L9.75 6.94v-3.29l1.838 2.276a.75.75 0 001.24-.72L11.918 2.032z"></path></svg>`;
+const defaultLogoSvg = `<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-primary"><path d="M6.66669 25.3333V4H10.6667L20.1334 16.5333V4H24.0001V25.3333H20.0001L10.5334 12.8V25.3333H6.66669Z" fill="currentColor"/></svg>`;
 
 export default function Header() {
   const [scrolled, setScrolled] = useState(false);
@@ -61,7 +61,7 @@ export default function Header() {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
           <Link href="/" className="flex items-center gap-2 text-foreground">
-             <span className="text-primary text-2xl font-bold">%</span>
+             <SvgRenderer svgString={logoSvg} className="w-8 h-8 text-primary" />
             <span className="text-xl font-headline font-bold">Evol-vance</span>
           </Link>
 
@@ -99,7 +99,7 @@ export default function Header() {
                 <SheetHeader>
                    <SheetTitle>
                      <Link href="/" className="flex items-center gap-2 text-foreground" onClick={() => setIsMobileMenuOpen(false)}>
-                        <span className="text-primary text-2xl font-bold">%</span>
+                        <SvgRenderer svgString={logoSvg} className="w-8 h-8 text-primary" />
                         <span className="text-xl font-headline font-bold">Evol-vance</span>
                     </Link>
                   </SheetTitle>

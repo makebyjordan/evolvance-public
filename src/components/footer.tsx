@@ -45,7 +45,19 @@ export default function Footer() {
           
           <div className="md:col-span-4 lg:col-span-5 flex flex-col items-center md:items-start text-center md:text-left">
             <Link href="/" className="flex items-center gap-2 mb-4 text-foreground">
-              <span className="text-primary text-2xl font-bold">%</span>
+              <svg
+                width="32"
+                height="32"
+                viewBox="0 0 32 32"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                className="w-8 h-8 text-primary"
+              >
+                <path
+                  d="M6.66669 25.3333V4H10.6667L20.1334 16.5333V4H24.0001V25.3333H20.0001L10.5334 12.8V25.3333H6.66669Z"
+                  fill="currentColor"
+                />
+              </svg>
               <span className="text-xl font-headline font-bold">Evol-vance</span>
             </Link>
             <p className="text-muted-foreground text-sm max-w-xs">
