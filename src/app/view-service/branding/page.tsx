@@ -71,14 +71,14 @@ export default function BrandingPage() {
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid md:grid-cols-2 gap-12 items-center">
                 <FadeIn>
-                     <div className="w-full h-80 bg-card rounded-lg flex items-center justify-center">
-                        <p className="text-muted-foreground">Aquí va una imagen</p>
-                    </div>
-                </FadeIn>
-                <FadeIn delay={0.2}>
                     <h1 className="text-3xl md:text-4xl font-extrabold text-foreground">Branding y Diseño Gráfico</h1>
                     <p className="mt-4 text-muted-foreground">Nuestros servicios de branding y diseño gráfico van más allá de lo convencional. Comprendemos que la identidad visual es <strong>clave para el éxito de tu marca</strong>, por lo que colaboramos contigo para forjar una <strong>imagen distintiva e inolvidable.</strong></p>
                     <p className="mt-4 text-muted-foreground">Tu marca es más que un logo; es la primera experiencia de tu cliente. Nos ocupamos de todos los detalles, desde la paleta de colores hasta la <strong>comunicación visual unificada</strong>. El objetivo es que tu marca destaque visualmente en cada punto de contacto.</p>
+                </FadeIn>
+                <FadeIn delay={0.2}>
+                     <div className="w-full h-80 bg-card rounded-lg flex items-center justify-center">
+                        <p className="text-muted-foreground">Aquí va una imagen</p>
+                    </div>
                 </FadeIn>
             </div>
           </div>
