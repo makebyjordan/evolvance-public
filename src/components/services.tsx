@@ -51,11 +51,11 @@ export default async function Services() {
 
   const getServiceLink = (serviceTitle: string) => {
     const lowerCaseTitle = serviceTitle.toLowerCase();
-    if (lowerCaseTitle === 'inteligencia artificial y automatizaciones') {
+    if (lowerCaseTitle.includes('inteligencia artificial')) {
       return "/view-service/ia";
     }
-    if (lowerCaseTitle === 'desarrollo de software') {
-      return "/view-service/software";
+    if (lowerCaseTitle.includes('desarrollo de software')) {
+      return "https://6000-firebase-evol-vance-landing2-1755906508125.cluster-cbeiita7rbe7iuwhvjs5zww2i4.cloudworkstations.dev/view-service/software";
     }
     return "/services";
   };
