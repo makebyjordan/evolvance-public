@@ -1,4 +1,5 @@
 
+
 import { Card, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
 import { FadeIn } from './fade-in';
 import { Button } from './ui/button';
@@ -29,6 +30,11 @@ export default async function Services() {
         title: 'Inteligencia Artificial y Automatizaciones',
         description: 'Potenciamos tu negocio con IA a medida. Desde chatbots que mejoran la atención al cliente hasta análisis predictivos que optimizan tus ventas, creamos soluciones que automatizan tareas, reducen costes y te dan una ventaja competitiva única.',
       },
+      {
+        icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-megaphone"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg>`,
+        title: 'Marketing Digital',
+        description: 'Conquista tu mercado digital con estrategias de contenido, SEO y campañas de ads que convierten. Creamos una presencia online que no solo atrae, sino que enamora y fideliza.',
+      },
     ]
   };
 
@@ -39,20 +45,8 @@ export default async function Services() {
     if (lowerCaseTitle.includes('inteligencia artificial')) {
       return "/view-service/ia";
     }
-    if (lowerCaseTitle.includes('webs, apps, crms')) {
-      return "/view-service/software";
-    }
-     if (lowerCaseTitle.includes('marketing digital')) {
+    if (lowerCaseTitle.includes('marketing digital')) {
       return "/view-service/marketing";
-    }
-    if (lowerCaseTitle.includes('branding')) {
-        return "/view-service/branding";
-    }
-     if (lowerCaseTitle.includes('ayuntamientos')) {
-        return "/view-service/ayuntamientos";
-    }
-    if (lowerCaseTitle.includes('realidad virtual')) {
-        return "/view-service/vr";
     }
     return "/services";
   };
