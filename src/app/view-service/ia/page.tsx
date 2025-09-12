@@ -207,7 +207,7 @@ export default function IaPage() {
 
   return (
     <>
-      <section className="relative text-primary-foreground h-[70vh] flex items-center justify-center">
+      <section className="relative text-primary-foreground h-screen flex items-center justify-center">
         <Image 
           src={heroImage}
           alt="Inteligencia Artificial"
