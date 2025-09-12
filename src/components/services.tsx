@@ -26,11 +26,6 @@ export default async function Services() {
     title: 'Un Universo de Soluciones a tu Medida',
     items: [
       {
-        icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-bot"><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v-2a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v2"/><path d="M12 13h2"/></svg>`,
-        title: 'Inteligencia Artificial y Automatizaciones',
-        description: 'Transformamos tu negocio con tecnología de vanguardia. Utilizamos la Inteligencia Artificial a través de chatbots, asistentes de voz y análisis de datos para optimizar procesos y tomar decisiones más inteligentes. Complementamos esto con la automatización de tareas repetitivas como reservas, facturación e inventario, lo que te permite ser más ágiles y centrarte en lo que realmente importa.',
-      },
-      {
         icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-megaphone"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg>`,
         title: 'Marketing Digital',
         description: 'Convierte tu presencia digital en un activo estratégico. Diseñamos y ejecutamos campañas que atraen a tu audiencia y convierten visitas en clientes leales, llevando tu marca a la cima de su sector. Dominamos el mercado digital con estrategias de contenido, SEO, SEM, y gestión de redes sociales.',
