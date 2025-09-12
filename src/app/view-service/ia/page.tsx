@@ -8,10 +8,10 @@ import { ContactModal } from '@/components/contact-modal';
 import { FadeIn } from '@/components/fade-in';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { cn } from '@/lib/utils';
-import { BrainCircuit, Briefcase, Handshake, HeartHand, Users } from 'lucide-react';
+import { BrainCircuit, Briefcase, Handshake, HeartHandshake, Users } from 'lucide-react';
 
 const TABS = [
-  { id: 'cliente', label: 'Atención al Cliente', icon: <HeartHand /> },
+  { id: 'cliente', label: 'Atención al Cliente', icon: <HeartHandshake /> },
   { id: 'marketing', label: 'Marketing y Ventas', icon: <Briefcase /> },
   { id: 'operaciones', label: 'Operaciones y Finanzas', icon: <Users /> },
   { id: 'rrhh', label: 'Recursos Humanos', icon: <Handshake /> },
