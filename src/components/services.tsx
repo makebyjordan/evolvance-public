@@ -1,5 +1,4 @@
 
-
 import { Card, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
 import { FadeIn } from './fade-in';
 import { Button } from './ui/button';
@@ -25,6 +24,11 @@ export default async function Services() {
   const defaultContent: ServicesContent = {
     title: 'Un Universo de Soluciones a tu Medida',
     items: [
+      {
+        icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-bot"><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v-2a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v2"/><path d="M12 13h2"/></svg>`,
+        title: 'Inteligencia Artificial y Automatizaciones',
+        description: 'Potenciamos tu negocio con IA a medida. Desde chatbots que mejoran la atención al cliente hasta análisis predictivos que optimizan tus ventas, creamos soluciones que automatizan tareas, reducen costes y te dan una ventaja competitiva única.',
+      },
       {
         icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-megaphone"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg>`,
         title: 'Marketing Digital',

@@ -78,6 +78,14 @@ export default async function WebPage() {
               </CardHeader>
               <CardContent className="space-y-4">
                  <div className="flex items-center justify-between p-3 border rounded-lg">
+                  <p className="font-medium">Inteligencia Artificial y Automatizaciones</p>
+                  <Button asChild variant="outline" size="sm">
+                    <Link href="/view-service/ia" target="_blank">
+                      Ver página <ExternalLink className="ml-2 h-4 w-4" />
+                    </Link>
+                  </Button>
+                </div>
+                 <div className="flex items-center justify-between p-3 border rounded-lg">
                   <p className="font-medium">Webs, Apps, CRMs y mucho más</p>
                   <Button asChild variant="outline" size="sm">
                     <Link href="/view-service/software" target="_blank">
