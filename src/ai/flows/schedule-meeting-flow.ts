@@ -1,6 +1,7 @@
+
 'use server';
 /**
- * @fileOverview A flow to schedule a meeting.
+ * @fileOverview A flow to schedule a meeting in Google Calendar.
  *
  * - scheduleMeeting - A function that handles scheduling a meeting.
  */
@@ -13,9 +14,8 @@ import {
   ScheduleMeetingOutputSchema, 
   type ScheduleMeetingOutput 
 } from '@/ai/schemas/schedule-meeting-schemas';
+import { google } from 'googleapis';
 
-
-// Dummy function to simulate adding an event to Google Calendar.
 const addEventToGoogleCalendar = ai.defineTool(
   {
     name: 'addEventToGoogleCalendar',
@@ -33,12 +33,60 @@ const addEventToGoogleCalendar = ai.defineTool(
     }),
   },
   async (input) => {
-    console.log('Simulating adding event to Google Calendar:', input);
-    // In a real application, you would implement the logic to interact with the Google Calendar API here.
-    return {
-      success: true,
-      eventUrl: 'https://calendar.google.com/calendar/r/eventedit', // Dummy URL
-    };
+    try {
+      const oauth2Client = new google.auth.OAuth2(
+        process.env.GOOGLE_CLIENT_ID,
+        process.env.GOOGLE_CLIENT_SECRET,
+        'http://localhost:3000' // Redirect URI - can be anything for this script
+      );
+
+      oauth2Client.setCredentials({
+        refresh_token: process.env.GOOGLE_REFRESH_TOKEN,
+      });
+
+      const calendar = google.calendar({ version: 'v3', auth: oauth2Client });
+
+      const event = {
+        summary: input.title,
+        description: input.description,
+        start: {
+          dateTime: input.startTime,
+          timeZone: 'Europe/Madrid',
+        },
+        end: {
+          dateTime: input.endTime,
+          timeZone: 'Europe/Madrid',
+        },
+        attendees: input.attendees.map(email => ({ email })),
+        reminders: {
+          useDefault: false,
+          overrides: [
+            { method: 'email', 'minutes': 24 * 60 },
+            { method: 'popup', 'minutes': 10 },
+          ],
+        },
+      };
+
+      const res = await calendar.events.insert({
+        calendarId: 'primary',
+        requestBody: event,
+      });
+
+      return {
+        success: true,
+        eventUrl: res.data.htmlLink || 'https://calendar.google.com',
+      };
+    } catch (error) {
+      console.error('Error creating Google Calendar event:', error);
+      // Inform the user that auth is needed
+      if (error instanceof Error && error.message.includes('No refresh token is set')) {
+         throw new Error("El administrador necesita autorizar el acceso a Google Calendar. Por favor, contacta con soporte.");
+      }
+      return {
+        success: false,
+        eventUrl: 'https://calendar.google.com',
+      };
+    }
   }
 );
 
@@ -59,18 +107,18 @@ const scheduleMeetingFlow = ai.defineFlow(
         description: `Detalles del cliente:\nNombre: ${input.name}\nEmail: ${input.email}\nTeléfono: ${input.phone}`,
         startTime: input.meetingTime,
         endTime: meetingEndTime.toISOString(),
-        attendees: [input.email],
+        attendees: [input.email, 'clientes@evol-vance.es'], // Añade tu email para que también te llegue
      });
 
     if (calendarEvent.success) {
       return {
         success: true,
-        message: '¡Tu sesión ha sido agendada! Recibirás una invitación por correo.',
+        message: '¡Tu sesión ha sido agendada! Recibirás una invitación de Google Calendar por correo.',
       };
     } else {
       return {
         success: false,
-        message: 'Lo sentimos, no pudimos agendar tu cita. Por favor, inténtalo de nuevo.',
+        message: 'Lo sentimos, no pudimos agendar tu cita. Por favor, inténtalo de nuevo más tarde.',
       };
     }
   }
