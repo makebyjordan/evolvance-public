@@ -7,7 +7,6 @@ import { ContactModal } from '@/components/contact-modal';
 import { FadeIn } from '@/components/fade-in';
 import { Megaphone, Globe, Smile, Utensils, GraduationCap, Home, HeartPulse, Cog } from 'lucide-react';
 import Image from 'next/image';
-import heroImage from '@/images/hero-evolvance-realidad-virtual.jpg';
 
 
 const serviceCards = [
@@ -106,12 +105,12 @@ export default function VrPage() {
     <>
       <section className="relative text-primary-foreground h-screen flex items-center justify-center">
         <Image 
-          src={heroImage}
+          src="https://picsum.photos/seed/vr-hero/1920/1080"
           alt="Realidad Virtual"
           fill
           className="object-cover"
-          placeholder="blur"
           quality={100}
+          data-ai-hint="virtual reality"
         />
         <div className="absolute inset-0 bg-black/60" />
         <div className="container mx-auto px-6 py-20 text-center relative z-10">
@@ -185,5 +184,3 @@ export default function VrPage() {
     </>
   );
 }
-
-    
