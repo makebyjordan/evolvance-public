@@ -5,11 +5,12 @@ import { FadeIn } from './fade-in';
 import { Button } from './ui/button';
 import Link from 'next/link';
 import { getWebContent, type ServicesContent } from '@/app/actions/web-content-actions';
-import { Zap, ArrowRight, Orbit } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { InteractiveCard } from './interactive-card';
 
 // Helper component to safely render SVG
 function SvgRenderer({ svgString, className }: { svgString: string, className: string }) {
+    if (!svgString || typeof svgString !== 'string') return null;
     // Add className to the SVG string
     const modifiedSvgString = svgString.replace('<svg', `<svg class="${className}"`);
     return <div dangerouslySetInnerHTML={{ __html: modifiedSvgString }} />;
@@ -45,7 +46,7 @@ export default async function Services() {
     if (lowerCaseTitle.includes('inteligencia artificial')) {
       return "/view-service/ia";
     }
-    if (lowerCaseTitle.includes('marketing digital')) {
+    if (lowerCaseTitle.includes('marketing')) {
       return "/view-service/marketing";
     }
     return "/services";
