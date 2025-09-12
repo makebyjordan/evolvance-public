@@ -10,6 +10,7 @@ import { FadeIn } from '@/components/fade-in';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Code, Search, Palette, Rocket, Users, BarChart, ShieldCheck, Eye, Shield, LifeBuoy } from 'lucide-react';
+import heroImage from '@/images/hero-evolvance-software.jpg';
 
 const FAQS = [
     {
@@ -44,11 +45,11 @@ export default function SoftwarePage() {
     <>
       <section className="relative text-primary-foreground h-screen flex items-center justify-center">
         <Image
-          src="https://picsum.photos/seed/software/1920/1080"
-          data-ai-hint="abstract technology"
+          src={heroImage}
           alt="Desarrollo de Software y Ciberseguridad"
           fill
           className="object-cover"
+          placeholder="blur"
           quality={100}
         />
         <div className="absolute inset-0 bg-black/60" />
