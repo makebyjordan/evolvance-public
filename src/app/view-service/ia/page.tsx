@@ -10,6 +10,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/
 import { cn } from '@/lib/utils';
 import { BrainCircuit, Briefcase, Handshake, HeartHandshake, Users } from 'lucide-react';
 import Image from 'next/image';
+import heroImage from '@/images/hero-evolvance-ia-automatizaciones.jpg';
 
 
 const TABS = [
@@ -208,11 +209,12 @@ export default function IaPage() {
     <>
       <section className="relative text-primary-foreground h-[70vh] flex items-center justify-center">
         <Image 
-          src="https://picsum.photos/seed/ai-hero/1920/1080"
+          src={heroImage}
           alt="Inteligencia Artificial"
           fill
           className="object-cover"
-          data-ai-hint="artificial intelligence"
+          placeholder="blur"
+          quality={100}
         />
          <div className="absolute inset-0 bg-black/60" />
         <div className="container mx-auto px-6 py-20 text-center relative z-10">
@@ -343,3 +345,5 @@ export default function IaPage() {
     </>
   );
 }
+
+    
