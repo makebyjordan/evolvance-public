@@ -10,7 +10,6 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/
 import { cn } from '@/lib/utils';
 import { BrainCircuit, Briefcase, Handshake, HeartHandshake, Users } from 'lucide-react';
 import Image from 'next/image';
-import placeholderImages from '@/lib/placeholder-images.json';
 
 
 const TABS = [
@@ -209,7 +208,7 @@ export default function IaPage() {
     <>
       <section className="relative text-primary-foreground h-[70vh] flex items-center justify-center">
         <Image 
-          src={placeholderImages['ia-hero']}
+          src="https://picsum.photos/seed/ai-hero/1920/1080"
           alt="Inteligencia Artificial"
           fill
           className="object-cover"
