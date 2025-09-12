@@ -12,8 +12,9 @@ import { SiteConfigEditor } from "./components/SiteConfigEditor";
 import { Button } from "@/components/ui/button";
 import Link from 'next/link';
 
-import { getWebContent, type ServicesContent, type TimelineContent, type PhilosophyContent, type FaqContent, type PageContent, type SiteConfigContent } from "@/app/actions/web-content-actions";
+import { getWebContent, type ServicesContent, type TimelineContent, type PhilosophyContent, type FaqContent, type PageContent, type SiteConfigContent, type ServicePagesConfig } from "@/app/actions/web-content-actions";
 import { Separator } from "@/components/ui/separator";
+import { ServicePagesEditor } from "./components/ServicePagesEditor";
 
 export const dynamic = 'force-dynamic';
 
@@ -26,6 +27,13 @@ export default async function WebPage() {
   const termsContent = await getWebContent<PageContent>('terms');
   const privacyContent = await getWebContent<PageContent>('privacy');
   const siteConfigContent = await getWebContent<SiteConfigContent>('siteConfig');
+  const servicePagesConfig = await getWebContent<ServicePagesConfig>('servicePagesConfig');
+
+  const defaultServicePageTitles: ServicePagesConfig = {
+    iaPageTitle: 'Inteligencia Artificial y Automatizaciones',
+    marketingPageTitle: 'Marketing Digital',
+    softwarePageTitle: 'Software y Ciberseguridad',
+  }
 
   return (
     <div>
@@ -44,9 +52,9 @@ export default async function WebPage() {
       </Card>
 
       <Tabs defaultValue="services" className="w-full">
-        <TabsList className="grid w-full grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 max-w-5xl">
+        <TabsList className="grid w-full grid-cols-2 sm:grid-cols-3 lg:grid-cols-7 max-w-6xl">
           <TabsTrigger value="config"><Settings className="w-4 h-4 mr-2"/>General</TabsTrigger>
-          <TabsTrigger value="services"><Bot className="w-4 h-4 mr-2"/>Servicios</TabsTrigger>
+          <TabsTrigger value="services"><Orbit className="w-4 h-4 mr-2"/>Servicios Home</TabsTrigger>
           <TabsTrigger value="timeline"><Milestone className="w-4 h-4 mr-2"/>Trayectoria</TabsTrigger>
           <TabsTrigger value="philosophy"><ShieldCheck className="w-4 h-4 mr-2"/>Filosofía</TabsTrigger>
           <TabsTrigger value="faq"><HelpCircle className="w-4 h-4 mr-2"/>FAQ</TabsTrigger>
@@ -78,7 +86,7 @@ export default async function WebPage() {
               </CardHeader>
               <CardContent className="space-y-4">
                  <div className="flex items-center justify-between p-3 border rounded-lg">
-                  <p className="font-medium">Inteligencia Artificial y Automatizaciones</p>
+                  <p className="font-medium">{servicePagesConfig?.iaPageTitle || defaultServicePageTitles.iaPageTitle}</p>
                   <Button asChild variant="outline" size="sm">
                     <Link href="/view-service/ia" target="_blank">
                       Ver página <ExternalLink className="ml-2 h-4 w-4" />
@@ -86,7 +94,7 @@ export default async function WebPage() {
                   </Button>
                 </div>
                 <div className="flex items-center justify-between p-3 border rounded-lg">
-                  <p className="font-medium">Marketing Digital</p>
+                  <p className="font-medium">{servicePagesConfig?.marketingPageTitle || defaultServicePageTitles.marketingPageTitle}</p>
                   <Button asChild variant="outline" size="sm">
                     <Link href="/view-service/marketing" target="_blank">
                       Ver página <ExternalLink className="ml-2 h-4 w-4" />
@@ -94,7 +102,7 @@ export default async function WebPage() {
                   </Button>
                 </div>
                 <div className="flex items-center justify-between p-3 border rounded-lg">
-                  <p className="font-medium">Software y Ciberseguridad</p>
+                  <p className="font-medium">{servicePagesConfig?.softwarePageTitle || defaultServicePageTitles.softwarePageTitle}</p>
                   <Button asChild variant="outline" size="sm">
                     <Link href="/view-service/software" target="_blank">
                       Ver página <ExternalLink className="ml-2 h-4 w-4" />
@@ -103,6 +111,8 @@ export default async function WebPage() {
                 </div>
               </CardContent>
             </Card>
+
+            <ServicePagesEditor initialContent={servicePagesConfig} />
 
             <Separator />
            

@@ -69,9 +69,16 @@ export interface SiteConfigContent {
     updatedAt?: string;
 }
 
+export interface ServicePagesConfig {
+    iaPageTitle: string;
+    marketingPageTitle: string;
+    softwarePageTitle: string;
+    updatedAt?: string;
+}
 
-export type WebContentSection = 'services' | 'timeline' | 'philosophy' | 'faq' | 'terms' | 'privacy' | 'siteConfig';
-export type WebContentData = ServicesContent | TimelineContent | PhilosophyContent | FaqContent | PageContent | SiteConfigContent;
+
+export type WebContentSection = 'services' | 'timeline' | 'philosophy' | 'faq' | 'terms' | 'privacy' | 'siteConfig' | 'servicePagesConfig';
+export type WebContentData = ServicesContent | TimelineContent | PhilosophyContent | FaqContent | PageContent | SiteConfigContent | ServicePagesConfig;
 
 
 // Return type for our server actions
