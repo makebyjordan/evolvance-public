@@ -85,46 +85,6 @@ export default async function WebPage() {
                     </Link>
                   </Button>
                 </div>
-                 <div className="flex items-center justify-between p-3 border rounded-lg">
-                  <p className="font-medium">Webs, Apps, CRMs y mucho más</p>
-                  <Button asChild variant="outline" size="sm">
-                    <Link href="/view-service/software" target="_blank">
-                      Ver página <ExternalLink className="ml-2 h-4 w-4" />
-                    </Link>
-                  </Button>
-                </div>
-                 <div className="flex items-center justify-between p-3 border rounded-lg">
-                  <p className="font-medium">Marketing Digital</p>
-                  <Button asChild variant="outline" size="sm">
-                    <Link href="/view-service/marketing" target="_blank">
-                      Ver página <ExternalLink className="ml-2 h-4 w-4" />
-                    </Link>
-                  </Button>
-                </div>
-                <div className="flex items-center justify-between p-3 border rounded-lg">
-                  <p className="font-medium">Branding y Diseño</p>
-                   <Button asChild variant="outline" size="sm">
-                    <Link href="/view-service/branding" target="_blank">
-                      Ver página <ExternalLink className="ml-2 h-4 w-4" />
-                    </Link>
-                  </Button>
-                </div>
-                 <div className="flex items-center justify-between p-3 border rounded-lg">
-                  <p className="font-medium">Tecnología Inmersiva en Ayuntamientos</p>
-                   <Button asChild variant="outline" size="sm">
-                    <Link href="/view-service/ayuntamientos" target="_blank">
-                      Ver página <ExternalLink className="ml-2 h-4 w-4" />
-                    </Link>
-                  </Button>
-                </div>
-                 <div className="flex items-center justify-between p-3 border rounded-lg">
-                  <p className="font-medium">Realidad Virtual</p>
-                   <Button asChild variant="outline" size="sm">
-                    <Link href="/view-service/vr" target="_blank">
-                      Ver página <ExternalLink className="ml-2 h-4 w-4" />
-                    </Link>
-                  </Button>
-                </div>
               </CardContent>
             </Card>
 
