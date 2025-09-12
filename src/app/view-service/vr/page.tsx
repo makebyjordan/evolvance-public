@@ -7,6 +7,8 @@ import { ContactModal } from '@/components/contact-modal';
 import { FadeIn } from '@/components/fade-in';
 import { Megaphone, Globe, Smile, Utensils, GraduationCap, Home, HeartPulse, Cog } from 'lucide-react';
 import Image from 'next/image';
+import heroImage from '@/images/hero-evolvance-realidad-virtual.jpg';
+
 
 const serviceCards = [
     {
@@ -102,16 +104,32 @@ const serviceCards = [
 export default function VrPage() {
   return (
     <>
-      <section className="relative hero-section text-foreground">
-         <div className="container mx-auto px-6 py-16 text-center">
-             <FadeIn>
-                <h1 className="text-4xl md:text-6xl font-bold text-foreground leading-tight">
-                    El Poder de la Realidad Virtual
-                </h1>
-                <p className="mt-6 text-lg text-muted-foreground max-w-3xl mx-auto">
-                    En un mundo saturado de información, la clave es no solo mostrar, sino hacer sentir. No solo creamos contenido de realidad virtual, sino que diseñamos experiencias inmersivas que conectan a tu público de una manera única. La realidad virtual es más que una tecnología; es una herramienta estratégica para emocionar, educar e impulsar tu negocio.
-                </p>
-             </FadeIn>
+      <section className="relative text-primary-foreground h-screen flex items-center justify-center">
+        <Image 
+          src={heroImage}
+          alt="Realidad Virtual"
+          fill
+          className="object-cover"
+          placeholder="blur"
+          quality={100}
+        />
+        <div className="absolute inset-0 bg-black/60" />
+        <div className="container mx-auto px-6 py-20 text-center relative z-10">
+          <FadeIn>
+            <h1 className="text-4xl md:text-6xl font-bold text-foreground leading-tight">
+                El Poder de la Realidad Virtual
+            </h1>
+            <p className="mt-6 text-lg text-muted-foreground max-w-3xl mx-auto">
+                En un mundo saturado de información, la clave es no solo mostrar, sino hacer sentir. No solo creamos contenido de realidad virtual, sino que diseñamos experiencias inmersivas que conectan a tu público de una manera única. La realidad virtual es más que una tecnología; es una herramienta estratégica para emocionar, educar e impulsar tu negocio.
+            </p>
+            <div className="mt-8">
+                <ContactModal>
+                  <Button size="lg" className="font-bold">
+                    Descubre Nuestras Soluciones
+                  </Button>
+                </ContactModal>
+              </div>
+          </FadeIn>
         </div>
       </section>
 
@@ -167,3 +185,5 @@ export default function VrPage() {
     </>
   );
 }
+
+    
