@@ -16,6 +16,15 @@ import {
 } from '@/ai/schemas/schedule-meeting-schemas';
 import { google } from 'googleapis';
 
+// Helper function to create OAuth2 client
+function createOauth2Client() {
+    return new google.auth.OAuth2(
+        process.env.GOOGLE_CLIENT_ID,
+        process.env.GOOGLE_CLIENT_SECRET,
+        'http://localhost:3000/oauth2callback' // This must be added in your Google Cloud Platform credentials
+    );
+}
+
 const addEventToGoogleCalendar = ai.defineTool(
   {
     name: 'addEventToGoogleCalendar',
@@ -34,11 +43,17 @@ const addEventToGoogleCalendar = ai.defineTool(
   },
   async (input) => {
     try {
-      const oauth2Client = new google.auth.OAuth2(
-        process.env.GOOGLE_CLIENT_ID,
-        process.env.GOOGLE_CLIENT_SECRET,
-        'http://localhost:3000' // Redirect URI - can be anything for this script
-      );
+      const oauth2Client = createOauth2Client();
+      
+      if (!process.env.GOOGLE_REFRESH_TOKEN) {
+         const authUrl = oauth2Client.generateAuthUrl({
+            access_type: 'offline',
+            scope: ['https://www.googleapis.com/auth/calendar'],
+         });
+         console.error('ERROR: GOOGLE_REFRESH_TOKEN no está configurado en .env');
+         console.error('Para autorizar, visita esta URL en tu navegador:', authUrl);
+         throw new Error("Configuración incompleta: falta el GOOGLE_REFRESH_TOKEN. Sigue las instrucciones en la consola para generarlo.");
+      }
 
       oauth2Client.setCredentials({
         refresh_token: process.env.GOOGLE_REFRESH_TOKEN,
@@ -78,9 +93,8 @@ const addEventToGoogleCalendar = ai.defineTool(
       };
     } catch (error) {
       console.error('Error creating Google Calendar event:', error);
-      // Inform the user that auth is needed
-      if (error instanceof Error && error.message.includes('No refresh token is set')) {
-         throw new Error("El administrador necesita autorizar el acceso a Google Calendar. Por favor, contacta con soporte.");
+      if (error instanceof Error && error.message.includes('incomplete')) {
+          throw error;
       }
       return {
         success: false,
@@ -96,31 +110,43 @@ const scheduleMeetingFlow = ai.defineFlow(
     name: 'scheduleMeetingFlow',
     inputSchema: ScheduleMeetingInputSchema,
     outputSchema: ScheduleMeetingOutputSchema,
-    tools: [addEventToGoogleCalendar]
   },
   async (input) => {
      const meetingEndTime = new Date(input.meetingTime);
      meetingEndTime.setHours(meetingEndTime.getHours() + 1);
 
-     const calendarEvent = await addEventToGoogleCalendar({
-        title: `Sesión Estratégica con ${input.name}`,
-        description: `Detalles del cliente:\nNombre: ${input.name}\nEmail: ${input.email}\nTeléfono: ${input.phone}`,
-        startTime: input.meetingTime,
-        endTime: meetingEndTime.toISOString(),
-        attendees: [input.email, 'clientes@evol-vance.es'], // Añade tu email para que también te llegue
-     });
+     try {
+        const calendarEvent = await addEventToGoogleCalendar({
+            title: `Sesión Estratégica con ${input.name}`,
+            description: `Detalles del cliente:\nNombre: ${input.name}\nEmail: ${input.email}\nTeléfono: ${input.phone}`,
+            startTime: input.meetingTime,
+            endTime: meetingEndTime.toISOString(),
+            attendees: [input.email, 'clientes@evol-vance.es'], // Añade tu email para que también te llegue
+        });
 
-    if (calendarEvent.success) {
-      return {
-        success: true,
-        message: '¡Tu sesión ha sido agendada! Recibirás una invitación de Google Calendar por correo.',
-      };
-    } else {
-      return {
-        success: false,
-        message: 'Lo sentimos, no pudimos agendar tu cita. Por favor, inténtalo de nuevo más tarde.',
-      };
-    }
+        if (calendarEvent.success) {
+          return {
+            success: true,
+            message: '¡Tu sesión ha sido agendada! Recibirás una invitación de Google Calendar por correo.',
+          };
+        } else {
+           return {
+            success: false,
+            message: 'Lo sentimos, no pudimos agendar tu cita. El servicio de calendario puede no estar disponible.',
+          };
+        }
+     } catch (e: any) {
+        if (e.message.includes('incomplete')) {
+            return {
+                success: false,
+                message: 'El administrador necesita configurar el acceso a Google Calendar. Por favor, contacta con soporte.'
+            }
+        }
+        return {
+            success: false,
+            message: 'Lo sentimos, no pudimos agendar tu cita. Por favor, inténtalo de nuevo más tarde.',
+        };
+     }
   }
 );
 
