@@ -4,7 +4,7 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { ContactModal } from '@/components/contact-modal';
 import { FadeIn } from '@/components/fade-in';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
@@ -18,6 +18,29 @@ const TABS = [
   { id: 'web', label: 'Diseño Web' },
   { id: 'seo', label: 'SEO' },
   { id: 'sem', label: 'SEM' },
+];
+
+const FAQS = [
+    {
+        question: "¿En cuánto tiempo veré resultados con el SEO?",
+        answer: "El SEO es una estrategia a medio-largo plazo. Generalmente, los resultados significativos comienzan a verse entre los 3 y 6 meses. Sin embargo, esto puede variar según la competitividad de tu sector y el estado inicial de tu web. Nuestro enfoque es construir una base sólida para un crecimiento sostenible."
+    },
+    {
+        question: "¿Qué paquete de redes sociales es mejor para mi negocio?",
+        answer: "La elección del paquete depende de tus objetivos y presupuesto. El Paquete Básico es ideal para establecer una presencia sólida y constante. Si buscas un crecimiento más agresivo y mayor interacción con tu comunidad, el Paquete Intermedio o Completo serían más adecuados. Te recomendamos empezar con una evaluación inicial para que podamos asesorarte."
+    },
+    {
+        question: "¿El coste del diseño web incluye el hosting y el dominio?",
+        answer: "Nuestros paquetes de diseño web se centran en la creación, estrategia y desarrollo del sitio. El hosting (alojamiento) y el dominio son servicios externos que el cliente debe contratar. Sin embargo, te asesoramos durante todo el proceso para que elijas las mejores opciones y te ayudamos con la configuración sin coste adicional."
+    },
+    {
+        question: "¿Qué diferencia hay entre SEO y SEM?",
+        answer: "La principal diferencia es que el SEO (Search Engine Optimization) se enfoca en mejorar tu visibilidad en los resultados de búsqueda orgánicos (no pagados) a través de optimizaciones en tu web y contenido. El SEM (Search Engine Marketing), por otro lado, utiliza publicidad de pago (como Google Ads) para aparecer en posiciones destacadas de forma inmediata. Ambas estrategias son complementarias y muy potentes cuando se trabajan juntas."
+    },
+    {
+        question: "¿Cómo se mide el retorno de la inversión (ROI) de vuestros servicios?",
+        answer: "Medimos el ROI a través de indicadores clave de rendimiento (KPIs) definidos al inicio del proyecto. Esto incluye el seguimiento de conversiones (ventas, formularios, llamadas), el coste de adquisición por cliente (CPA) y el valor del tiempo de vida del cliente (LTV). Te proporcionamos informes mensuales transparentes que detallan el rendimiento de la inversión y las acciones realizadas."
+    }
 ];
 
 export default function MarketingPage() {
@@ -86,12 +109,11 @@ export default function MarketingPage() {
               </div>
               <h3 className="text-2xl md:text-3xl font-bold text-center mb-8">Nuestros Paquetes de Servicios</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {/* Paquetes de Redes Sociales */}
-                <Card><CardHeader><CardTitle>PAQUETE ECONÓMICO</CardTitle></CardHeader><CardContent><ul className="list-disc list-inside text-muted-foreground space-y-2 text-sm"><li>4 publicaciones al mes</li><li>1 reel al mes</li><li>Edición del reel</li><li>Diseño y copywriting básicos</li></ul></CardContent></Card>
-                <Card><CardHeader><CardTitle>PAQUETE ECONÓMICO PLUS</CardTitle></CardHeader><CardContent><ul className="list-disc list-inside text-muted-foreground space-y-2 text-sm"><li>6 publicaciones al mes</li><li>2 reels al mes</li><li>1 sesión de grabación trimestral</li><li>Edición y copywriting mejorado</li></ul></CardContent></Card>
-                <Card className="border-2 border-primary relative"><span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground text-xs font-bold px-3 py-1 rounded-full whitespace-nowrap">MÁS POPULAR</span><CardHeader><CardTitle>PAQUETE BÁSICO</CardTitle></CardHeader><CardContent><ul className="list-disc list-inside text-muted-foreground space-y-2 text-sm"><li>Estrategia de contenido</li><li>8 publicaciones al mes</li><li>4 reels al mes</li><li>1 sesión de grabación mensual</li><li>Análisis mensual</li></ul></CardContent></Card>
-                <Card><CardHeader><CardTitle>PAQUETE INTERMEDIO</CardTitle></CardHeader><CardContent><ul className="list-disc list-inside text-muted-foreground space-y-2 text-sm"><li>Todo lo del Básico +</li><li>12 publicaciones al mes</li><li>6 reels al mes</li><li>2 sesiones de grabación</li><li>Gestión de comunidad</li><li>Publicidad básica</li></ul></CardContent></Card>
-                <Card><CardHeader><CardTitle>PAQUETE COMPLETO</CardTitle></CardHeader><CardContent><ul className="list-disc list-inside text-muted-foreground space-y-2 text-sm"><li>Todo lo del Intermedio +</li><li>16 publicaciones al mes</li><li>8 reels al mes</li><li>4 sesiones de grabación</li><li>Publicidad avanzada</li><li>Producción audiovisual elaborada</li></ul></CardContent></Card>
+                <div className="card-animated-border"><Card><CardHeader><CardTitle>PAQUETE ECONÓMICO</CardTitle></CardHeader><CardContent><ul className="list-disc list-inside text-muted-foreground space-y-2 text-sm"><li>4 publicaciones al mes</li><li>1 reel al mes</li><li>Edición del reel</li><li>Diseño y copywriting básicos</li></ul></CardContent></Card></div>
+                <div className="card-animated-border"><Card><CardHeader><CardTitle>PAQUETE ECONÓMICO PLUS</CardTitle></CardHeader><CardContent><ul className="list-disc list-inside text-muted-foreground space-y-2 text-sm"><li>6 publicaciones al mes</li><li>2 reels al mes</li><li>1 sesión de grabación trimestral</li><li>Edición y copywriting mejorado</li></ul></CardContent></Card></div>
+                <div className="card-animated-border"><Card className="border-2 border-primary relative"><span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground text-xs font-bold px-3 py-1 rounded-full whitespace-nowrap">MÁS POPULAR</span><CardHeader><CardTitle>PAQUETE BÁSICO</CardTitle></CardHeader><CardContent><ul className="list-disc list-inside text-muted-foreground space-y-2 text-sm"><li>Estrategia de contenido</li><li>8 publicaciones al mes</li><li>4 reels al mes</li><li>1 sesión de grabación mensual</li><li>Análisis mensual</li></ul></CardContent></Card></div>
+                <div className="card-animated-border"><Card><CardHeader><CardTitle>PAQUETE INTERMEDIO</CardTitle></CardHeader><CardContent><ul className="list-disc list-inside text-muted-foreground space-y-2 text-sm"><li>Todo lo del Básico +</li><li>12 publicaciones al mes</li><li>6 reels al mes</li><li>2 sesiones de grabación</li><li>Gestión de comunidad</li><li>Publicidad básica</li></ul></CardContent></Card></div>
+                <div className="card-animated-border"><Card><CardHeader><CardTitle>PAQUETE COMPLETO</CardTitle></CardHeader><CardContent><ul className="list-disc list-inside text-muted-foreground space-y-2 text-sm"><li>Todo lo del Intermedio +</li><li>16 publicaciones al mes</li><li>8 reels al mes</li><li>4 sesiones de grabación</li><li>Publicidad avanzada</li><li>Producción audiovisual elaborada</li></ul></CardContent></Card></div>
               </div>
             </div>
           )}
@@ -104,9 +126,9 @@ export default function MarketingPage() {
               </div>
               <h3 className="text-2xl md:text-3xl font-bold text-center mb-8">Nuestros Servicios de Branding</h3>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                  <Card><CardHeader><CardTitle>Identidad Visual Básica</CardTitle></CardHeader><CardContent><p className="font-semibold mb-2">Incluye:</p><ul className="list-disc list-inside text-muted-foreground space-y-2 text-sm"><li>Logotipo principal</li><li>Paleta de colores</li><li>Selección de tipografía</li></ul></CardContent></Card>
-                  <Card><CardHeader><CardTitle>Branding Completo</CardTitle></CardHeader><CardContent><p className="font-semibold mb-2">Incluye:</p><ul className="list-disc list-inside text-muted-foreground space-y-2 text-sm"><li>Todo lo de la Identidad Básica</li><li>Manual de marca</li><li>Assets visuales</li><li>Estrategia visual</li></ul></CardContent></Card>
-                  <Card><CardHeader><CardTitle>Branding + Estrategia</CardTitle></CardHeader><CardContent><p className="font-semibold mb-2">Incluye:</p><ul className="list-disc list-inside text-muted-foreground space-y-2 text-sm"><li>Todo lo de Branding Completo</li><li>Naming (si aplica)</li><li>Estrategia de comunicación</li><li>Plantillas de comunicación</li></ul></CardContent></Card>
+                  <div className="card-animated-border"><Card><CardHeader><CardTitle>Identidad Visual Básica</CardTitle></CardHeader><CardContent><p className="font-semibold mb-2">Incluye:</p><ul className="list-disc list-inside text-muted-foreground space-y-2 text-sm"><li>Logotipo principal</li><li>Paleta de colores</li><li>Selección de tipografía</li></ul></CardContent></Card></div>
+                  <div className="card-animated-border"><Card><CardHeader><CardTitle>Branding Completo</CardTitle></CardHeader><CardContent><p className="font-semibold mb-2">Incluye:</p><ul className="list-disc list-inside text-muted-foreground space-y-2 text-sm"><li>Todo lo de la Identidad Básica</li><li>Manual de marca</li><li>Assets visuales</li><li>Estrategia visual</li></ul></CardContent></Card></div>
+                  <div className="card-animated-border"><Card><CardHeader><CardTitle>Branding + Estrategia</CardTitle></CardHeader><CardContent><p className="font-semibold mb-2">Incluye:</p><ul className="list-disc list-inside text-muted-foreground space-y-2 text-sm"><li>Todo lo de Branding Completo</li><li>Naming (si aplica)</li><li>Estrategia de comunicación</li><li>Plantillas de comunicación</li></ul></CardContent></Card></div>
               </div>
             </div>
           )}
@@ -120,10 +142,10 @@ export default function MarketingPage() {
                 </div>
                 <h3 className="text-2xl md:text-3xl font-bold text-center mb-8">Nuestros Servicios de Diseño Web</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-8">
-                  <Card><CardHeader><CardTitle>Web Básica</CardTitle><CardDescription>Tu Primer Paso Online</CardDescription></CardHeader><CardContent><ul className="space-y-3 text-sm flex-grow"><li className="flex gap-2"><Check className="text-primary"/>Diseño a medida (hasta 3 secciones).</li><li className="flex gap-2"><Check className="text-primary"/>100% responsive.</li><li className="flex gap-2"><Check className="text-primary"/>Formulario de contacto.</li><li className="flex gap-2"><Check className="text-primary"/>SEO básico.</li></ul></CardContent></Card>
-                  <Card className="border-2 border-primary relative"><span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground text-xs font-bold px-3 py-1 rounded-full">MÁS POPULAR</span><CardHeader><CardTitle>Web Estándar</CardTitle><CardDescription>Un Sitio Completo</CardDescription></CardHeader><CardContent><ul className="space-y-3 text-sm flex-grow"><li className="flex gap-2"><Check className="text-primary"/>Sitio con 5 a 7 secciones.</li><li className="flex gap-2"><Check className="text-primary"/>Integración de blog o noticias.</li><li className="flex gap-2"><Check className="text-primary"/>Galería de imágenes o portfolio.</li><li className="flex gap-2"><Check className="text-primary"/>SEO on-page y Google Analytics.</li></ul></CardContent></Card>
-                  <Card><CardHeader><CardTitle>Web Avanzada</CardTitle><CardDescription>Funcionalidades a Medida</CardDescription></CardHeader><CardContent><ul className="space-y-3 text-sm flex-grow"><li className="flex gap-2"><Check className="text-primary"/>Desarrollo a medida.</li><li className="flex gap-2"><Check className="text-primary"/>Soporte multiidioma.</li><li className="flex gap-2"><Check className="text-primary"/>Integraciones estratégicas (CRM, pagos).</li><li className="flex gap-2"><Check className="text-primary"/>Soporte prioritario.</li></ul></CardContent></Card>
-                  <Card><CardHeader><CardTitle>E-commerce</CardTitle><CardDescription>Personalizado</CardDescription></CardHeader><CardContent><ul className="space-y-3 text-sm flex-grow"><li className="flex gap-2"><Check className="text-primary"/>Tienda online única.</li><li className="flex gap-2"><Check className="text-primary"/>Pasarelas de pago seguras.</li><li className="flex gap-2"><Check className="text-primary"/>Gestión de productos y pedidos.</li><li className="flex gap-2"><Check className="text-primary"/>Soporte continuo.</li></ul></CardContent></Card>
+                  <div className="card-animated-border"><Card><CardHeader><CardTitle>Web Básica</CardTitle><CardDescription>Tu Primer Paso Online</CardDescription></CardHeader><CardContent><ul className="space-y-3 text-sm flex-grow"><li className="flex gap-2"><Check className="text-primary"/>Diseño a medida (hasta 3 secciones).</li><li className="flex gap-2"><Check className="text-primary"/>100% responsive.</li><li className="flex gap-2"><Check className="text-primary"/>Formulario de contacto.</li><li className="flex gap-2"><Check className="text-primary"/>SEO básico.</li></ul></CardContent></Card></div>
+                  <div className="card-animated-border"><Card className="border-2 border-primary relative"><span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground text-xs font-bold px-3 py-1 rounded-full">MÁS POPULAR</span><CardHeader><CardTitle>Web Estándar</CardTitle><CardDescription>Un Sitio Completo</CardDescription></CardHeader><CardContent><ul className="space-y-3 text-sm flex-grow"><li className="flex gap-2"><Check className="text-primary"/>Sitio con 5 a 7 secciones.</li><li className="flex gap-2"><Check className="text-primary"/>Integración de blog o noticias.</li><li className="flex gap-2"><Check className="text-primary"/>Galería de imágenes o portfolio.</li><li className="flex gap-2"><Check className="text-primary"/>SEO on-page y Google Analytics.</li></ul></CardContent></Card></div>
+                  <div className="card-animated-border"><Card><CardHeader><CardTitle>Web Avanzada</CardTitle><CardDescription>Funcionalidades a Medida</CardDescription></CardHeader><CardContent><ul className="space-y-3 text-sm flex-grow"><li className="flex gap-2"><Check className="text-primary"/>Desarrollo a medida.</li><li className="flex gap-2"><Check className="text-primary"/>Soporte multiidioma.</li><li className="flex gap-2"><Check className="text-primary"/>Integraciones estratégicas (CRM, pagos).</li><li className="flex gap-2"><Check className="text-primary"/>Soporte prioritario.</li></ul></CardContent></Card></div>
+                  <div className="card-animated-border"><Card><CardHeader><CardTitle>E-commerce</CardTitle><CardDescription>Personalizado</CardDescription></CardHeader><CardContent><ul className="space-y-3 text-sm flex-grow"><li className="flex gap-2"><Check className="text-primary"/>Tienda online única.</li><li className="flex gap-2"><Check className="text-primary"/>Pasarelas de pago seguras.</li><li className="flex gap-2"><Check className="text-primary"/>Gestión de productos y pedidos.</li><li className="flex gap-2"><Check className="text-primary"/>Soporte continuo.</li></ul></CardContent></Card></div>
                 </div>
             </div>
           )}
@@ -136,9 +158,9 @@ export default function MarketingPage() {
               </div>
               <h3 className="text-2xl md:text-3xl font-bold text-center mb-8">Servicios SEO</h3>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
-                <Card><CardHeader><CardTitle>SEO Esencial</CardTitle></CardHeader><CardContent><p className="text-sm mb-4">Para empresas que necesitan sentar una base sólida.</p><ul className="text-sm space-y-2"><li>Revisión SEO inicial</li><li>SEO On-Page básico</li><li>Análisis de palabras clave</li><li>Informes mensuales</li></ul></CardContent></Card>
-                <Card className="border-2 border-primary relative"><span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground text-xs font-bold px-3 py-1 rounded-full">RECOMENDADO</span><CardHeader><CardTitle>SEO Avanzado</CardTitle></CardHeader><CardContent><p className="text-sm mb-4">Diseñado para un crecimiento estable y competitivo.</p><ul className="text-sm space-y-2"><li>Revisión SEO completa</li><li>SEO On-Page optimizado</li><li>Linkbuilding básico</li><li>Redacción de contenidos</li></ul></CardContent></Card>
-                <Card><CardHeader><CardTitle>SEO Premium</CardTitle></CardHeader><CardContent><p className="text-sm mb-4">Para marcas que buscan liderazgo digital.</p><ul className="text-sm space-y-2"><li>Auditoría y revisión técnica completa</li><li>SEO Off-Page avanzado</li><li>Creación de contenido especializado</li><li>Plan de crecimiento</li></ul></CardContent></Card>
+                <div className="card-animated-border"><Card><CardHeader><CardTitle>SEO Esencial</CardTitle></CardHeader><CardContent><p className="text-sm mb-4">Para empresas que necesitan sentar una base sólida.</p><ul className="text-sm space-y-2"><li>Revisión SEO inicial</li><li>SEO On-Page básico</li><li>Análisis de palabras clave</li><li>Informes mensuales</li></ul></CardContent></Card></div>
+                <div className="card-animated-border"><Card className="border-2 border-primary relative"><span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground text-xs font-bold px-3 py-1 rounded-full">RECOMENDADO</span><CardHeader><CardTitle>SEO Avanzado</CardTitle></CardHeader><CardContent><p className="text-sm mb-4">Diseñado para un crecimiento estable y competitivo.</p><ul className="text-sm space-y-2"><li>Revisión SEO completa</li><li>SEO On-Page optimizado</li><li>Linkbuilding básico</li><li>Redacción de contenidos</li></ul></CardContent></Card></div>
+                <div className="card-animated-border"><Card><CardHeader><CardTitle>SEO Premium</CardTitle></CardHeader><CardContent><p className="text-sm mb-4">Para marcas que buscan liderazgo digital.</p><ul className="text-sm space-y-2"><li>Auditoría y revisión técnica completa</li><li>SEO Off-Page avanzado</li><li>Creación de contenido especializado</li><li>Plan de crecimiento</li></ul></CardContent></Card></div>
               </div>
             </div>
           )}
@@ -151,9 +173,9 @@ export default function MarketingPage() {
               </div>
               <h3 className="text-2xl md:text-3xl font-bold text-center mb-8">Servicios de Campañas de ADS</h3>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
-                <Card><CardHeader><CardTitle>Campaña Básica</CardTitle></CardHeader><CardContent><p className="text-sm mb-4">Para empezar a anunciarse de manera simple y efectiva.</p><ul className="text-sm space-y-2"><li>Hasta 2 objetivos</li><li>Campañas en Meta o Google</li><li>Diseño de piezas gráficas</li><li>Informe mensual</li></ul></CardContent></Card>
-                <Card><CardHeader><CardTitle>Campaña Completa</CardTitle></CardHeader><CardContent><p className="text-sm mb-4">Para un enfoque más avanzado y sostenible.</p><ul className="text-sm space-y-2"><li>Estrategia con funnels</li><li>Campañas de remarketing</li><li>Landing pages básicas</li><li>Anuncios de catálogo dinámico</li></ul></CardContent></Card>
-                <Card><CardHeader><CardTitle>Campaña Multicanal</CardTitle></CardHeader><CardContent><p className="text-sm mb-4">Para una estrategia integral en todas las plataformas clave.</p><ul className="text-sm space-y-2"><li>Publicidad en Meta, Google, TikTok</li><li>Gestión de varios objetivos</li><li>Campañas locales en Google Maps</li><li>Panel de control personalizado</li></ul></CardContent></Card>
+                <div className="card-animated-border"><Card><CardHeader><CardTitle>Campaña Básica</CardTitle></CardHeader><CardContent><p className="text-sm mb-4">Para empezar a anunciarse de manera simple y efectiva.</p><ul className="text-sm space-y-2"><li>Hasta 2 objetivos</li><li>Campañas en Meta o Google</li><li>Diseño de piezas gráficas</li><li>Informe mensual</li></ul></CardContent></Card></div>
+                <div className="card-animated-border"><Card><CardHeader><CardTitle>Campaña Completa</CardTitle></CardHeader><CardContent><p className="text-sm mb-4">Para un enfoque más avanzado y sostenible.</p><ul className="text-sm space-y-2"><li>Estrategia con funnels</li><li>Campañas de remarketing</li><li>Landing pages básicas</li><li>Anuncios de catálogo dinámico</li></ul></CardContent></Card></div>
+                <div className="card-animated-border"><Card><CardHeader><CardTitle>Campaña Multicanal</CardTitle></CardHeader><CardContent><p className="text-sm mb-4">Para una estrategia integral en todas las plataformas clave.</p><ul className="text-sm space-y-2"><li>Publicidad en Meta, Google, TikTok</li><li>Gestión de varios objetivos</li><li>Campañas locales en Google Maps</li><li>Panel de control personalizado</li></ul></CardContent></Card></div>
               </div>
             </div>
           )}
@@ -166,13 +188,16 @@ export default function MarketingPage() {
             <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 text-foreground">Preguntas Frecuentes</h2>
           </FadeIn>
           <FadeIn delay={0.2}>
-            <div className="max-w-3xl mx-auto space-y-4">
+            <div className="max-w-3xl mx-auto">
               <Accordion type="single" collapsible className="w-full">
-                <AccordionItem value="item-1" className="bg-card border rounded-lg"><AccordionTrigger className="p-6 text-lg font-semibold">¿En cuánto tiempo veré resultados con el SEO?</AccordionTrigger><AccordionContent className="px-6 pb-6">El SEO es una estrategia a medio-largo plazo. Generalmente, los resultados significativos comienzan a verse entre los 3 y 6 meses.</AccordionContent></AccordionItem>
-                <AccordionItem value="item-2" className="bg-card border rounded-lg"><AccordionTrigger className="p-6 text-lg font-semibold">¿Qué paquete de redes sociales es mejor para mi negocio?</AccordionTrigger><AccordionContent className="px-6 pb-6">El Paquete Básico es ideal para establecer una presencia sólida. Si buscas un crecimiento más agresivo, el Intermedio o Completo serían más adecuados.</AccordionContent></AccordionItem>
-                <AccordionItem value="item-3" className="bg-card border rounded-lg"><AccordionTrigger className="p-6 text-lg font-semibold">¿El coste del diseño web incluye el hosting y el dominio?</AccordionTrigger><AccordionContent className="px-6 pb-6">Nuestros paquetes se centran en el diseño y desarrollo. El hosting y el dominio son servicios externos, pero te asesoramos en todo el proceso.</AccordionContent></AccordionItem>
-                <AccordionItem value="item-4" className="bg-card border rounded-lg"><AccordionTrigger className="p-6 text-lg font-semibold">¿Qué diferencia hay entre SEO y SEM?</AccordionTrigger><AccordionContent className="px-6 pb-6">El SEO mejora tu visibilidad en resultados orgánicos (no pagados), mientras que el SEM utiliza publicidad de pago para aparecer de forma inmediata.</AccordionContent></AccordionItem>
-                <AccordionItem value="item-5" className="bg-card border rounded-lg"><AccordionTrigger className="p-6 text-lg font-semibold">¿Cómo se mide el retorno de la inversión (ROI)?</AccordionTrigger><AccordionContent className="px-6 pb-6">Medimos el ROI a través de indicadores clave (KPIs) definidos al inicio, como el seguimiento de conversiones, el coste por adquisición (CPA) y el valor del cliente (LTV).</AccordionContent></AccordionItem>
+                {FAQS.map((faq, index) => (
+                    <div key={index} className="card-animated-border mb-4">
+                        <AccordionItem value={`item-${index}`} className="bg-card border-none rounded-lg">
+                            <AccordionTrigger className="p-6 text-lg font-semibold hover:no-underline">{faq.question}</AccordionTrigger>
+                            <AccordionContent className="px-6 pb-6 text-muted-foreground">{faq.answer}</AccordionContent>
+                        </AccordionItem>
+                    </div>
+                ))}
               </Accordion>
             </div>
           </FadeIn>
