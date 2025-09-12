@@ -9,6 +9,9 @@ import { FadeIn } from '@/components/fade-in';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { cn } from '@/lib/utils';
 import { BrainCircuit, Briefcase, Handshake, HeartHandshake, Users } from 'lucide-react';
+import Image from 'next/image';
+import placeholderImages from '@/lib/placeholder-images.json';
+
 
 const TABS = [
   { id: 'cliente', label: 'Atención al Cliente', icon: <HeartHandshake /> },
@@ -204,8 +207,16 @@ export default function IaPage() {
 
   return (
     <>
-      <section className="bg-primary text-primary-foreground">
-        <div className="container mx-auto px-6 py-20 text-center">
+      <section className="relative text-primary-foreground h-[70vh] flex items-center justify-center">
+        <Image 
+          src={placeholderImages['ia-hero']}
+          alt="Inteligencia Artificial"
+          fill
+          className="object-cover"
+          data-ai-hint="artificial intelligence"
+        />
+         <div className="absolute inset-0 bg-black/60" />
+        <div className="container mx-auto px-6 py-20 text-center relative z-10">
           <FadeIn>
             <h1 className="text-4xl md:text-5xl font-bold leading-tight mb-4">Transforma tu Negocio con Inteligencia Artificial</h1>
             <p className="text-lg md:text-xl mb-8 max-w-3xl mx-auto text-primary-foreground/80">Implementamos soluciones de IA y automatización a medida para optimizar procesos, mejorar la experiencia del cliente e impulsar tus ventas.</p>
