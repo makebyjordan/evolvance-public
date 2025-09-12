@@ -2,7 +2,7 @@
 
 import { Card, CardDescription, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { FileText, Globe, HelpCircle, Bot, Milestone, ShieldCheck, FileType, Settings, ExternalLink, Brush, Orbit } from "lucide-react";
+import { FileText, Globe, HelpCircle, Milestone, ShieldCheck, FileType, Settings, ExternalLink, Orbit } from "lucide-react";
 import { ServicesEditor } from "./components/ServicesEditor";
 import { TimelineEditor } from "./components/TimelineEditor";
 import { PhilosophyEditor } from "./components/PhilosophyEditor";
@@ -33,6 +33,7 @@ export default async function WebPage() {
     iaPageTitle: 'Inteligencia Artificial y Automatizaciones',
     marketingPageTitle: 'Marketing Digital',
     softwarePageTitle: 'Software y Ciberseguridad',
+    vrPageTitle: 'Ayúdate de la realidad virtual',
   }
 
   return (
@@ -105,6 +106,14 @@ export default async function WebPage() {
                   <p className="font-medium">{servicePagesConfig?.softwarePageTitle || defaultServicePageTitles.softwarePageTitle}</p>
                   <Button asChild variant="outline" size="sm">
                     <Link href="/view-service/software" target="_blank">
+                      Ver página <ExternalLink className="ml-2 h-4 w-4" />
+                    </Link>
+                  </Button>
+                </div>
+                 <div className="flex items-center justify-between p-3 border rounded-lg">
+                  <p className="font-medium">{servicePagesConfig?.vrPageTitle || defaultServicePageTitles.vrPageTitle}</p>
+                  <Button asChild variant="outline" size="sm">
+                    <Link href="/view-service/vr" target="_blank">
                       Ver página <ExternalLink className="ml-2 h-4 w-4" />
                     </Link>
                   </Button>

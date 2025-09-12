@@ -73,6 +73,7 @@ export interface ServicePagesConfig {
     iaPageTitle: string;
     marketingPageTitle: string;
     softwarePageTitle: string;
+    vrPageTitle: string;
     updatedAt?: string;
 }
 

@@ -15,6 +15,7 @@ const servicePagesSchema = z.object({
   iaPageTitle: z.string().min(5, "El título es requerido."),
   marketingPageTitle: z.string().min(5, "El título es requerido."),
   softwarePageTitle: z.string().min(5, "El título es requerido."),
+  vrPageTitle: z.string().min(5, "El título es requerido."),
 });
 
 type ServicePagesFormValues = z.infer<typeof servicePagesSchema>;
@@ -32,6 +33,7 @@ export function ServicePagesEditor({ initialContent }: ServicePagesEditorProps) 
       iaPageTitle: 'Inteligencia Artificial y Automatizaciones',
       marketingPageTitle: 'Marketing Digital',
       softwarePageTitle: 'Software y Ciberseguridad',
+      vrPageTitle: 'Ayúdate de la realidad virtual',
     },
   });
 
@@ -94,6 +96,20 @@ export function ServicePagesEditor({ initialContent }: ServicePagesEditorProps) 
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Título Página Software</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="vrPageTitle"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Título Página Realidad Virtual</FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>

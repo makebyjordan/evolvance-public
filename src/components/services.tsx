@@ -40,7 +40,12 @@ export default async function Services() {
         icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-shield-check"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg>`,
         title: 'Webs, Apps, CRMs y mucho más.',
         description: 'Desarrollamos aplicaciones a medida que se adaptan a tus procesos y las blindamos con las últimas tecnologías en ciberseguridad para garantizar la continuidad y la confianza en tu negocio.',
-      }
+      },
+      {
+        icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-vr"><path d="M2 12a10 10 0 0 1 20 0Z"/><path d="M6 12h2m6 0h2"/><path d="M12 12a3 3 0 0 1-3-3V7a3 3 0 0 1 6 0v2a3 3 0 0 1-3 3Z"/></svg>`,
+        title: 'Ayúdate de la realidad virtual',
+        description: 'Diseñamos experiencias inmersivas que conectan a tu público. La realidad virtual es una herramienta estratégica para emocionar, educar e impulsar tu negocio.',
+      },
     ]
   };
 
@@ -54,8 +59,11 @@ export default async function Services() {
     if (lowerCaseTitle.includes('marketing')) {
       return "/view-service/marketing";
     }
-     if (lowerCaseTitle.includes('software') || lowerCaseTitle.includes('apps')) {
+     if (lowerCaseTitle.includes('apps')) {
       return "/view-service/software";
+    }
+    if (lowerCaseTitle.includes('realidad virtual')) {
+      return "/view-service/vr";
     }
     return "/services";
   };
