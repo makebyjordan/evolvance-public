@@ -94,7 +94,7 @@ export default function Header() {
           <div className="hidden md:flex items-center gap-2">
              <ContactModal>
                 <Button>
-                    Agendar Sesión
+                    Agendar Reunión
                 </Button>
             </ContactModal>
           </div>
@@ -143,7 +143,7 @@ export default function Header() {
                    <div className="pt-4">
                      <ContactModal>
                         <Button className="w-full">
-                            Agendar Sesión
+                            Agendar Reunión
                         </Button>
                     </ContactModal>
                    </div>
