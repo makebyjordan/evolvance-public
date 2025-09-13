@@ -1,18 +1,18 @@
+
 'use client';
 
-import { useState } from 'react';
-import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
 import { ContactModal } from '@/components/contact-modal';
 import { FadeIn } from '@/components/fade-in';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
-import { cn } from '@/lib/utils';
 import { BrainCircuit, Megaphone, Codesandbox, Headset, Search, PencilRuler, Code2, Rocket, Target, ShieldCheck, ArrowRight } from 'lucide-react';
 import Header from '@/components/header';
 import Footer from '@/components/footer';
 import teamImages from '@/lib/placeholder-images.json';
 import Link from 'next/link';
+import Image from 'next/image';
+import logoEvolVance from './logo-evol-vance.svg';
 
 
 export default function ServicesPage() {
@@ -99,7 +99,7 @@ export default function ServicesPage() {
                                                 <p className="text-muted-foreground mb-6">Diseñamos y ejecutamos campañas que atraen a tu audiencia ideal. Conquista tu mercado con desarrollo web, branding, SEO/SEM, campañas de ads y gestión de contenido de alto impacto.</p>
                                             </CardContent>
                                             <CardFooter className="p-0">
-                                                <Button asChild variant="link" className="p-0 font-semibold text-primary hover:text-sky-300 transition-colors flex items-center gap-2">
+                                                 <Button asChild variant="link" className="p-0 font-semibold text-primary hover:text-sky-300 transition-colors flex items-center gap-2">
                                                     <a href="https://evol-vance.com/view-service/marketing" target="_blank" rel="noopener noreferrer">Saber más <ArrowRight className="h-4 w-4"/></a>
                                                 </Button>
                                             </CardFooter>
@@ -231,23 +231,7 @@ export default function ServicesPage() {
                             <div className="container mx-auto px-6">
                                 <div className="flex flex-col md:flex-row items-center gap-12">
                                     <div className="md:w-1/2">
-                                         <svg
-                                            width="32"
-                                            height="32"
-                                            viewBox="0 0 32 32"
-                                            fill="none"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            className="w-full h-auto text-primary"
-                                        >
-                                            <path
-                                            d="M19.781 2.00021C19.234 1.98621 18.795 2.30621 18.623 2.79321L11.289 23.0182C11.109 23.5352 11.396 24.0882 11.913 24.2682C12.43 24.4472 12.984 24.1602 13.163 23.6442L20.497 3.41921C20.677 2.90221 20.39 2.34921 19.873 2.16921C19.842 2.15821 19.812 2.15121 19.781 2.14421V2.00021Z"
-                                            fill="currentColor"
-                                            />
-                                            <path
-                                            d="M26.4819 12.5295C26.4819 11.2335 25.9619 10.0155 25.0419 9.0965C24.1219 8.1765 22.9039 7.6565 21.6079 7.6565C20.3119 7.6565 19.0939 8.1765 18.1739 9.0965C17.2539 10.0155 16.7339 11.2335 16.7339 12.5295C16.7339 13.6115 17.0869 14.6345 17.7129 15.4245L19.2229 17.2915C19.5399 17.6745 20.0439 17.9045 20.5759 17.9045H20.6079C21.0119 17.9045 21.3949 17.7695 21.6989 17.5255C22.4889 16.9005 23.4089 15.6525 24.1309 14.1845C24.2259 13.9995 24.2729 13.7855 24.2729 13.5655C24.2729 12.9865 24.0389 12.4465 23.6439 12.0515C23.2489 11.6565 22.7089 11.4225 22.1299 11.4225C21.5509 11.4225 21.0109 11.6565 20.6159 12.0515C20.2209 12.4465 19.9869 12.9865 19.9869 13.5655C19.9869 13.6215 19.9919 13.6765 19.9989 13.7325C20.0009 13.7545 20.0079 13.7745 20.0119 13.7955C20.0129 13.8015 20.0149 13.8065 20.0159 13.8125C20.0159 13.8145 20.0159 13.8165 20.0169 13.8185C20.4569 14.6195 20.9769 15.2615 21.4329 15.6325C21.5549 15.7275 21.7249 15.6705 21.8199 15.5485L25.0499 11.1835C25.4019 10.7065 25.2979 10.0215 24.8209 9.6705C24.3439 9.3185 23.6599 9.4235 23.3079 9.8995L20.8939 13.1115C20.7679 13.2755 20.5409 13.3325 20.3549 13.2435C20.1689 13.1555 20.0719 12.9465 20.1229 12.7505L21.0369 9.5445C21.2229 8.8955 21.8489 8.4485 22.5279 8.5635C23.2059 8.6785 23.7299 9.2565 23.7299 9.9485V10.0055C25.3219 10.3705 26.4819 11.3535 26.4819 12.5295Z"
-                                            fill="currentColor"
-                                            />
-                                        </svg>
+                                        <Image src={logoEvolVance} alt="Evol-vance Logo" className="w-full h-auto text-primary" />
                                     </div>
                                     <div className="md:w-1/2">
                                         <h2 className="text-sm font-bold uppercase text-accent tracking-widest">¿Por Qué Elegirnos?</h2>
@@ -343,7 +327,7 @@ export default function ServicesPage() {
                                     <h3 className="text-4xl md:text-5xl font-extrabold text-foreground mt-2">Preguntas Frecuentes</h3>
                                 </div>
                                 <Accordion type="single" collapsible className="w-full space-y-4">
-                                     <div className="card-animated-border">
+                                    <div className="card-animated-border">
                                         <AccordionItem value="item-1" className="card-bg rounded-lg border-none">
                                             <AccordionTrigger className="w-full p-6 text-left text-lg font-semibold text-foreground hover:no-underline">¿Cuánto tiempo se tarda en desarrollar un proyecto?</AccordionTrigger>
                                             <AccordionContent className="px-6 pb-6 text-muted-foreground">El tiempo de desarrollo varía según la complejidad del proyecto. Un sitio web puede tardar de 4 a 8 semanas, mientras que una aplicación a medida o una solución de IA puede llevar varios meses. Siempre proporcionamos una hoja de ruta detallada al inicio.</AccordionContent>
