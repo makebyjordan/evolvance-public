@@ -10,6 +10,7 @@ import Clients from '@/components/clients';
 import Faq from '@/components/faq';
 import Cta from '@/components/cta';
 import { SectionSeparator } from '@/components/section-separator';
+import Footer from '@/components/footer';
 
 export default function Home() {
   return (
