@@ -34,6 +34,7 @@ export default function MarketingAI() {
           </FadeIn>
           <FadeIn delay={0.2}>
             <div className="grid grid-cols-2 gap-6">
+              <div className="card-animated-border">
                 <InteractiveCard className="h-full text-center p-4 card-gradient-hover">
                     <CardHeader className="p-2">
                          <div className="flex justify-center mb-3">
@@ -44,6 +45,8 @@ export default function MarketingAI() {
                         <CardTitle className="text-base font-bold">Segmentación Avanzada</CardTitle>
                     </CardHeader>
                 </InteractiveCard>
+              </div>
+              <div className="card-animated-border">
                  <InteractiveCard className="h-full text-center p-4 card-gradient-hover">
                     <CardHeader className="p-2">
                         <div className="flex justify-center mb-3">
@@ -54,6 +57,8 @@ export default function MarketingAI() {
                         <CardTitle className="text-base font-bold">Análisis Predictivo</CardTitle>
                     </CardHeader>
                 </InteractiveCard>
+              </div>
+              <div className="card-animated-border">
                  <InteractiveCard className="h-full text-center p-4 card-gradient-hover">
                      <CardHeader className="p-2">
                        <div className="flex justify-center mb-3">
@@ -64,6 +69,8 @@ export default function MarketingAI() {
                         <CardTitle className="text-base font-bold">Automatización de Anuncios</CardTitle>
                     </CardHeader>
                 </InteractiveCard>
+              </div>
+              <div className="card-animated-border">
                  <InteractiveCard className="h-full text-center p-4 card-gradient-hover">
                      <CardHeader className="p-2">
                          <div className="flex justify-center mb-3">
@@ -74,6 +81,7 @@ export default function MarketingAI() {
                         <CardTitle className="text-base font-bold">Optimización de Campañas</CardTitle>
                     </CardHeader>
                 </InteractiveCard>
+              </div>
             </div>
           </FadeIn>
         </div>
