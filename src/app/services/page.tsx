@@ -1,9 +1,10 @@
+
 'use client';
 
 import { useState } from 'react';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
 import { ContactModal } from '@/components/contact-modal';
 import { FadeIn } from '@/components/fade-in';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
@@ -73,43 +74,67 @@ export default function ServicesPage() {
                                 </div>
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                                     <div className="card-animated-border">
-                                        <Card className="h-full p-8">
-                                            <div className="flex items-center justify-center h-16 w-16 rounded-full bg-primary/10 mb-6"><BrainCircuit className="text-primary h-8 w-8"/></div>
-                                            <h4 className="text-2xl font-bold text-foreground mb-3">Inteligencia Artificial y Automatizaciones</h4>
-                                            <p className="text-muted-foreground mb-6">Optimizamos procesos con chatbots, asistentes de voz y análisis de datos. Automatizamos tareas repetitivas como reservas, facturación e inventario para que te centres en lo que realmente importa.</p>
-                                            <Button asChild variant="link" className="p-0 text-primary font-semibold">
-                                                <Link href="https://evol-vance.com/view-service/ia">Saber más <ArrowRight className="ml-2 h-4 w-4"/></Link>
-                                            </Button>
+                                        <Card className="h-full p-8 transform hover:-translate-y-2 transition-transform duration-300 glow-effect">
+                                            <CardHeader className="p-0">
+                                                <div className="flex items-center justify-center h-16 w-16 rounded-full bg-primary/10 mb-6"><BrainCircuit className="text-primary h-8 w-8"/></div>
+                                                <CardTitle className="text-2xl font-bold text-white mb-3">Inteligencia Artificial y Automatizaciones</CardTitle>
+                                            </CardHeader>
+                                            <CardContent className="p-0">
+                                                <p className="text-muted-foreground mb-6">Optimizamos procesos con chatbots, asistentes de voz y análisis de datos. Automatizamos tareas repetitivas como reservas, facturación e inventario para que te centres en lo que realmente importa.</p>
+                                            </CardContent>
+                                            <CardFooter className="p-0">
+                                                <Button asChild variant="link" className="p-0 font-semibold text-primary hover:text-sky-300 transition-colors flex items-center gap-2">
+                                                    <a href="https://evol-vance.com/view-service/ia" target="_blank" rel="noopener noreferrer">Saber más <ArrowRight className="h-4 w-4"/></a>
+                                                </Button>
+                                            </CardFooter>
                                         </Card>
                                     </div>
                                     <div className="card-animated-border">
-                                        <Card className="h-full p-8">
-                                            <div className="flex items-center justify-center h-16 w-16 rounded-full bg-primary/10 mb-6"><Megaphone className="text-primary h-8 w-8"/></div>
-                                            <h4 className="text-2xl font-bold text-foreground mb-3">Marketing Digital</h4>
-                                            <p className="text-muted-foreground mb-6">Diseñamos y ejecutamos campañas que atraen a tu audiencia ideal. Conquista tu mercado con desarrollo web, branding, SEO/SEM, campañas de ads y gestión de contenido de alto impacto.</p>
-                                            <Button asChild variant="link" className="p-0 text-primary font-semibold">
-                                                <Link href="/view-service/marketing">Saber más <ArrowRight className="ml-2 h-4 w-4"/></Link>
-                                            </Button>
+                                        <Card className="h-full p-8 transform hover:-translate-y-2 transition-transform duration-300 glow-effect">
+                                            <CardHeader className="p-0">
+                                                <div className="flex items-center justify-center h-16 w-16 rounded-full bg-primary/10 mb-6"><Megaphone className="text-primary h-8 w-8"/></div>
+                                                <CardTitle className="text-2xl font-bold text-white mb-3">Marketing Digital</CardTitle>
+                                            </CardHeader>
+                                            <CardContent className="p-0">
+                                                <p className="text-muted-foreground mb-6">Diseñamos y ejecutamos campañas que atraen a tu audiencia ideal. Conquista tu mercado con desarrollo web, branding, SEO/SEM, campañas de ads y gestión de contenido de alto impacto.</p>
+                                            </CardContent>
+                                            <CardFooter className="p-0">
+                                                <Button asChild variant="link" className="p-0 font-semibold text-primary hover:text-sky-300 transition-colors flex items-center gap-2">
+                                                    <a href="https://evol-vance.com/view-service/marketing" target="_blank" rel="noopener noreferrer">Saber más <ArrowRight className="h-4 w-4"/></a>
+                                                </Button>
+                                            </CardFooter>
                                         </Card>
                                     </div>
                                     <div className="card-animated-border">
-                                        <Card className="h-full p-8">
-                                            <div className="flex items-center justify-center h-16 w-16 rounded-full bg-primary/10 mb-6"><Codesandbox className="text-primary h-8 w-8"/></div>
-                                            <h4 className="text-2xl font-bold text-foreground mb-3">Webs, Apps, CRMs y mucho más</h4>
-                                            <p className="text-muted-foreground mb-6">Creamos CRMs, apps móviles y webs de gestión a medida. Herramientas que automatizan tareas, resuelven problemas y te dan una ventaja competitiva para centrarte en crecer.</p>
-                                            <Button asChild variant="link" className="p-0 text-primary font-semibold">
-                                                <Link href="/view-service/software">Saber más <ArrowRight className="ml-2 h-4 w-4"/></Link>
-                                            </Button>
+                                        <Card className="h-full p-8 transform hover:-translate-y-2 transition-transform duration-300 glow-effect">
+                                             <CardHeader className="p-0">
+                                                <div className="flex items-center justify-center h-16 w-16 rounded-full bg-primary/10 mb-6"><Codesandbox className="text-primary h-8 w-8"/></div>
+                                                <CardTitle className="text-2xl font-bold text-white mb-3">Webs, Apps, CRMs y mucho más</CardTitle>
+                                            </CardHeader>
+                                            <CardContent className="p-0">
+                                                <p className="text-muted-foreground mb-6">Creamos CRMs, apps móviles y webs de gestión a medida. Herramientas que automatizan tareas, resuelven problemas y te dan una ventaja competitiva para centrarte en crecer.</p>
+                                            </CardContent>
+                                            <CardFooter className="p-0">
+                                                <Button asChild variant="link" className="p-0 font-semibold text-primary hover:text-sky-300 transition-colors flex items-center gap-2">
+                                                    <Link href="/view-service/software">Saber más <ArrowRight className="h-4 w-4"/></Link>
+                                                </Button>
+                                            </CardFooter>
                                         </Card>
                                     </div>
                                     <div className="card-animated-border" id="vr">
-                                        <Card className="h-full p-8">
-                                            <div className="flex items-center justify-center h-16 w-16 rounded-full bg-primary/10 mb-6"><Headset className="text-primary h-8 w-8"/></div>
-                                            <h4 className="text-2xl font-bold text-foreground mb-3">Ayúdate de la Realidad Virtual</h4>
-                                            <p className="text-muted-foreground mb-6">Creamos experiencias inmersivas para marketing y turismo, simuladores para formación industrial y sanitaria, y tours virtuales para el sector inmobiliario. Usamos la RV para generar impacto y mejorar la eficiencia.</p>
-                                            <Button asChild variant="link" className="p-0 text-primary font-semibold">
-                                                <Link href="/view-service/vr">Saber más <ArrowRight className="ml-2 h-4 w-4"/></Link>
-                                            </Button>
+                                        <Card className="h-full p-8 transform hover:-translate-y-2 transition-transform duration-300 glow-effect">
+                                            <CardHeader className="p-0">
+                                                <div className="flex items-center justify-center h-16 w-16 rounded-full bg-primary/10 mb-6"><Headset className="text-primary h-8 w-8"/></div>
+                                                <CardTitle className="text-2xl font-bold text-white mb-3">Ayúdate de la Realidad Virtual</CardTitle>
+                                            </CardHeader>
+                                            <CardContent className="p-0">
+                                                <p className="text-muted-foreground mb-6">Creamos experiencias inmersivas para marketing y turismo, simuladores para formación industrial y sanitaria, y tours virtuales para el sector inmobiliario. Usamos la RV para generar impacto y mejorar la eficiencia.</p>
+                                            </CardContent>
+                                            <CardFooter className="p-0">
+                                                <Button asChild variant="link" className="p-0 font-semibold text-primary hover:text-sky-300 transition-colors flex items-center gap-2">
+                                                    <Link href="/view-service/vr">Saber más <ArrowRight className="h-4 w-4"/></Link>
+                                                </Button>
+                                            </CardFooter>
                                         </Card>
                                     </div>
                                 </div>
@@ -128,25 +153,33 @@ export default function ServicesPage() {
                                 <div className="relative">
                                     <div className="hidden md:block absolute top-1/2 left-0 w-full h-0.5 bg-border"></div>
                                     <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
-                                        <div className="text-center relative">
-                                            <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4 border-2 border-primary"><Search className="text-primary h-8 w-8"/></div>
-                                            <h4 className="text-xl font-bold text-foreground">1. Descubrimiento</h4>
-                                            <p className="text-muted-foreground mt-2">Analizamos tus objetivos, audiencia y desafíos para definir una estrategia clara.</p>
+                                        <div className="card-animated-border">
+                                            <Card className="text-center relative p-6">
+                                                <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4 border-2 border-primary"><Search className="text-primary h-8 w-8"/></div>
+                                                <h4 className="text-xl font-bold text-foreground">1. Descubrimiento</h4>
+                                                <p className="text-muted-foreground mt-2">Analizamos tus objetivos, audiencia y desafíos para definir una estrategia clara.</p>
+                                            </Card>
                                         </div>
-                                        <div className="text-center relative">
-                                            <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4 border-2 border-primary"><PencilRuler className="text-primary h-8 w-8"/></div>
-                                            <h4 className="text-xl font-bold text-foreground">2. Diseño y Prototipo</h4>
-                                            <p className="text-muted-foreground mt-2">Creamos la arquitectura de la información y diseñamos interfaces intuitivas y atractivas.</p>
+                                        <div className="card-animated-border">
+                                            <Card className="text-center relative p-6">
+                                                <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4 border-2 border-primary"><PencilRuler className="text-primary h-8 w-8"/></div>
+                                                <h4 className="text-xl font-bold text-foreground">2. Diseño y Prototipo</h4>
+                                                <p className="text-muted-foreground mt-2">Creamos la arquitectura de la información y diseñamos interfaces intuitivas y atractivas.</p>
+                                            </Card>
                                         </div>
-                                        <div className="text-center relative">
-                                            <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4 border-2 border-primary"><Code2 className="text-primary h-8 w-8"/></div>
-                                            <h4 className="text-xl font-bold text-foreground">3. Desarrollo Ágil</h4>
-                                            <p className="text-muted-foreground mt-2">Construimos la solución con código limpio y escalable, manteniéndote informado en cada sprint.</p>
+                                        <div className="card-animated-border">
+                                            <Card className="text-center relative p-6">
+                                                <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4 border-2 border-primary"><Code2 className="text-primary h-8 w-8"/></div>
+                                                <h4 className="text-xl font-bold text-foreground">3. Desarrollo Ágil</h4>
+                                                <p className="text-muted-foreground mt-2">Construimos la solución con código limpio y escalable, manteniéndote informado en cada sprint.</p>
+                                            </Card>
                                         </div>
-                                        <div className="text-center relative">
-                                            <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4 border-2 border-primary"><Rocket className="text-primary h-8 w-8"/></div>
-                                            <h4 className="text-xl font-bold text-foreground">4. Despliegue y Soporte</h4>
-                                            <p className="text-muted-foreground mt-2">Lanzamos el proyecto y ofrecemos soporte continuo para asegurar su óptimo rendimiento.</p>
+                                        <div className="card-animated-border">
+                                            <Card className="text-center relative p-6">
+                                                <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4 border-2 border-primary"><Rocket className="text-primary h-8 w-8"/></div>
+                                                <h4 className="text-xl font-bold text-foreground">4. Despliegue y Soporte</h4>
+                                                <p className="text-muted-foreground mt-2">Lanzamos el proyecto y ofrecemos soporte continuo para asegurar su óptimo rendimiento.</p>
+                                            </Card>
                                         </div>
                                     </div>
                                 </div>
