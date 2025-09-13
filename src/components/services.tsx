@@ -77,7 +77,7 @@ export default async function Services() {
             {title}
           </h2>
         </FadeIn>
-        <div className="mt-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="mt-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
           {items.map((service, index) => {
             return (
                 <FadeIn key={index} delay={index * 0.1}>
