@@ -1,4 +1,3 @@
-
 import { FadeIn } from './fade-in';
 import { BrainCircuit, Megaphone, Target, Bot } from 'lucide-react';
 import { InteractiveCard } from './interactive-card';
@@ -8,7 +7,11 @@ import { ContactModal } from './contact-modal';
 
 export default function MarketingAI() {
   return (
-    <section id="marketing-ai" className="py-20 sm:py-32">
+    // 👇 AQUÍ ESTÁ EL CAMBIO. Se ha añadido la máscara de CSS.
+    <section 
+      id="marketing-ai" 
+      className="py-20 sm:py-32 [-webkit-mask-image:linear-gradient(to_bottom,transparent_0%,black_5%)] [mask-image:linear-gradient(to_bottom,transparent_0%,black_5%)]"
+    >
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <FadeIn>
@@ -31,54 +34,46 @@ export default function MarketingAI() {
           </FadeIn>
           <FadeIn delay={0.2}>
             <div className="grid grid-cols-2 gap-6">
-                <div className="card-animated-border">
-                    <Card className="h-full text-center p-4">
-                        <CardHeader className="p-2">
-                             <div className="flex justify-center mb-3">
-                                <div className="p-3 bg-primary/10 rounded-lg text-primary">
-                                    <Target className="w-8 h-8" />
-                                </div>
+                <InteractiveCard className="h-full text-center p-4 card-gradient-hover">
+                    <CardHeader className="p-2">
+                         <div className="flex justify-center mb-3">
+                            <div className="p-3 bg-primary/10 rounded-lg text-primary">
+                                <Target className="w-8 h-8" />
                             </div>
-                            <CardTitle className="text-base font-bold">Segmentación Avanzada</CardTitle>
-                        </CardHeader>
-                    </Card>
-                </div>
-                 <div className="card-animated-border">
-                    <Card className="h-full text-center p-4">
-                        <CardHeader className="p-2">
-                            <div className="flex justify-center mb-3">
-                                <div className="p-3 bg-primary/10 rounded-lg text-primary">
-                                    <BrainCircuit className="w-8 h-8" />
-                                </div>
+                        </div>
+                        <CardTitle className="text-base font-bold">Segmentación Avanzada</CardTitle>
+                    </CardHeader>
+                </InteractiveCard>
+                 <InteractiveCard className="h-full text-center p-4 card-gradient-hover">
+                    <CardHeader className="p-2">
+                        <div className="flex justify-center mb-3">
+                            <div className="p-3 bg-primary/10 rounded-lg text-primary">
+                                <BrainCircuit className="w-8 h-8" />
                             </div>
-                            <CardTitle className="text-base font-bold">Análisis Predictivo</CardTitle>
-                        </CardHeader>
-                    </Card>
-                </div>
-                 <div className="card-animated-border">
-                    <Card className="h-full text-center p-4">
-                         <CardHeader className="p-2">
-                           <div className="flex justify-center mb-3">
-                                <div className="p-3 bg-primary/10 rounded-lg text-primary">
-                                    <Bot className="w-8 h-8" />
-                                </div>
+                        </div>
+                        <CardTitle className="text-base font-bold">Análisis Predictivo</CardTitle>
+                    </CardHeader>
+                </InteractiveCard>
+                 <InteractiveCard className="h-full text-center p-4 card-gradient-hover">
+                     <CardHeader className="p-2">
+                       <div className="flex justify-center mb-3">
+                            <div className="p-3 bg-primary/10 rounded-lg text-primary">
+                                <Bot className="w-8 h-8" />
                             </div>
-                            <CardTitle className="text-base font-bold">Automatización de Anuncios</CardTitle>
-                        </CardHeader>
-                    </Card>
-                </div>
-                 <div className="card-animated-border">
-                    <Card className="h-full text-center p-4">
-                         <CardHeader className="p-2">
-                             <div className="flex justify-center mb-3">
-                                <div className="p-3 bg-primary/10 rounded-lg text-primary">
-                                    <Megaphone className="w-8 h-8" />
-                                </div>
+                        </div>
+                        <CardTitle className="text-base font-bold">Automatización de Anuncios</CardTitle>
+                    </CardHeader>
+                </InteractiveCard>
+                 <InteractiveCard className="h-full text-center p-4 card-gradient-hover">
+                     <CardHeader className="p-2">
+                         <div className="flex justify-center mb-3">
+                            <div className="p-3 bg-primary/10 rounded-lg text-primary">
+                                <Megaphone className="w-8 h-8" />
                             </div>
-                            <CardTitle className="text-base font-bold">Optimización de Campañas</CardTitle>
-                        </CardHeader>
-                    </Card>
-                </div>
+                        </div>
+                        <CardTitle className="text-base font-bold">Optimización de Campañas</CardTitle>
+                    </CardHeader>
+                </InteractiveCard>
             </div>
           </FadeIn>
         </div>
