@@ -40,7 +40,7 @@ export default function Home() {
             <Faq />
         </div>
          <div className="relative isolate">
-            <Sectionator position="top" align="left" />
+            <SectionSeparator position="top" align="left" />
             <Clients />
         </div>
          <div className="relative isolate">
