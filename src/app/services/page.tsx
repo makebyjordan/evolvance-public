@@ -14,7 +14,7 @@ import teamImages from '@/lib/placeholder-images.json';
 import Link from 'next/link';
 import Image from 'next/image';
 import logoEvolVance from './logo-evol-vance.svg';
-import heroImage from '@/images/hero-evolvance-services.jpg';
+import heroImage from '@/images/hero-evolvance-software.jpg';
 
 
 export default function ServicesPage() {
@@ -364,3 +364,4 @@ export default function ServicesPage() {
         </>
     );
 }
+
