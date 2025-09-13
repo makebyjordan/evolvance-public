@@ -3,10 +3,11 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
 import { ContactModal } from '@/components/contact-modal';
 import { FadeIn } from '@/components/fade-in';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
+import { cn } from '@/lib/utils';
 import { BrainCircuit, Megaphone, Codesandbox, Headset, Search, PencilRuler, Code2, Rocket, Target, ShieldCheck, ArrowRight } from 'lucide-react';
 import Header from '@/components/header';
 import Footer from '@/components/footer';
@@ -231,6 +232,8 @@ export default function ServicesPage() {
                                 <div className="flex flex-col md:flex-row items-center gap-12">
                                     <div className="md:w-1/2">
                                          <svg
+                                            width="32"
+                                            height="32"
                                             viewBox="0 0 32 32"
                                             fill="none"
                                             xmlns="http://www.w3.org/2000/svg"
