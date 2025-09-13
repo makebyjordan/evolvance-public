@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { PlusCircle, MoreHorizontal, FileText, Trash2, Pencil, AlertTriangle, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -28,6 +28,13 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { useToast } from "@/hooks/use-toast";
 import { TrainingItemForm } from "./TrainingItemForm";
@@ -48,6 +55,7 @@ export function TrainingItemsClientPage() {
   const [isAlertOpen, setIsAlertOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState<TrainingItem | null>(null);
   const { toast } = useToast();
+  const [subsectionFilter, setSubsectionFilter] = useState<string>("all");
 
   useEffect(() => {
     const qItems = query(collection(db, "trainingItems"), orderBy("createdAt", "desc"));
@@ -105,6 +113,13 @@ export function TrainingItemsClientPage() {
         unsubscribeSubsections();
     };
   }, [error]);
+
+  const filteredItems = useMemo(() => {
+    if (subsectionFilter === "all") {
+      return items;
+    }
+    return items.filter(item => item.subsectionId === subsectionFilter);
+  }, [items, subsectionFilter]);
 
   const handleFormSubmit = () => {
     // Real-time listener will handle the update
@@ -179,7 +194,19 @@ export function TrainingItemsClientPage() {
 
   return (
     <>
-      <div className="flex justify-end mb-4">
+      <div className="flex justify-between items-center mb-4 gap-4">
+        <Select value={subsectionFilter} onValueChange={setSubsectionFilter}>
+            <SelectTrigger className="w-full max-w-xs">
+                <SelectValue placeholder="Filtrar por subsección..." />
+            </SelectTrigger>
+            <SelectContent>
+                <SelectItem value="all">Todas las subsecciones</SelectItem>
+                {subsections.map(subsection => (
+                    <SelectItem key={subsection.id} value={subsection.id}>{subsection.title}</SelectItem>
+                ))}
+            </SelectContent>
+        </Select>
+
         <Button onClick={() => {
           setSelectedItem(null);
           setIsFormOpen(true);
@@ -208,8 +235,8 @@ export function TrainingItemsClientPage() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {items.length > 0 ? (
-              items.map((item) => (
+            {filteredItems.length > 0 ? (
+              filteredItems.map((item) => (
                 <TableRow key={item.id}>
                   <TableCell className="font-medium">{item.title}</TableCell>
                   <TableCell>
@@ -248,7 +275,12 @@ export function TrainingItemsClientPage() {
                 <TableCell colSpan={4} className="h-24 text-center">
                   <FileText className="mx-auto h-12 w-12 text-gray-400" />
                   <h3 className="mt-2 text-sm font-medium text-gray-900 dark:text-gray-200">No hay formaciones</h3>
-                  <p className="mt-1 text-sm text-gray-500">Empieza por crear una nueva formación.</p>
+                  <p className="mt-1 text-sm text-gray-500">
+                    {subsectionFilter === 'all' 
+                      ? 'Empieza por crear una nueva formación.'
+                      : 'No hay formaciones en esta subsección.'
+                    }
+                  </p>
                 </TableCell>
               </TableRow>
             )}
