@@ -1,29 +1,17 @@
-
 'use client';
 
-import { 
-    BrainCircuit, 
-    Megaphone, 
-    Codesandbox, 
-    Contact,
-    ArrowRight,
-    Search,
-    PencilRuler,
-    Code2,
-    Rocket,
-    Target,
-    ShieldCheck,
-    VrHeadset
-} from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { FadeIn } from "@/components/fade-in";
-import { ContactModal } from "@/components/contact-modal";
-import Header from "@/components/header";
-import Footer from "@/components/footer";
-import Image from "next/image";
+import { useState } from 'react';
+import Image from 'next/image';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { ContactModal } from '@/components/contact-modal';
+import { FadeIn } from '@/components/fade-in';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
+import { BrainCircuit, Megaphone, Codesandbox, VrHeadset, Search, PencilRuler, Code2, Rocket, Target, ShieldCheck, ArrowRight } from 'lucide-react';
+import Header from '@/components/header';
+import Footer from '@/components/footer';
 import teamImages from '@/lib/placeholder-images.json';
-import Link from "next/link";
+import Link from 'next/link';
 
 const caseStudies = [
     {
@@ -119,37 +107,45 @@ export default function ServicesPage() {
                                     <p className="text-muted-foreground max-w-2xl mx-auto mt-4">Ofrecemos un ecosistema de servicios tecnológicos diseñados para llevar tu negocio al siguiente nivel.</p>
                                 </div>
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                                    <div className="card-bg rounded-xl p-8 transform hover:-translate-y-2 transition-transform duration-300 glow-effect">
-                                        <div className="flex items-center justify-center h-16 w-16 rounded-full bg-primary/10 mb-6"><BrainCircuit className="text-primary h-8 w-8"/></div>
-                                        <h4 className="text-2xl font-bold text-foreground mb-3">Inteligencia Artificial y Automatizaciones</h4>
-                                        <p className="text-muted-foreground mb-6">Optimizamos procesos con chatbots, asistentes de voz y análisis de datos. Automatizamos tareas repetitivas como reservas, facturación e inventario para que te centres en lo que realmente importa.</p>
-                                         <Button asChild variant="link" className="p-0 text-primary font-semibold">
-                                            <Link href="/view-service/ia">Saber más <ArrowRight className="ml-2 h-4 w-4"/></Link>
-                                        </Button>
+                                    <div className="card-animated-border">
+                                        <Card className="h-full p-8">
+                                            <div className="flex items-center justify-center h-16 w-16 rounded-full bg-primary/10 mb-6"><BrainCircuit className="text-primary h-8 w-8"/></div>
+                                            <h4 className="text-2xl font-bold text-foreground mb-3">Inteligencia Artificial y Automatizaciones</h4>
+                                            <p className="text-muted-foreground mb-6">Optimizamos procesos con chatbots, asistentes de voz y análisis de datos. Automatizamos tareas repetitivas como reservas, facturación e inventario para que te centres en lo que realmente importa.</p>
+                                            <Button asChild variant="link" className="p-0 text-primary font-semibold">
+                                                <Link href="/view-service/ia">Saber más <ArrowRight className="ml-2 h-4 w-4"/></Link>
+                                            </Button>
+                                        </Card>
                                     </div>
-                                    <div className="card-bg rounded-xl p-8 transform hover:-translate-y-2 transition-transform duration-300 glow-effect">
-                                        <div className="flex items-center justify-center h-16 w-16 rounded-full bg-primary/10 mb-6"><Megaphone className="text-primary h-8 w-8"/></div>
-                                        <h4 className="text-2xl font-bold text-foreground mb-3">Marketing Digital</h4>
-                                        <p className="text-muted-foreground mb-6">Diseñamos y ejecutamos campañas que atraen a tu audiencia ideal. Conquista tu mercado con desarrollo web, branding, SEO/SEM, campañas de ads y gestión de contenido de alto impacto.</p>
-                                        <Button asChild variant="link" className="p-0 text-primary font-semibold">
-                                            <Link href="/view-service/marketing">Saber más <ArrowRight className="ml-2 h-4 w-4"/></Link>
-                                        </Button>
+                                    <div className="card-animated-border">
+                                        <Card className="h-full p-8">
+                                            <div className="flex items-center justify-center h-16 w-16 rounded-full bg-primary/10 mb-6"><Megaphone className="text-primary h-8 w-8"/></div>
+                                            <h4 className="text-2xl font-bold text-foreground mb-3">Marketing Digital</h4>
+                                            <p className="text-muted-foreground mb-6">Diseñamos y ejecutamos campañas que atraen a tu audiencia ideal. Conquista tu mercado con desarrollo web, branding, SEO/SEM, campañas de ads y gestión de contenido de alto impacto.</p>
+                                            <Button asChild variant="link" className="p-0 text-primary font-semibold">
+                                                <Link href="/view-service/marketing">Saber más <ArrowRight className="ml-2 h-4 w-4"/></Link>
+                                            </Button>
+                                        </Card>
                                     </div>
-                                    <div className="card-bg rounded-xl p-8 transform hover:-translate-y-2 transition-transform duration-300 glow-effect">
-                                        <div className="flex items-center justify-center h-16 w-16 rounded-full bg-primary/10 mb-6"><Codesandbox className="text-primary h-8 w-8"/></div>
-                                        <h4 className="text-2xl font-bold text-foreground mb-3">Webs, Apps, CRMs y mucho más</h4>
-                                        <p className="text-muted-foreground mb-6">Creamos CRMs, apps móviles y webs de gestión a medida. Herramientas que automatizan tareas, resuelven problemas y te dan una ventaja competitiva para centrarte en crecer.</p>
-                                        <Button asChild variant="link" className="p-0 text-primary font-semibold">
-                                            <Link href="/view-service/software">Saber más <ArrowRight className="ml-2 h-4 w-4"/></Link>
-                                        </Button>
+                                    <div className="card-animated-border">
+                                        <Card className="h-full p-8">
+                                            <div className="flex items-center justify-center h-16 w-16 rounded-full bg-primary/10 mb-6"><Codesandbox className="text-primary h-8 w-8"/></div>
+                                            <h4 className="text-2xl font-bold text-foreground mb-3">Webs, Apps, CRMs y mucho más</h4>
+                                            <p className="text-muted-foreground mb-6">Creamos CRMs, apps móviles y webs de gestión a medida. Herramientas que automatizan tareas, resuelven problemas y te dan una ventaja competitiva para centrarte en crecer.</p>
+                                            <Button asChild variant="link" className="p-0 text-primary font-semibold">
+                                                <Link href="/view-service/software">Saber más <ArrowRight className="ml-2 h-4 w-4"/></Link>
+                                            </Button>
+                                        </Card>
                                     </div>
-                                    <div className="card-bg rounded-xl p-8 transform hover:-translate-y-2 transition-transform duration-300 glow-effect" id="vr">
-                                        <div className="flex items-center justify-center h-16 w-16 rounded-full bg-primary/10 mb-6"><VrHeadset className="text-primary h-8 w-8"/></div>
-                                        <h4 className="text-2xl font-bold text-foreground mb-3">Ayúdate de la Realidad Virtual</h4>
-                                        <p className="text-muted-foreground mb-6">Creamos experiencias inmersivas para marketing y turismo, simuladores para formación industrial y sanitaria, y tours virtuales para el sector inmobiliario. Usamos la RV para generar impacto y mejorar la eficiencia.</p>
-                                        <Button asChild variant="link" className="p-0 text-primary font-semibold">
-                                            <Link href="/view-service/vr">Saber más <ArrowRight className="ml-2 h-4 w-4"/></Link>
-                                        </Button>
+                                    <div className="card-animated-border" id="vr">
+                                        <Card className="h-full p-8">
+                                            <div className="flex items-center justify-center h-16 w-16 rounded-full bg-primary/10 mb-6"><VrHeadset className="text-primary h-8 w-8"/></div>
+                                            <h4 className="text-2xl font-bold text-foreground mb-3">Ayúdate de la Realidad Virtual</h4>
+                                            <p className="text-muted-foreground mb-6">Creamos experiencias inmersivas para marketing y turismo, simuladores para formación industrial y sanitaria, y tours virtuales para el sector inmobiliario. Usamos la RV para generar impacto y mejorar la eficiencia.</p>
+                                            <Button asChild variant="link" className="p-0 text-primary font-semibold">
+                                                <Link href="/view-service/vr">Saber más <ArrowRight className="ml-2 h-4 w-4"/></Link>
+                                            </Button>
+                                        </Card>
                                     </div>
                                 </div>
                             </div>
@@ -202,16 +198,18 @@ export default function ServicesPage() {
                                 </div>
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                                     {caseStudies.map(study => (
-                                        <div key={study.title} className="card-bg rounded-xl overflow-hidden group">
-                                            <div className="relative w-full h-64">
-                                                <Image src={study.src} alt={study.title} layout="fill" objectFit="cover" className="group-hover:scale-105 transition-transform duration-300" data-ai-hint={study.hint}/>
-                                            </div>
-                                            <div className="p-8">
-                                                <span className="text-sm text-accent font-semibold">{study.category}</span>
-                                                <h4 className="text-2xl font-bold text-foreground mt-2 mb-3">{study.title}</h4>
-                                                <p className="text-muted-foreground mb-4">{study.description}</p>
-                                                <Button variant="link" className="p-0 text-accent">Ver caso de estudio</Button>
-                                            </div>
+                                        <div className="card-animated-border" key={study.title}>
+                                            <Card className="overflow-hidden group h-full">
+                                                <div className="relative w-full h-64">
+                                                    <Image src={study.src} alt={study.title} layout="fill" objectFit="cover" className="group-hover:scale-105 transition-transform duration-300" data-ai-hint={study.hint}/>
+                                                </div>
+                                                <CardContent className="p-8">
+                                                    <span className="text-sm text-accent font-semibold">{study.category}</span>
+                                                    <h4 className="text-2xl font-bold text-foreground mt-2 mb-3">{study.title}</h4>
+                                                    <p className="text-muted-foreground mb-4">{study.description}</p>
+                                                    <Button variant="link" className="p-0 text-accent">Ver caso de estudio</Button>
+                                                </CardContent>
+                                            </Card>
                                         </div>
                                     ))}
                                 </div>
@@ -285,15 +283,17 @@ export default function ServicesPage() {
                                 </div>
                                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                                     {testimonials.map(testimonial => (
-                                        <div key={testimonial.name} className="card-bg rounded-xl p-8">
-                                            <p className="text-muted-foreground mb-6">{testimonial.quote}</p>
-                                            <div className="flex items-center gap-4">
-                                                <Image src={testimonial.src} width={48} height={48} className="rounded-full" alt={testimonial.name} data-ai-hint={testimonial.hint}/>
-                                                <div>
-                                                    <p className="font-bold text-foreground">{testimonial.name}</p>
-                                                    <p className="text-sm text-muted-foreground">{testimonial.title}</p>
+                                        <div className="card-animated-border" key={testimonial.name}>
+                                            <Card className="p-8 h-full">
+                                                <p className="text-muted-foreground mb-6">{testimonial.quote}</p>
+                                                <div className="flex items-center gap-4">
+                                                    <Image src={testimonial.src} width={48} height={48} className="rounded-full" alt={testimonial.name} data-ai-hint={testimonial.hint}/>
+                                                    <div>
+                                                        <p className="font-bold text-foreground">{testimonial.name}</p>
+                                                        <p className="text-sm text-muted-foreground">{testimonial.title}</p>
+                                                    </div>
                                                 </div>
-                                            </div>
+                                            </Card>
                                         </div>
                                     ))}
                                 </div>
@@ -309,18 +309,24 @@ export default function ServicesPage() {
                                     <h3 className="text-4xl md:text-5xl font-extrabold text-foreground mt-2">Preguntas Frecuentes</h3>
                                 </div>
                                 <Accordion type="single" collapsible className="w-full space-y-4">
-                                    <AccordionItem value="item-1" className="card-bg rounded-lg border-none">
-                                        <AccordionTrigger className="w-full p-6 text-left text-lg font-semibold text-foreground hover:no-underline">¿Cuánto tiempo se tarda en desarrollar un proyecto?</AccordionTrigger>
-                                        <AccordionContent className="px-6 pb-6 text-muted-foreground">El tiempo de desarrollo varía según la complejidad del proyecto. Un sitio web puede tardar de 4 a 8 semanas, mientras que una aplicación a medida o una solución de IA puede llevar varios meses. Siempre proporcionamos una hoja de ruta detallada al inicio.</AccordionContent>
-                                    </AccordionItem>
-                                    <AccordionItem value="item-2" className="card-bg rounded-lg border-none">
-                                        <AccordionTrigger className="w-full p-6 text-left text-lg font-semibold text-foreground hover:no-underline">¿Cómo es el modelo de precios?</AccordionTrigger>
-                                        <AccordionContent className="px-6 pb-6 text-muted-foreground">Ofrecemos modelos flexibles. Para proyectos bien definidos, trabajamos con un precio cerrado. Para proyectos evolutivos o de consultoría, podemos trabajar por horas o con un contrato de retainer mensual. Somos transparentes con todos los costes desde el principio.</AccordionContent>
-                                    </AccordionItem>
-                                    <AccordionItem value="item-3" className="card-bg rounded-lg border-none">
-                                        <AccordionTrigger className="w-full p-6 text-left text-lg font-semibold text-foreground hover:no-underline">¿Ofrecéis mantenimiento después del lanzamiento?</AccordionTrigger>
-                                        <AccordionContent className="px-6 pb-6 text-muted-foreground">Sí, ofrecemos planes de soporte y mantenimiento post-lanzamiento para garantizar que tu solución digital esté siempre actualizada, segura y funcionando a pleno rendimiento. Nos adaptamos a tus necesidades, desde soporte básico hasta gestión proactiva.</AccordionContent>
-                                    </AccordionItem>
+                                    <div className="card-animated-border">
+                                        <AccordionItem value="item-1" className="card-bg rounded-lg border-none">
+                                            <AccordionTrigger className="w-full p-6 text-left text-lg font-semibold text-foreground hover:no-underline">¿Cuánto tiempo se tarda en desarrollar un proyecto?</AccordionTrigger>
+                                            <AccordionContent className="px-6 pb-6 text-muted-foreground">El tiempo de desarrollo varía según la complejidad del proyecto. Un sitio web puede tardar de 4 a 8 semanas, mientras que una aplicación a medida o una solución de IA puede llevar varios meses. Siempre proporcionamos una hoja de ruta detallada al inicio.</AccordionContent>
+                                        </AccordionItem>
+                                    </div>
+                                    <div className="card-animated-border">
+                                        <AccordionItem value="item-2" className="card-bg rounded-lg border-none">
+                                            <AccordionTrigger className="w-full p-6 text-left text-lg font-semibold text-foreground hover:no-underline">¿Cómo es el modelo de precios?</AccordionTrigger>
+                                            <AccordionContent className="px-6 pb-6 text-muted-foreground">Ofrecemos modelos flexibles. Para proyectos bien definidos, trabajamos con un precio cerrado. Para proyectos evolutivos o de consultoría, podemos trabajar por horas o con un contrato de retainer mensual. Somos transparentes con todos los costes desde el principio.</AccordionContent>
+                                        </AccordionItem>
+                                    </div>
+                                    <div className="card-animated-border">
+                                        <AccordionItem value="item-3" className="card-bg rounded-lg border-none">
+                                            <AccordionTrigger className="w-full p-6 text-left text-lg font-semibold text-foreground hover:no-underline">¿Ofrecéis mantenimiento después del lanzamiento?</AccordionTrigger>
+                                            <AccordionContent className="px-6 pb-6 text-muted-foreground">Sí, ofrecemos planes de soporte y mantenimiento post-lanzamiento para garantizar que tu solución digital esté siempre actualizada, segura y funcionando a pleno rendimiento. Nos adaptamos a tus necesidades, desde soporte básico hasta gestión proactiva.</AccordionContent>
+                                        </AccordionItem>
+                                    </div>
                                 </Accordion>
                             </div>
                         </section>
@@ -329,14 +335,18 @@ export default function ServicesPage() {
                     <FadeIn>
                         <section id="contact" className="py-20">
                             <div className="container mx-auto px-6">
-                                <div className="card-bg rounded-xl p-10 md:p-16 text-center relative overflow-hidden">
-                                    <div className="absolute -top-10 -right-10 w-32 h-32 rounded-full bg-primary/20 blur-2xl"></div>
-                                    <div className="absolute -bottom-10 -left-10 w-32 h-32 rounded-full bg-accent/20 blur-2xl"></div>
-                                    <h3 className="text-3xl md:text-4xl font-extrabold text-foreground">¿Listo para llevar tu negocio al siguiente nivel?</h3>
-                                    <p className="text-muted-foreground max-w-xl mx-auto mt-4 mb-8">Hablemos de tu proyecto. Te ofrecemos una consultoría gratuita para identificar cómo la tecnología puede ayudarte a alcanzar tus objetivos.</p>
-                                    <ContactModal>
-                                        <Button size="lg" className="glow-effect">Contactar Ahora</Button>
-                                    </ContactModal>
+                                <div className="card-animated-border">
+                                    <Card className="p-10 md:p-16 text-center relative overflow-hidden">
+                                        <div className="absolute -top-10 -right-10 w-32 h-32 rounded-full bg-primary/20 blur-2xl"></div>
+                                        <div className="absolute -bottom-10 -left-10 w-32 h-32 rounded-full bg-accent/20 blur-2xl"></div>
+                                        <h3 className="text-3xl md:text-4xl font-extrabold text-foreground">¿Listo para llevar tu negocio al siguiente nivel?</h3>
+                                        <p className="text-muted-foreground max-w-xl mx-auto mt-4 mb-8">Hablemos de tu proyecto. Te ofrecemos una consultoría gratuita para identificar cómo la tecnología puede ayudarte a alcanzar tus objetivos.</p>
+                                        <ContactModal>
+                                            <Button size="lg">
+                                                Contactar Ahora
+                                            </Button>
+                                        </ContactModal>
+                                    </Card>
                                 </div>
                             </div>
                         </section>
