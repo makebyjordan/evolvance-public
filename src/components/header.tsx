@@ -47,6 +47,7 @@ export default function Header() {
     { href: '/#services', label: 'Servicios' },
     { href: '/#timeline', label: 'Trayectoria' },
     { href: '/#philosophy', label: 'Filosofía' },
+    { href: '/#team', label: 'Equipo' },
     { href: '/#faq', label: 'FAQ' },
     { href: '/dashboard', label: 'Intranet' },
   ];

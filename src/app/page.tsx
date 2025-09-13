@@ -3,6 +3,7 @@ import Hero from '@/components/hero';
 import Services from '@/components/services';
 import Timeline from '@/components/timeline';
 import Philosophy from '@/components/philosophy';
+import Team from '@/components/team';
 import Clients from '@/components/clients';
 import Faq from '@/components/faq';
 import Cta from '@/components/cta';
@@ -30,16 +31,20 @@ export default function Home() {
             <SectionSeparator position="top" align="right" />
             <Philosophy />
         </div>
-         <div className="relative isolate">
+        <div className="relative isolate">
             <SectionSeparator position="top" align="left" />
-            <Faq />
+            <Team />
         </div>
          <div className="relative isolate">
             <SectionSeparator position="top" align="right" />
+            <Faq />
+        </div>
+         <div className="relative isolate">
+            <Sectionator position="top" align="left" />
             <Clients />
         </div>
          <div className="relative isolate">
-            <SectionSeparator position="top" align="left" />
+            <SectionSeparator position="top" align="right" />
             <Cta />
         </div>
       </main>
