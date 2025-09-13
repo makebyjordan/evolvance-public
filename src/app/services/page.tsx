@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState } from 'react';
@@ -7,7 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { ContactModal } from '@/components/contact-modal';
 import { FadeIn } from '@/components/fade-in';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
-import { BrainCircuit, Megaphone, Codesandbox, VrHeadset, Search, PencilRuler, Code2, Rocket, Target, ShieldCheck, ArrowRight } from 'lucide-react';
+import { BrainCircuit, Megaphone, Codesandbox, Headset, Search, PencilRuler, Code2, Rocket, Target, ShieldCheck, ArrowRight } from 'lucide-react';
 import Header from '@/components/header';
 import Footer from '@/components/footer';
 import teamImages from '@/lib/placeholder-images.json';
@@ -139,7 +140,7 @@ export default function ServicesPage() {
                                     </div>
                                     <div className="card-animated-border" id="vr">
                                         <Card className="h-full p-8">
-                                            <div className="flex items-center justify-center h-16 w-16 rounded-full bg-primary/10 mb-6"><VrHeadset className="text-primary h-8 w-8"/></div>
+                                            <div className="flex items-center justify-center h-16 w-16 rounded-full bg-primary/10 mb-6"><Headset className="text-primary h-8 w-8"/></div>
                                             <h4 className="text-2xl font-bold text-foreground mb-3">Ayúdate de la Realidad Virtual</h4>
                                             <p className="text-muted-foreground mb-6">Creamos experiencias inmersivas para marketing y turismo, simuladores para formación industrial y sanitaria, y tours virtuales para el sector inmobiliario. Usamos la RV para generar impacto y mejorar la eficiencia.</p>
                                             <Button asChild variant="link" className="p-0 text-primary font-semibold">
@@ -233,7 +234,7 @@ export default function ServicesPage() {
                                             <g transform="translate(100 100) scale(0.6)">
                                                 <path d="M-28,32.9c-2.1-3.2-3.8-6.9-5-10.7c-2.3-7.5,0.7-15.5,6.5-20.2c5.9-4.8,14-6.2,21.6-4.9 c7.6,1.4,14.6,5.3,19,11.3c4.4,6,6.3,13.6,5,20.9c-1.3,7.3-5.8,13.9-12.2,17.7c-6.4,3.8-14.5,4.8-21.9,2.8 C-19.4,52.3,-24.5,48.2,-28,32.9z" fill="hsl(var(--background))"></path>
                                                 <path d="M38,41.9c-2.9-1.4-5.4-3.5-7.4-5.9c-4-4.8-5.3-11.2-3.4-17.1c1.9-5.9,7-10.4,13.1-12.1 c6.1-1.7,12.8,0.2,17.7,4.4c4.9,4.2,7.7,10.3,7.6,16.5c-0.1,6.2-3.1,12.1-7.9,15.9c-4.8,3.8-11.2,5.2-17.3,3.8 C41.1,47,39.4,45.8,38,41.9z" fill="hsl(var(--background))"></path>
-                                                <path d="M-33.1-41c5.2-3.9,12.2-5.4,19-3.9c6.8,1.5,12.9,6.1,16.5,11.7c3.6,5.6,4.6,12.4,2.7,18.8 c-1.9,6.4-6.8,11.6-13,14.2c-6.2,2.6-13.4,2.6-19.7,0.2c-6.3-2.4-11.6-7.3-14.5-13.3C-45.1-19.2,-43.3-33.1,-33.1-41z" fill="hsl(var(--background))"></path>
+                                                <path d="M-33.1-41c5.2-3.9,12.2-5.4,19-3.9c6.8,1.5,12.9,6.1,16.5,11.7c3.6,5.6,4.6,12.4,2.7,18.8 c-1.9,6.4-6.8,11.6-13,14.2c-6.2,2.6-13.4,2.6-19.7,0.2c-6.3-2.4-11.6-7.3-14.5-13.3C-45.1,-19.2,-43.3-33.1,-33.1-41z" fill="hsl(var(--background))"></path>
                                             </g>
                                         </svg>
                                     </div>
@@ -357,3 +358,5 @@ export default function ServicesPage() {
         </>
     );
 }
+
+    
