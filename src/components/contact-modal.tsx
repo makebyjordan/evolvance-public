@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from 'react';
@@ -28,6 +29,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { cn } from '@/lib/utils';
 import { scheduleMeeting } from '@/ai/flows/schedule-meeting-flow';
 import type { ScheduleMeetingInput } from '@/ai/schemas/schedule-meeting-schemas';
+import { Textarea } from './ui/textarea';
 
 const formSchema = z.object({
   name: z.string().min(2, { message: "El nombre debe tener al menos 2 caracteres." }),
@@ -39,6 +41,7 @@ const formSchema = z.object({
   time: z.string({
     required_error: "Se requiere una hora.",
   }),
+  serviceInterest: z.string().optional(),
 });
 
 async function submitForm(data: z.infer<typeof formSchema>) {
@@ -52,6 +55,7 @@ async function submitForm(data: z.infer<typeof formSchema>) {
       email: data.email,
       phone: data.phone,
       meetingTime: meetingDateTime.toISOString(),
+      serviceInterest: data.serviceInterest,
     };
 
     console.log("Enviando al flow:", meetingData);
@@ -73,6 +77,7 @@ export function ContactModal({ children }: { children: React.ReactNode }) {
       name: "",
       email: "",
       phone: "",
+      serviceInterest: "",
     },
   });
 
@@ -147,6 +152,19 @@ export function ContactModal({ children }: { children: React.ReactNode }) {
                   <FormLabel>Teléfono</FormLabel>
                   <FormControl>
                     <Input placeholder="Tu número de teléfono" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="serviceInterest"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>¿En qué servicio estás interesado?</FormLabel>
+                  <FormControl>
+                    <Textarea placeholder="Ej: IA y Automatización, Marketing Digital..." {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

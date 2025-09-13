@@ -9,6 +9,7 @@ export const ScheduleMeetingInputSchema = z.object({
     .string()
     .datetime()
     .describe('The time for the meeting in ISO 8601 format.'),
+  serviceInterest: z.string().optional().describe('The service the person is interested in.'),
 });
 export type ScheduleMeetingInput = z.infer<typeof ScheduleMeetingInputSchema>;
 

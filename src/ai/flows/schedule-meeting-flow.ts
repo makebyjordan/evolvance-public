@@ -46,8 +46,8 @@ const addEventToGoogleCalendar = ai.defineTool(
       const oauth2Client = createOauth2Client();
       
       if (!process.env.GOOGLE_REFRESH_TOKEN) {
-         console.error('FATAL_ERROR: GOOGLE_REFRESH_TOKEN no está configurado en .env. La autenticación fallará.');
-         throw new Error("El servicio de calendario no está configurado correctamente. Contacta al administrador.");
+         console.error('FATAL_ERROR: GOOGLE_REFRESH_TOKEN is not set in .env. Authentication will fail.');
+         throw new Error("Calendar service is not configured correctly. Please contact the administrator.");
       }
 
       oauth2Client.setCredentials({
@@ -88,7 +88,7 @@ const addEventToGoogleCalendar = ai.defineTool(
       };
     } catch (error) {
       console.error('Error creating Google Calendar event:', error);
-      throw new Error('No se pudo crear el evento en Google Calendar.');
+      throw new Error('Could not create event in Google Calendar.');
     }
   }
 );
@@ -104,13 +104,15 @@ const scheduleMeetingFlow = ai.defineFlow(
      const meetingEndTime = new Date(input.meetingTime);
      meetingEndTime.setHours(meetingEndTime.getHours() + 1);
 
+     const description = `Detalles del cliente:\nNombre: ${input.name}\nEmail: ${input.email}\nTeléfono: ${input.phone}\n\nServicio de interés:\n${input.serviceInterest || 'No especificado'}`;
+
      try {
         const calendarEvent = await addEventToGoogleCalendar({
             title: `Sesión Estratégica con ${input.name}`,
-            description: `Detalles del cliente:\nNombre: ${input.name}\nEmail: ${input.email}\nTeléfono: ${input.phone}`,
+            description: description,
             startTime: input.meetingTime,
             endTime: meetingEndTime.toISOString(),
-            attendees: [input.email, 'clientes@evol-vance.es'], // Añade tu email para que también te llegue
+            attendees: [input.email, 'clientes@evol-vance.es'], // Add your email to also get the invitation
         });
 
         if (calendarEvent.success) {
