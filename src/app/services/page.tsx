@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState } from 'react';
@@ -14,41 +13,6 @@ import Footer from '@/components/footer';
 import teamImages from '@/lib/placeholder-images.json';
 import Link from 'next/link';
 
-const caseStudies = [
-    {
-        ...teamImages['case-study-1'],
-        category: 'E-commerce y Automatización',
-        title: 'Plataforma para Retail Tech',
-        description: 'Desarrollamos un e-commerce con IA para recomendaciones personalizadas y automatización de inventario, aumentando las ventas un 40%.'
-    },
-    {
-        ...teamImages['case-study-2'],
-        category: 'Realidad Virtual',
-        title: 'Simulador de Formación Industrial',
-        description: 'Creamos un simulador de RV para capacitar a operarios en maquinaria compleja, reduciendo los accidentes laborales en un 75%.'
-    }
-];
-
-const testimonials = [
-    {
-        ...teamImages['testimonial-1'],
-        quote: "El CRM que desarrollaron para nosotros ha transformado nuestra gestión de clientes. ¡Un equipo increíblemente profesional y eficiente!",
-        name: "Carla Estrada",
-        title: "CEO de Soluciones Logísticas"
-    },
-    {
-        ...teamImages['testimonial-2'],
-        quote: "La campaña de marketing digital superó todas nuestras expectativas. Aumentamos nuestros leads cualificados en un 150% en solo tres meses.",
-        name: "Marcos Sánchez",
-        title: "Director de Marketing en FinTech Global"
-    },
-    {
-        ...teamImages['testimonial-3'],
-        quote: "La experiencia de Realidad Virtual para nuestro stand en la feria fue un éxito rotundo. Captamos la atención de todos los asistentes.",
-        name: "Ana Pérez",
-        title: "Gerente de Eventos en Inmobiliaria Vista"
-    }
-]
 
 export default function ServicesPage() {
     return (
@@ -114,7 +78,7 @@ export default function ServicesPage() {
                                             <h4 className="text-2xl font-bold text-foreground mb-3">Inteligencia Artificial y Automatizaciones</h4>
                                             <p className="text-muted-foreground mb-6">Optimizamos procesos con chatbots, asistentes de voz y análisis de datos. Automatizamos tareas repetitivas como reservas, facturación e inventario para que te centres en lo que realmente importa.</p>
                                             <Button asChild variant="link" className="p-0 text-primary font-semibold">
-                                                <Link href="/view-service/ia">Saber más <ArrowRight className="ml-2 h-4 w-4"/></Link>
+                                                <Link href="https://evol-vance.com/view-service/ia">Saber más <ArrowRight className="ml-2 h-4 w-4"/></Link>
                                             </Button>
                                         </Card>
                                     </div>
@@ -198,21 +162,32 @@ export default function ServicesPage() {
                                     <h3 className="text-4xl md:text-5xl font-extrabold text-foreground mt-2">Proyectos que Generan Impacto</h3>
                                 </div>
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                                    {caseStudies.map(study => (
-                                        <div className="card-animated-border" key={study.title}>
-                                            <Card className="overflow-hidden group h-full">
-                                                <div className="relative w-full h-64">
-                                                    <Image src={study.src} alt={study.title} layout="fill" objectFit="cover" className="group-hover:scale-105 transition-transform duration-300" data-ai-hint={study.hint}/>
-                                                </div>
-                                                <CardContent className="p-8">
-                                                    <span className="text-sm text-accent font-semibold">{study.category}</span>
-                                                    <h4 className="text-2xl font-bold text-foreground mt-2 mb-3">{study.title}</h4>
-                                                    <p className="text-muted-foreground mb-4">{study.description}</p>
-                                                    <Button variant="link" className="p-0 text-accent">Ver caso de estudio</Button>
-                                                </CardContent>
-                                            </Card>
-                                        </div>
-                                    ))}
+                                    <div className="card-animated-border">
+                                        <Card className="overflow-hidden group h-full">
+                                            <div className="relative w-full h-64">
+                                                <Image src={teamImages['case-study-1'].src} alt="Proyecto E-commerce" layout="fill" objectFit="cover" className="group-hover:scale-105 transition-transform duration-300" data-ai-hint={teamImages['case-study-1'].hint}/>
+                                            </div>
+                                            <CardContent className="p-8">
+                                                <span className="text-sm text-accent font-semibold">E-commerce y Automatización</span>
+                                                <h4 className="text-2xl font-bold text-foreground mt-2 mb-3">Plataforma para Retail Tech</h4>
+                                                <p className="text-muted-foreground mb-4">Desarrollamos un e-commerce con IA para recomendaciones personalizadas y automatización de inventario, aumentando las ventas un 40%.</p>
+                                                <Button variant="link" className="p-0 text-accent">Ver caso de estudio</Button>
+                                            </CardContent>
+                                        </Card>
+                                    </div>
+                                    <div className="card-animated-border">
+                                        <Card className="overflow-hidden group h-full">
+                                            <div className="relative w-full h-64">
+                                                <Image src={teamImages['case-study-2'].src} alt="Proyecto VR" layout="fill" objectFit="cover" className="group-hover:scale-105 transition-transform duration-300" data-ai-hint={teamImages['case-study-2'].hint}/>
+                                            </div>
+                                            <CardContent className="p-8">
+                                                <span className="text-sm text-accent font-semibold">Realidad Virtual</span>
+                                                <h4 className="text-2xl font-bold text-foreground mt-2 mb-3">Simulador de Formación Industrial</h4>
+                                                <p className="text-muted-foreground mb-4">Creamos un simulador de RV para capacitar a operarios en maquinaria compleja, reduciendo los accidentes laborales en un 75%.</p>
+                                                <Button variant="link" className="p-0 text-accent">Ver caso de estudio</Button>
+                                            </CardContent>
+                                        </Card>
+                                    </div>
                                 </div>
                             </div>
                         </section>
@@ -283,20 +258,42 @@ export default function ServicesPage() {
                                     <h3 className="text-4xl md:text-5xl font-extrabold text-foreground mt-2">Lo que Dicen Nuestros Clientes</h3>
                                 </div>
                                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                                    {testimonials.map(testimonial => (
-                                        <div className="card-animated-border" key={testimonial.name}>
-                                            <Card className="p-8 h-full">
-                                                <p className="text-muted-foreground mb-6">{testimonial.quote}</p>
-                                                <div className="flex items-center gap-4">
-                                                    <Image src={testimonial.src} width={48} height={48} className="rounded-full" alt={testimonial.name} data-ai-hint={testimonial.hint}/>
-                                                    <div>
-                                                        <p className="font-bold text-foreground">{testimonial.name}</p>
-                                                        <p className="text-sm text-muted-foreground">{testimonial.title}</p>
-                                                    </div>
+                                    <div className="card-animated-border">
+                                        <Card className="p-8 h-full">
+                                            <p className="text-muted-foreground mb-6">"El CRM que desarrollaron para nosotros ha transformado nuestra gestión de clientes. ¡Un equipo increíblemente profesional y eficiente!"</p>
+                                            <div className="flex items-center gap-4">
+                                                <Image src={teamImages['testimonial-1'].src} width={48} height={48} className="rounded-full" alt="Cliente 1" data-ai-hint={teamImages['testimonial-1'].hint}/>
+                                                <div>
+                                                    <p className="font-bold text-foreground">Carla Estrada</p>
+                                                    <p className="text-sm text-muted-foreground">CEO de Soluciones Logísticas</p>
                                                 </div>
-                                            </Card>
-                                        </div>
-                                    ))}
+                                            </div>
+                                        </Card>
+                                    </div>
+                                     <div className="card-animated-border">
+                                        <Card className="p-8 h-full">
+                                            <p className="text-muted-foreground mb-6">"La campaña de marketing digital superó todas nuestras expectativas. Aumentamos nuestros leads cualificados en un 150% en solo tres meses."</p>
+                                            <div className="flex items-center gap-4">
+                                                <Image src={teamImages['testimonial-2'].src} width={48} height={48} className="rounded-full" alt="Cliente 2" data-ai-hint={teamImages['testimonial-2'].hint}/>
+                                                <div>
+                                                    <p className="font-bold text-foreground">Marcos Sánchez</p>
+                                                    <p className="text-sm text-muted-foreground">Director de Marketing en FinTech Global</p>
+                                                </div>
+                                            </div>
+                                        </Card>
+                                    </div>
+                                     <div className="card-animated-border">
+                                        <Card className="p-8 h-full">
+                                            <p className="text-muted-foreground mb-6">"La experiencia de Realidad Virtual para nuestro stand en la feria fue un éxito rotundo. Captamos la atención de todos los asistentes."</p>
+                                            <div className="flex items-center gap-4">
+                                                <Image src={teamImages['testimonial-3'].src} width={48} height={48} className="rounded-full" alt="Cliente 3" data-ai-hint={teamImages['testimonial-3'].hint}/>
+                                                <div>
+                                                    <p className="font-bold text-foreground">Ana Pérez</p>
+                                                    <p className="text-sm text-muted-foreground">Gerente de Eventos en Inmobiliaria Vista</p>
+                                                </div>
+                                            </div>
+                                        </Card>
+                                    </div>
                                 </div>
                             </div>
                         </section>
@@ -310,7 +307,7 @@ export default function ServicesPage() {
                                     <h3 className="text-4xl md:text-5xl font-extrabold text-foreground mt-2">Preguntas Frecuentes</h3>
                                 </div>
                                 <Accordion type="single" collapsible className="w-full space-y-4">
-                                    <div className="card-animated-border">
+                                     <div className="card-animated-border">
                                         <AccordionItem value="item-1" className="card-bg rounded-lg border-none">
                                             <AccordionTrigger className="w-full p-6 text-left text-lg font-semibold text-foreground hover:no-underline">¿Cuánto tiempo se tarda en desarrollar un proyecto?</AccordionTrigger>
                                             <AccordionContent className="px-6 pb-6 text-muted-foreground">El tiempo de desarrollo varía según la complejidad del proyecto. Un sitio web puede tardar de 4 a 8 semanas, mientras que una aplicación a medida o una solución de IA puede llevar varios meses. Siempre proporcionamos una hoja de ruta detallada al inicio.</AccordionContent>
@@ -358,5 +355,3 @@ export default function ServicesPage() {
         </>
     );
 }
-
-    
