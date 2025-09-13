@@ -38,10 +38,10 @@ export default function ServicesPage() {
                             <h1 className="text-4xl md:text-6xl font-extrabold text-foreground leading-tight mb-4">
                                 Transformamos tu Negocio con <span className="text-primary">Tecnología de Vanguardia</span>
                             </h1>
-                            <p className="text-lg text-muted-foreground mb-8 max-w-xl mx-auto md:mx-0">
+                            <p className="text-lg text-muted-foreground mb-8 max-w-xl mx-auto">
                                 Desde Inteligencia Artificial hasta Realidad Virtual, creamos soluciones digitales a medida que impulsan tu crecimiento y eficiencia.
                             </p>
-                            <div className="flex gap-4 justify-center md:justify-start">
+                            <div className="flex gap-4 justify-center">
                                 <Button asChild size="lg">
                                     <a href="#services">Nuestros Servicios</a>
                                 </Button>
@@ -364,4 +364,3 @@ export default function ServicesPage() {
         </>
     );
 }
-
