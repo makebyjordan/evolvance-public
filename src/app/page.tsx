@@ -17,10 +17,7 @@ export default function Home() {
     <div className="flex flex-col min-h-screen bg-background">
       <Header />
       <main className="flex-grow">
-        <div className="relative isolate">
-           <SectionSeparator position="top" align="left" />
-           <Hero />
-        </div>
+        <Hero />
         <div className="relative isolate">
           <SectionSeparator position="top" align="right" />
           <MarketingAI />
