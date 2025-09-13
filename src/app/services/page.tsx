@@ -116,7 +116,7 @@ export default function ServicesPage() {
                                             </CardContent>
                                             <CardFooter className="p-0">
                                                 <Button asChild variant="link" className="p-0 font-semibold text-primary hover:text-sky-300 transition-colors flex items-center gap-2">
-                                                    <Link href="/view-service/software">Saber más <ArrowRight className="h-4 w-4"/></Link>
+                                                    <a href="https://evol-vance.com/view-service/software" target="_blank" rel="noopener noreferrer">Saber más <ArrowRight className="h-4 w-4"/></a>
                                                 </Button>
                                             </CardFooter>
                                         </Card>
@@ -132,7 +132,7 @@ export default function ServicesPage() {
                                             </CardContent>
                                             <CardFooter className="p-0">
                                                 <Button asChild variant="link" className="p-0 font-semibold text-primary hover:text-sky-300 transition-colors flex items-center gap-2">
-                                                    <Link href="/view-service/vr">Saber más <ArrowRight className="h-4 w-4"/></Link>
+                                                    <a href="https://evol-vance.com/view-service/vr" target="_blank" rel="noopener noreferrer">Saber más <ArrowRight className="h-4 w-4"/></a>
                                                 </Button>
                                             </CardFooter>
                                         </Card>
