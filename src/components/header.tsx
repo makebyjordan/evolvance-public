@@ -62,7 +62,7 @@ export default function Header() {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
           <Link href="/" className="flex items-center gap-2 text-foreground">
-             <Image src={logoEvolVance} alt="Evol-vance Logo" width={32} height={32} />
+             <Image src={logoEvolVance} alt="Evol-vance Logo" width={42} height={42} />
             <span className="text-xl font-headline font-bold">Evol-vance</span>
           </Link>
 
@@ -100,7 +100,7 @@ export default function Header() {
                 <SheetHeader>
                    <SheetTitle>
                      <Link href="/" className="flex items-center gap-2 text-foreground" onClick={() => setIsMobileMenuOpen(false)}>
-                        <Image src={logoEvolVance} alt="Evol-vance Logo" width={32} height={32} />
+                        <Image src={logoEvolVance} alt="Evol-vance Logo" width={42} height={42} />
                         <span className="text-xl font-headline font-bold">Evol-vance</span>
                     </Link>
                   </SheetTitle>
