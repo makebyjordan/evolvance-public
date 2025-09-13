@@ -1,10 +1,9 @@
-
 'use client';
 
 import { useState } from 'react';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { ContactModal } from '@/components/contact-modal';
 import { FadeIn } from '@/components/fade-in';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
@@ -231,26 +230,27 @@ export default function ServicesPage() {
                             <div className="container mx-auto px-6">
                                 <div className="flex flex-col md:flex-row items-center gap-12">
                                     <div className="md:w-1/2">
-                                        <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-                                            <defs>
-                                                <linearGradient id="grad2" x1="100%" y1="0%" x2="0%" y2="100%">
-                                                <stop offset="0%" style={{stopColor: "hsl(var(--accent))"}} />
-                                                <stop offset="100%" style={{stopColor: "hsl(var(--secondary))"}} />
-                                                </linearGradient>
-                                            </defs>
-                                            <path fill="url(#grad2)" d="M49.9,-54.9C64.3,-41.8,75.3,-20.9,76.5,1.2C77.7,23.3,69.1,46.6,52.3,58.8C35.5,71,10.6,72.1,-12,67.8C-34.5,63.5,-54.8,53.8,-66,38C-77.1,22.2,-79.1,0.3,-72.6,-18.2C-66.1,-36.8,-51.1,-52,-35,-63.3C-18.9,-74.6,-1.7,-82.1,16,-79.6C33.7,-77.2,49.9,-54.9,49.9,-54.9Z" transform="translate(100 100)" />
-                                            <g transform="translate(100 100) scale(0.6)">
-                                                <path d="M-28,32.9c-2.1-3.2-3.8-6.9-5-10.7c-2.3-7.5,0.7-15.5,6.5-20.2c5.9-4.8,14-6.2,21.6-4.9 c7.6,1.4,14.6,5.3,19,11.3c4.4,6,6.3,13.6,5,20.9c-1.3,7.3-5.8,13.9-12.2,17.7c-6.4,3.8-14.5,4.8-21.9,2.8 C-19.4,52.3,-24.5,48.2,-28,32.9z" fill="hsl(var(--background))"></path>
-                                                <path d="M38,41.9c-2.9-1.4-5.4-3.5-7.4-5.9c-4-4.8-5.3-11.2-3.4-17.1c1.9-5.9,7-10.4,13.1-12.1 c6.1-1.7,12.8,0.2,17.7,4.4c4.9,4.2,7.7,10.3,7.6,16.5c-0.1,6.2-3.1,12.1-7.9,15.9c-4.8,3.8-11.2,5.2-17.3,3.8 C41.1,47,39.4,45.8,38,41.9z" fill="hsl(var(--background))"></path>
-                                                <path d="M-33.1-41c5.2-3.9,12.2-5.4,19-3.9c6.8,1.5,12.9,6.1,16.5,11.7c3.6,5.6,4.6,12.4,2.7,18.8 c-1.9,6.4-6.8,11.6-13,14.2c-6.2,2.6-13.4,2.6-19.7,0.2c-6.3-2.4-11.6-7.3-14.5-13.3C-45.1,-19.2,-43.3-33.1,-33.1-41z" fill="hsl(var(--background))"></path>
-                                            </g>
+                                         <svg
+                                            viewBox="0 0 32 32"
+                                            fill="none"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            className="w-full h-auto text-primary"
+                                        >
+                                            <path
+                                            d="M19.781 2.00021C19.234 1.98621 18.795 2.30621 18.623 2.79321L11.289 23.0182C11.109 23.5352 11.396 24.0882 11.913 24.2682C12.43 24.4472 12.984 24.1602 13.163 23.6442L20.497 3.41921C20.677 2.90221 20.39 2.34921 19.873 2.16921C19.842 2.15821 19.812 2.15121 19.781 2.14421V2.00021Z"
+                                            fill="currentColor"
+                                            />
+                                            <path
+                                            d="M26.4819 12.5295C26.4819 11.2335 25.9619 10.0155 25.0419 9.0965C24.1219 8.1765 22.9039 7.6565 21.6079 7.6565C20.3119 7.6565 19.0939 8.1765 18.1739 9.0965C17.2539 10.0155 16.7339 11.2335 16.7339 12.5295C16.7339 13.6115 17.0869 14.6345 17.7129 15.4245L19.2229 17.2915C19.5399 17.6745 20.0439 17.9045 20.5759 17.9045H20.6079C21.0119 17.9045 21.3949 17.7695 21.6989 17.5255C22.4889 16.9005 23.4089 15.6525 24.1309 14.1845C24.2259 13.9995 24.2729 13.7855 24.2729 13.5655C24.2729 12.9865 24.0389 12.4465 23.6439 12.0515C23.2489 11.6565 22.7089 11.4225 22.1299 11.4225C21.5509 11.4225 21.0109 11.6565 20.6159 12.0515C20.2209 12.4465 19.9869 12.9865 19.9869 13.5655C19.9869 13.6215 19.9919 13.6765 19.9989 13.7325C20.0009 13.7545 20.0079 13.7745 20.0119 13.7955C20.0129 13.8015 20.0149 13.8065 20.0159 13.8125C20.0159 13.8145 20.0159 13.8165 20.0169 13.8185C20.4569 14.6195 20.9769 15.2615 21.4329 15.6325C21.5549 15.7275 21.7249 15.6705 21.8199 15.5485L25.0499 11.1835C25.4019 10.7065 25.2979 10.0215 24.8209 9.6705C24.3439 9.3185 23.6599 9.4235 23.3079 9.8995L20.8939 13.1115C20.7679 13.2755 20.5409 13.3325 20.3549 13.2435C20.1689 13.1555 20.0719 12.9465 20.1229 12.7505L21.0369 9.5445C21.2229 8.8955 21.8489 8.4485 22.5279 8.5635C23.2059 8.6785 23.7299 9.2565 23.7299 9.9485V10.0055C25.3219 10.3705 26.4819 11.3535 26.4819 12.5295Z"
+                                            fill="currentColor"
+                                            />
                                         </svg>
                                     </div>
                                     <div className="md:w-1/2">
                                         <h2 className="text-sm font-bold uppercase text-accent tracking-widest">¿Por Qué Elegirnos?</h2>
                                         <h3 className="text-4xl md:text-5xl font-extrabold text-foreground mt-2 mb-6">Tu Socio Estratégico en la Era Digital</h3>
                                         <p className="text-muted-foreground mb-8">
-                                            No solo creamos tecnología; creamos oportunidades. Nuestro enfoque es entender tus desafíos de negocio y diseñar soluciones precisas que te den una ventaja competitiva real. Somos transparentes, ágiles y estamos comprometidos con tu éxito.
+                                           No solo creamos tecnología; creamos oportunidades. Nuestro enfoque es entender tus desafíos de negocio y diseñar soluciones precisas que te den una ventaja competitiva real. Somos transparentes, ágiles y estamos comprometidos con tu éxito.
                                         </p>
                                         <div className="space-y-4">
                                             <div className="flex items-start gap-4"><div className="bg-accent/10 p-2 rounded-md"><Rocket className="text-accent"/></div><div><h5 className="font-semibold text-foreground">Innovación Constante</h5><p className="text-muted-foreground text-sm">Utilizamos las últimas tecnologías para garantizar soluciones eficientes y escalables.</p></div></div>
