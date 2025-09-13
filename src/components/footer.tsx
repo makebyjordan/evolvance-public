@@ -45,7 +45,7 @@ export default function Footer() {
           
           <div className="md:col-span-4 lg:col-span-5 flex flex-col items-center md:items-start text-center md:text-left">
             <Link href="/" className="flex items-center gap-2 mb-4 text-foreground">
-              <Image src={logoEvolVance} alt="Evol-vance Logo" width={42} height={42} />
+              <Image src={logoEvolVance} alt="Evol-vance Logo" width={55} height={55} />
               <span className="text-xl font-headline font-bold">Evol-vance</span>
             </Link>
             <p className="text-muted-foreground text-sm max-w-xs">

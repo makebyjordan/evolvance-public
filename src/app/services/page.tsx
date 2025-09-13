@@ -1,6 +1,7 @@
 
 'use client';
 
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
 import { ContactModal } from '@/components/contact-modal';
@@ -13,6 +14,7 @@ import teamImages from '@/lib/placeholder-images.json';
 import Link from 'next/link';
 import Image from 'next/image';
 import logoEvolVance from './logo-evol-vance.svg';
+import heroImage from '@/images/hero-evolvance-services.jpg';
 
 
 export default function ServicesPage() {
@@ -21,46 +23,33 @@ export default function ServicesPage() {
             <div className="bg-background text-foreground">
                 <Header />
                 <main>
-                    <section className="min-h-screen flex items-center pt-24 pb-12 relative overflow-hidden">
-                        <div className="absolute inset-0 bg-grid-slate-800 [mask-image:linear-gradient(to_bottom,white_10%,transparent_100%)]"></div>
-                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60rem] h-[60rem] rounded-full bg-primary/10 blur-3xl"></div>
-
-                        <div className="container mx-auto px-6 flex flex-col md:flex-row items-center gap-12 z-10">
-                            <div className="md:w-1/2 text-center md:text-left">
-                                <FadeIn>
-                                    <h1 className="text-4xl md:text-6xl font-extrabold text-foreground leading-tight mb-4">
-                                        Transformamos tu Negocio con <span className="text-primary">Tecnología de Vanguardia</span>
-                                    </h1>
-                                    <p className="text-lg text-muted-foreground mb-8 max-w-xl mx-auto md:mx-0">
-                                        Desde Inteligencia Artificial hasta Realidad Virtual, creamos soluciones digitales a medida que impulsan tu crecimiento y eficiencia.
-                                    </p>
-                                    <div className="flex gap-4 justify-center md:justify-start">
-                                        <Button asChild size="lg">
-                                            <a href="#services">Nuestros Servicios</a>
-                                        </Button>
-                                        <ContactModal>
-                                            <Button size="lg" variant="secondary">Contactar</Button>
-                                        </ContactModal>
-                                    </div>
-                                </FadeIn>
+                    <section className="relative text-primary-foreground h-screen flex items-center justify-center">
+                        <Image 
+                          src={heroImage}
+                          alt="Servicios Tecnológicos"
+                          fill
+                          className="object-cover"
+                          placeholder="blur"
+                          quality={100}
+                        />
+                         <div className="absolute inset-0 bg-black/60" />
+                        <div className="container mx-auto px-6 py-20 text-center relative z-10">
+                          <FadeIn>
+                            <h1 className="text-4xl md:text-6xl font-extrabold text-foreground leading-tight mb-4">
+                                Transformamos tu Negocio con <span className="text-primary">Tecnología de Vanguardia</span>
+                            </h1>
+                            <p className="text-lg text-muted-foreground mb-8 max-w-xl mx-auto md:mx-0">
+                                Desde Inteligencia Artificial hasta Realidad Virtual, creamos soluciones digitales a medida que impulsan tu crecimiento y eficiencia.
+                            </p>
+                            <div className="flex gap-4 justify-center md:justify-start">
+                                <Button asChild size="lg">
+                                    <a href="#services">Nuestros Servicios</a>
+                                </Button>
+                                <ContactModal>
+                                    <Button size="lg" variant="secondary">Contactar</Button>
+                                </ContactModal>
                             </div>
-                            <div className="md:w-1/2">
-                            <FadeIn>
-                                <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" className="w-full h-auto">
-                                    <defs>
-                                        <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
-                                        <stop offset="0%" style={{stopColor: "hsl(var(--primary))"}} />
-                                        <stop offset="100%" style={{stopColor: "hsl(var(--accent))"}} />
-                                        </linearGradient>
-                                    </defs>
-                                    <path fill="url(#grad1)" d="M48.2,-64.5C62.1,-53.5,72.7,-38.7,78.2,-21.8C83.7,-4.8,84.1,14.2,76.5,29.3C68.9,44.3,53.3,55.4,37.3,64.2C21.3,73,-5.1,79.5,-27.9,74.7C-50.7,69.9,-70,53.8,-79.8,34.8C-89.6,15.8,-90,-6.1,-82.1,-24.1C-74.1,-42.2,-57.8,-56.3,-41.1,-66.1C-24.4,-75.9,-7.2,-81.4,8.5,-79.7C24.3,-78.1,48.2,-64.5,48.2,-64.5Z" transform="translate(100 100)" />
-                                    <circle cx="100" cy="100" r="40" fill="hsla(var(--background) / 0.8)"/>
-                                    <path d="M 85 90 L 115 90 L 100 120 Z" fill="hsl(var(--foreground))" transform="rotate(45 100 100)"/>
-                                    <path d="M 90 85 L 110 115" stroke="hsl(var(--primary))" strokeWidth="2" />
-                                    <path d="M 110 85 L 90 115" stroke="hsl(var(--accent))" strokeWidth="2" />
-                                    </svg>
-                            </FadeIn>
-                            </div>
+                          </FadeIn>
                         </div>
                     </section>
 
@@ -74,7 +63,7 @@ export default function ServicesPage() {
                                 </div>
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                                     <div className="card-animated-border">
-                                        <Card className="h-full p-8 transform hover:-translate-y-2 transition-transform duration-300 glow-effect">
+                                        <Card className="h-full p-8 transform hover:-translate-y-2 transition-transform duration-300">
                                             <CardHeader className="p-0">
                                                 <div className="flex items-center justify-center h-16 w-16 rounded-full bg-primary/10 mb-6"><BrainCircuit className="text-primary h-8 w-8"/></div>
                                                 <CardTitle className="text-2xl font-bold text-white mb-3">Inteligencia Artificial y Automatizaciones</CardTitle>
@@ -83,14 +72,14 @@ export default function ServicesPage() {
                                                 <p className="text-muted-foreground mb-6">Optimizamos procesos con chatbots, asistentes de voz y análisis de datos. Automatizamos tareas repetitivas como reservas, facturación e inventario para que te centres en lo que realmente importa.</p>
                                             </CardContent>
                                             <CardFooter className="p-0">
-                                                <Button asChild variant="link" className="p-0 font-semibold text-primary hover:text-sky-300 transition-colors flex items-center gap-2">
+                                                 <Button asChild variant="link" className="p-0 font-semibold text-primary hover:text-sky-300 transition-colors flex items-center gap-2">
                                                     <a href="https://evol-vance.com/view-service/ia" target="_blank" rel="noopener noreferrer">Saber más <ArrowRight className="h-4 w-4"/></a>
                                                 </Button>
                                             </CardFooter>
                                         </Card>
                                     </div>
                                     <div className="card-animated-border">
-                                        <Card className="h-full p-8 transform hover:-translate-y-2 transition-transform duration-300 glow-effect">
+                                        <Card className="h-full p-8 transform hover:-translate-y-2 transition-transform duration-300">
                                             <CardHeader className="p-0">
                                                 <div className="flex items-center justify-center h-16 w-16 rounded-full bg-primary/10 mb-6"><Megaphone className="text-primary h-8 w-8"/></div>
                                                 <CardTitle className="text-2xl font-bold text-white mb-3">Marketing Digital</CardTitle>
@@ -106,7 +95,7 @@ export default function ServicesPage() {
                                         </Card>
                                     </div>
                                     <div className="card-animated-border">
-                                        <Card className="h-full p-8 transform hover:-translate-y-2 transition-transform duration-300 glow-effect">
+                                        <Card className="h-full p-8 transform hover:-translate-y-2 transition-transform duration-300">
                                              <CardHeader className="p-0">
                                                 <div className="flex items-center justify-center h-16 w-16 rounded-full bg-primary/10 mb-6"><Codesandbox className="text-primary h-8 w-8"/></div>
                                                 <CardTitle className="text-2xl font-bold text-white mb-3">Webs, Apps, CRMs y mucho más</CardTitle>
@@ -122,7 +111,7 @@ export default function ServicesPage() {
                                         </Card>
                                     </div>
                                     <div className="card-animated-border" id="vr">
-                                        <Card className="h-full p-8 transform hover:-translate-y-2 transition-transform duration-300 glow-effect">
+                                        <Card className="h-full p-8 transform hover:-translate-y-2 transition-transform duration-300">
                                             <CardHeader className="p-0">
                                                 <div className="flex items-center justify-center h-16 w-16 rounded-full bg-primary/10 mb-6"><Headset className="text-primary h-8 w-8"/></div>
                                                 <CardTitle className="text-2xl font-bold text-white mb-3">Ayúdate de la Realidad Virtual</CardTitle>
@@ -328,19 +317,19 @@ export default function ServicesPage() {
                                 </div>
                                 <Accordion type="single" collapsible className="w-full space-y-4">
                                     <div className="card-animated-border">
-                                        <AccordionItem value="item-1" className="card-bg rounded-lg border-none">
+                                        <AccordionItem value="item-1" className="bg-card rounded-lg border-none">
                                             <AccordionTrigger className="w-full p-6 text-left text-lg font-semibold text-foreground hover:no-underline">¿Cuánto tiempo se tarda en desarrollar un proyecto?</AccordionTrigger>
                                             <AccordionContent className="px-6 pb-6 text-muted-foreground">El tiempo de desarrollo varía según la complejidad del proyecto. Un sitio web puede tardar de 4 a 8 semanas, mientras que una aplicación a medida o una solución de IA puede llevar varios meses. Siempre proporcionamos una hoja de ruta detallada al inicio.</AccordionContent>
                                         </AccordionItem>
                                     </div>
                                     <div className="card-animated-border">
-                                        <AccordionItem value="item-2" className="card-bg rounded-lg border-none">
+                                        <AccordionItem value="item-2" className="bg-card rounded-lg border-none">
                                             <AccordionTrigger className="w-full p-6 text-left text-lg font-semibold text-foreground hover:no-underline">¿Cómo es el modelo de precios?</AccordionTrigger>
                                             <AccordionContent className="px-6 pb-6 text-muted-foreground">Ofrecemos modelos flexibles. Para proyectos bien definidos, trabajamos con un precio cerrado. Para proyectos evolutivos o de consultoría, podemos trabajar por horas o con un contrato de retainer mensual. Somos transparentes con todos los costes desde el principio.</AccordionContent>
                                         </AccordionItem>
                                     </div>
                                     <div className="card-animated-border">
-                                        <AccordionItem value="item-3" className="card-bg rounded-lg border-none">
+                                        <AccordionItem value="item-3" className="bg-card rounded-lg border-none">
                                             <AccordionTrigger className="w-full p-6 text-left text-lg font-semibold text-foreground hover:no-underline">¿Ofrecéis mantenimiento después del lanzamiento?</AccordionTrigger>
                                             <AccordionContent className="px-6 pb-6 text-muted-foreground">Sí, ofrecemos planes de soporte y mantenimiento post-lanzamiento para garantizar que tu solución digital esté siempre actualizada, segura y funcionando a pleno rendimiento. Nos adaptamos a tus necesidades, desde soporte básico hasta gestión proactiva.</AccordionContent>
                                         </AccordionItem>
