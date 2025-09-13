@@ -1,6 +1,7 @@
 
 import Header from '@/components/header';
 import Hero from '@/components/hero';
+import MarketingAI from '@/components/marketing-ai';
 import Services from '@/components/services';
 import Timeline from '@/components/timeline';
 import Philosophy from '@/components/philosophy';
@@ -8,7 +9,6 @@ import Team from '@/components/team';
 import Clients from '@/components/clients';
 import Faq from '@/components/faq';
 import Cta from '@/components/cta';
-import Footer from '@/components/footer';
 import { SectionSeparator } from '@/components/section-separator';
 
 export default function Home() {
@@ -22,30 +22,34 @@ export default function Home() {
         </div>
         <div className="relative isolate">
           <SectionSeparator position="top" align="right" />
-          <Services />
+          <MarketingAI />
         </div>
         <div className="relative isolate">
           <SectionSeparator position="top" align="left" />
+          <Services />
+        </div>
+        <div className="relative isolate">
+          <SectionSeparator position="top" align="right" />
           <Timeline />
         </div>
         <div className="relative isolate">
-            <SectionSeparator position="top" align="right" />
+            <SectionSeparator position="top" align="left" />
             <Philosophy />
         </div>
         <div className="relative isolate">
-            <SectionSeparator position="top" align="left" />
+            <SectionSeparator position="top" align="right" />
             <Team />
         </div>
          <div className="relative isolate">
-            <SectionSeparator position="top" align="right" />
+            <SectionSeparator position="top" align="left" />
             <Faq />
         </div>
          <div className="relative isolate">
-            <SectionSeparator position="top" align="left" />
+            <SectionSeparator position="top" align="right" />
             <Clients />
         </div>
          <div className="relative isolate">
-            <SectionSeparator position="top" align="right" />
+            <SectionSeparator position="top" align="left" />
             <Cta />
         </div>
       </main>

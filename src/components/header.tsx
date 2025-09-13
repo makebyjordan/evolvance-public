@@ -44,6 +44,7 @@ export default function Header() {
   }, []);
 
   const navLinks = [
+    { href: '/#marketing-ai', label: 'IA & Ads' },
     { href: '/services', label: 'Servicios' },
     { href: '/#timeline', label: 'Trayectoria' },
     { href: '/#philosophy', label: 'Filosofía' },

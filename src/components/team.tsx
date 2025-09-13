@@ -21,12 +21,12 @@ const teamMembers = [
     image: teamImages['team-cto'],
   },
   {
-    name: "Persona 4",
+    name: "Juanfra",
     role: "CMO",
     image: teamImages['team-cmo'],
   },
   {
-    name: "Persona 5",
+    name: "Juan",
     role: "RV Dept",
     image: teamImages['team-rv'],
   },
