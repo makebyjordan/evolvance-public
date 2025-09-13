@@ -123,7 +123,7 @@ export default function ServicesPage() {
                                         <div className="flex items-center justify-center h-16 w-16 rounded-full bg-primary/10 mb-6"><BrainCircuit className="text-primary h-8 w-8"/></div>
                                         <h4 className="text-2xl font-bold text-foreground mb-3">Inteligencia Artificial y Automatizaciones</h4>
                                         <p className="text-muted-foreground mb-6">Optimizamos procesos con chatbots, asistentes de voz y análisis de datos. Automatizamos tareas repetitivas como reservas, facturación e inventario para que te centres en lo que realmente importa.</p>
-                                        <Button asChild variant="link" className="p-0 text-primary font-semibold">
+                                         <Button asChild variant="link" className="p-0 text-primary font-semibold">
                                             <Link href="/view-service/ia">Saber más <ArrowRight className="ml-2 h-4 w-4"/></Link>
                                         </Button>
                                     </div>
@@ -308,7 +308,7 @@ export default function ServicesPage() {
                                     <h2 className="text-sm font-bold uppercase text-accent tracking-widest">FAQ</h2>
                                     <h3 className="text-4xl md:text-5xl font-extrabold text-foreground mt-2">Preguntas Frecuentes</h3>
                                 </div>
-                                <div className="Accordion type="single" collapsible className="w-full space-y-4">
+                                <Accordion type="single" collapsible className="w-full space-y-4">
                                     <AccordionItem value="item-1" className="card-bg rounded-lg border-none">
                                         <AccordionTrigger className="w-full p-6 text-left text-lg font-semibold text-foreground hover:no-underline">¿Cuánto tiempo se tarda en desarrollar un proyecto?</AccordionTrigger>
                                         <AccordionContent className="px-6 pb-6 text-muted-foreground">El tiempo de desarrollo varía según la complejidad del proyecto. Un sitio web puede tardar de 4 a 8 semanas, mientras que una aplicación a medida o una solución de IA puede llevar varios meses. Siempre proporcionamos una hoja de ruta detallada al inicio.</AccordionContent>
