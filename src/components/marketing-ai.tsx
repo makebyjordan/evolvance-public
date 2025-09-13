@@ -3,6 +3,8 @@ import { FadeIn } from './fade-in';
 import { BrainCircuit, Megaphone, Target, Bot } from 'lucide-react';
 import { InteractiveCard } from './interactive-card';
 import { Card, CardHeader, CardTitle, CardContent } from './ui/card';
+import { Button } from './ui/button';
+import { ContactModal } from './contact-modal';
 
 export default function MarketingAI() {
   return (
@@ -20,6 +22,11 @@ export default function MarketingAI() {
                 <p className="mt-4 text-lg text-muted-foreground">
                     Nuestro enfoque combina <span className="font-bold text-foreground">creatividad + algoritmos</span> para optimizar presupuestos, aumentar conversiones y garantizar un ROI superior.
                 </p>
+                 <div className="mt-8 text-center lg:text-left">
+                    <ContactModal>
+                        <Button size="lg">Agenda reunión para estudiar tu caso</Button>
+                    </ContactModal>
+                </div>
             </div>
           </FadeIn>
           <FadeIn delay={0.2}>
