@@ -1,6 +1,7 @@
 
 import { Card, CardDescription, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { GraduationCap } from "lucide-react";
+import { TrainingClientPage } from "./components/TrainingClientPage";
 
 export const dynamic = 'force-dynamic';
 
@@ -14,15 +15,13 @@ export default async function TrainingPage() {
                     <div>
                         <CardTitle className="text-2xl font-headline">Gestión de Formación</CardTitle>
                         <CardDescription>
-                            Crea, gestiona y asigna cursos y materiales de formación para tu equipo o clientes.
+                            Crea y gestiona las subsecciones o módulos de tu área de formación.
                         </CardDescription>
                     </div>
                 </div>
             </CardHeader>
-            <CardContent>
-                <p className="text-muted-foreground">Próximamente podrás gestionar aquí todos los recursos de formación.</p>
-            </CardContent>
         </Card>
+        <TrainingClientPage />
     </div>
   );
 }
