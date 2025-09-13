@@ -3,6 +3,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { ContactModal } from '@/components/contact-modal';
 import { cn } from '@/lib/utils';
@@ -10,6 +11,7 @@ import { Menu } from 'lucide-react';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import type { SiteConfigContent } from '@/app/actions/web-content-actions';
 import { getWebContent } from '@/app/actions/web-content-actions';
+import logoEvolVance from '@/images/logo-evol-vance.png';
 
 
 function SvgRenderer({ svgString, className }: { svgString: string, className?: string }) {
@@ -41,8 +43,6 @@ export default function Header() {
     fetchConfig();
   }, []);
 
-  const logoSvg = config?.logoSvg || defaultLogoSvg;
-
   const navLinks = [
     { href: '/services', label: 'Servicios' },
     { href: '/#timeline', label: 'Trayectoria' },
@@ -62,19 +62,7 @@ export default function Header() {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
           <Link href="/" className="flex items-center gap-2 text-foreground">
-             <svg
-                width="32"
-                height="32"
-                viewBox="0 0 32 32"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-                className="w-8 h-8 text-primary"
-              >
-                <path
-                  d="M6.66669 25.3333V4H10.6667L20.1334 16.5333V4H24.0001V25.3333H20.0001L10.5334 12.8V25.3333H6.66669Z"
-                  fill="currentColor"
-                />
-              </svg>
+             <Image src={logoEvolVance} alt="Evol-vance Logo" width={32} height={32} />
             <span className="text-xl font-headline font-bold">Evol-vance</span>
           </Link>
 
@@ -112,19 +100,7 @@ export default function Header() {
                 <SheetHeader>
                    <SheetTitle>
                      <Link href="/" className="flex items-center gap-2 text-foreground" onClick={() => setIsMobileMenuOpen(false)}>
-                        <svg
-                            width="32"
-                            height="32"
-                            viewBox="0 0 32 32"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="w-8 h-8 text-primary"
-                        >
-                            <path
-                            d="M6.66669 25.3333V4H10.6667L20.1334 16.5333V4H24.0001V25.3333H20.0001L10.5334 12.8V25.3333H6.66669Z"
-                            fill="currentColor"
-                            />
-                        </svg>
+                        <Image src={logoEvolVance} alt="Evol-vance Logo" width={32} height={32} />
                         <span className="text-xl font-headline font-bold">Evol-vance</span>
                     </Link>
                   </SheetTitle>
