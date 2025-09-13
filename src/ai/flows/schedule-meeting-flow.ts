@@ -21,7 +21,7 @@ function createOauth2Client() {
     return new google.auth.OAuth2(
         process.env.GOOGLE_CLIENT_ID,
         process.env.GOOGLE_CLIENT_SECRET,
-        'http://localhost:3000/oauth2callback' // This must be added in your Google Cloud Platform credentials
+        'http://localhost:3000/oauth2callback'
     );
 }
 
@@ -46,13 +46,8 @@ const addEventToGoogleCalendar = ai.defineTool(
       const oauth2Client = createOauth2Client();
       
       if (!process.env.GOOGLE_REFRESH_TOKEN) {
-         const authUrl = oauth2Client.generateAuthUrl({
-            access_type: 'offline',
-            scope: ['https://www.googleapis.com/auth/calendar'],
-         });
-         console.error('ERROR: GOOGLE_REFRESH_TOKEN no está configurado en .env');
-         console.error('Para autorizar, visita esta URL en tu navegador:', authUrl);
-         throw new Error("Configuración incompleta: falta el GOOGLE_REFRESH_TOKEN. Sigue las instrucciones en la consola para generarlo.");
+         console.error('FATAL_ERROR: GOOGLE_REFRESH_TOKEN no está configurado en .env. La autenticación fallará.');
+         throw new Error("El servicio de calendario no está configurado correctamente. Contacta al administrador.");
       }
 
       oauth2Client.setCredentials({
@@ -93,13 +88,7 @@ const addEventToGoogleCalendar = ai.defineTool(
       };
     } catch (error) {
       console.error('Error creating Google Calendar event:', error);
-      if (error instanceof Error && error.message.includes('incomplete')) {
-          throw error;
-      }
-      return {
-        success: false,
-        eventUrl: 'https://calendar.google.com',
-      };
+      throw new Error('No se pudo crear el evento en Google Calendar.');
     }
   }
 );
@@ -135,13 +124,8 @@ const scheduleMeetingFlow = ai.defineFlow(
             message: 'Lo sentimos, no pudimos agendar tu cita. El servicio de calendario puede no estar disponible.',
           };
         }
-     } catch (e: any) {
-        if (e.message.includes('incomplete')) {
-            return {
-                success: false,
-                message: 'El administrador necesita configurar el acceso a Google Calendar. Por favor, contacta con soporte.'
-            }
-        }
+     } catch (e) {
+        console.error('Error in scheduleMeetingFlow:', e);
         return {
             success: false,
             message: 'Lo sentimos, no pudimos agendar tu cita. Por favor, inténtalo de nuevo más tarde.',
