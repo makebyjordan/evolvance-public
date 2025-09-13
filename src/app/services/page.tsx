@@ -1,4 +1,3 @@
-
 'use client';
 
 import { 
@@ -12,7 +11,8 @@ import {
     Code2,
     Rocket,
     Target,
-    ShieldCheck
+    ShieldCheck,
+    VrHeadset
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
@@ -22,6 +22,7 @@ import Header from "@/components/header";
 import Footer from "@/components/footer";
 import Image from "next/image";
 import teamImages from '@/lib/placeholder-images.json';
+import Link from "next/link";
 
 const caseStudies = [
     {
@@ -120,25 +121,33 @@ export default function ServicesPage() {
                                     <div className="flex items-center justify-center h-16 w-16 rounded-full bg-primary/10 mb-6"><BrainCircuit className="text-primary h-8 w-8"/></div>
                                     <h4 className="text-2xl font-bold text-foreground mb-3">Inteligencia Artificial y Automatizaciones</h4>
                                     <p className="text-muted-foreground mb-6">Optimizamos procesos con chatbots, asistentes de voz y análisis de datos. Automatizamos tareas repetitivas como reservas, facturación e inventario para que te centres en lo que realmente importa.</p>
-                                    <Button variant="link" className="p-0 text-primary">Saber más <ArrowRight className="ml-2 h-4 w-4"/></Button>
+                                    <Button asChild variant="link" className="p-0 text-primary font-semibold">
+                                        <Link href="/view-service/ia">Saber más <ArrowRight className="ml-2 h-4 w-4"/></Link>
+                                    </Button>
                                 </div>
                                 <div className="card-bg rounded-xl p-8 transform hover:-translate-y-2 transition-transform duration-300 glow-effect">
                                     <div className="flex items-center justify-center h-16 w-16 rounded-full bg-primary/10 mb-6"><Megaphone className="text-primary h-8 w-8"/></div>
                                     <h4 className="text-2xl font-bold text-foreground mb-3">Marketing Digital</h4>
                                     <p className="text-muted-foreground mb-6">Diseñamos y ejecutamos campañas que atraen a tu audiencia ideal. Conquista tu mercado con desarrollo web, branding, SEO/SEM, campañas de ads y gestión de contenido de alto impacto.</p>
-                                    <Button variant="link" className="p-0 text-primary">Saber más <ArrowRight className="ml-2 h-4 w-4"/></Button>
+                                     <Button asChild variant="link" className="p-0 text-primary font-semibold">
+                                        <Link href="/view-service/marketing">Saber más <ArrowRight className="ml-2 h-4 w-4"/></Link>
+                                    </Button>
                                 </div>
                                 <div className="card-bg rounded-xl p-8 transform hover:-translate-y-2 transition-transform duration-300 glow-effect">
                                     <div className="flex items-center justify-center h-16 w-16 rounded-full bg-primary/10 mb-6"><Codesandbox className="text-primary h-8 w-8"/></div>
                                     <h4 className="text-2xl font-bold text-foreground mb-3">Webs, Apps, CRMs y mucho más</h4>
                                     <p className="text-muted-foreground mb-6">Creamos CRMs, apps móviles y webs de gestión a medida. Herramientas que automatizan tareas, resuelven problemas y te dan una ventaja competitiva para centrarte en crecer.</p>
-                                    <Button variant="link" className="p-0 text-primary">Saber más <ArrowRight className="ml-2 h-4 w-4"/></Button>
+                                     <Button asChild variant="link" className="p-0 text-primary font-semibold">
+                                        <Link href="/view-service/software">Saber más <ArrowRight className="ml-2 h-4 w-4"/></Link>
+                                    </Button>
                                 </div>
                                 <div className="card-bg rounded-xl p-8 transform hover:-translate-y-2 transition-transform duration-300 glow-effect" id="vr">
-                                    <div className="flex items-center justify-center h-16 w-16 rounded-full bg-primary/10 mb-6"><Contact className="text-primary h-8 w-8"/></div>
+                                    <div className="flex items-center justify-center h-16 w-16 rounded-full bg-primary/10 mb-6"><VrHeadset className="text-primary h-8 w-8"/></div>
                                     <h4 className="text-2xl font-bold text-foreground mb-3">Ayúdate de la Realidad Virtual</h4>
                                     <p className="text-muted-foreground mb-6">Creamos experiencias inmersivas para marketing y turismo, simuladores para formación industrial y sanitaria, y tours virtuales para el sector inmobiliario. Usamos la RV para generar impacto y mejorar la eficiencia.</p>
-                                    <Button variant="link" className="p-0 text-primary">Saber más <ArrowRight className="ml-2 h-4 w-4"/></Button>
+                                     <Button asChild variant="link" className="p-0 text-primary font-semibold">
+                                        <Link href="/view-service/vr">Saber más <ArrowRight className="ml-2 h-4 w-4"/></Link>
+                                    </Button>
                                 </div>
                             </div>
                         </div>
@@ -297,7 +306,7 @@ export default function ServicesPage() {
                                 <h2 className="text-sm font-bold uppercase text-accent tracking-widest">FAQ</h2>
                                 <h3 className="text-4xl md:text-5xl font-extrabold text-foreground mt-2">Preguntas Frecuentes</h3>
                             </div>
-                            <Accordion type="single" collapsible className="w-full space-y-4">
+                            <div className="Accordion type="single" collapsible className="w-full space-y-4">
                                 <AccordionItem value="item-1" className="card-bg rounded-lg border-none">
                                     <AccordionTrigger className="w-full p-6 text-left text-lg font-semibold text-foreground hover:no-underline">¿Cuánto tiempo se tarda en desarrollar un proyecto?</AccordionTrigger>
                                     <AccordionContent className="px-6 pb-6 text-muted-foreground">El tiempo de desarrollo varía según la complejidad del proyecto. Un sitio web puede tardar de 4 a 8 semanas, mientras que una aplicación a medida o una solución de IA puede llevar varios meses. Siempre proporcionamos una hoja de ruta detallada al inicio.</AccordionContent>
@@ -335,4 +344,5 @@ export default function ServicesPage() {
         </div>
     );
 }
+
 
