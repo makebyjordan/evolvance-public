@@ -44,7 +44,7 @@ export default function Header() {
   const logoSvg = config?.logoSvg || defaultLogoSvg;
 
   const navLinks = [
-    { href: '/#services', label: 'Servicios' },
+    { href: '/services', label: 'Servicios' },
     { href: '/#timeline', label: 'Trayectoria' },
     { href: '/#philosophy', label: 'Filosofía' },
     { href: '/#team', label: 'Equipo' },

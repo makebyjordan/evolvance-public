@@ -1,3 +1,4 @@
+
 {
   "team-founder-1": {
     "src": "https://picsum.photos/seed/team1/400/400",
@@ -18,5 +19,25 @@
   "team-rv": {
     "src": "https://picsum.photos/seed/team5/400/400",
     "hint": "professional headshot"
+  },
+  "case-study-1": {
+    "src": "https://picsum.photos/seed/case1/600/400",
+    "hint": "tech retail"
+  },
+  "case-study-2": {
+    "src": "https://picsum.photos/seed/case2/600/400",
+    "hint": "virtual reality industry"
+  },
+  "testimonial-1": {
+    "src": "https://picsum.photos/seed/person1/48/48",
+    "hint": "professional headshot woman"
+  },
+  "testimonial-2": {
+    "src": "https://picsum.photos/seed/person2/48/48",
+    "hint": "professional headshot man"
+  },
+  "testimonial-3": {
+    "src": "https://picsum.photos/seed/person3/48/48",
+    "hint": "professional headshot person"
   }
 }
