@@ -1,9 +1,9 @@
 
 import { Button } from '@/components/ui/button';
-import { ContactModal } from '@/components/contact-modal';
 import { FadeIn } from './fade-in';
 import Image from 'next/image';
 import heroBackground from '@/images/hero-evolvance-software.jpg';
+import Link from 'next/link';
 
 export default function Hero() {
   return (
@@ -40,11 +40,9 @@ export default function Hero() {
         </FadeIn>
         <FadeIn delay={0.4}>
           <div className="mt-10">
-            <ContactModal>
-              <Button size="lg" className="font-bold">
-                Descubre nuestros servicios
-              </Button>
-            </ContactModal>
+            <Button asChild size="lg" className="font-bold">
+              <Link href="/services">Descubre nuestros servicios</Link>
+            </Button>
           </div>
         </FadeIn>
       </div>
