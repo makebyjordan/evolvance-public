@@ -27,7 +27,7 @@ export default function Hero() {
       />
       
       {/* CAPA 20: El contenido se mantiene igual, por encima de la imagen. */}
-      <div className="container relative mx-auto px-4 sm:px-6 lg:px-8 z-20 mt-16">
+      <div className="container relative mx-auto px-4 sm:px-6 lg:px-8 z-20 mt-32">
         <FadeIn>
           <h1 className="text-4xl md:text-6xl font-extrabold text-foreground tracking-tight">
             Diseñamos el Futuro de tu Crecimiento.
