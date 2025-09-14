@@ -2,7 +2,7 @@
 import { Button } from '@/components/ui/button';
 import { FadeIn } from './fade-in';
 import Image from 'next/image';
-import heroBackground from '@/images/hero-evolvance-software.jpg';
+import heroBackground from '@/images/hero.principal-evol-vance.jpg';
 import Link from 'next/link';
 
 export default function Hero() {
