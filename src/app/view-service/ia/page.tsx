@@ -3,7 +3,7 @@
 
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { ContactModal } from '@/components/contact-modal';
 import { FadeIn } from '@/components/fade-in';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
@@ -11,6 +11,7 @@ import { cn } from '@/lib/utils';
 import { BrainCircuit, Briefcase, Handshake, HeartHandshake, Users } from 'lucide-react';
 import Image from 'next/image';
 import heroImage from '@/images/hero-evolvance-ia-automatizaciones.jpg';
+import Link from 'next/link';
 
 
 const TABS = [
@@ -37,7 +38,8 @@ const SOLUTIONS = {
         title: "Chatbots Conversacionales",
         description: "Implementamos agentes virtuales que entienden la intención, el contexto y el sentimiento del usuario, resolviendo dudas complejas y guiando a tus clientes 24/7.",
         problem: "Elimina tiempos de espera, cualifica leads de forma automática y libera a tu equipo humano para que se enfoque en tareas estratégicas.",
-        how: "Utilizamos plataformas de IA líderes y las integramos con tu CRM. Diseñamos flujos que pueden escalar a un agente humano de forma transparente."
+        how: "Utilizamos plataformas de IA líderes y las integramos con tu CRM. Diseñamos flujos que pueden escalar a un agente humano de forma transparente.",
+        cta: { text: "Saber más", href: "#" }
       },
       {
         title: "Asistentes de Voz (IVR Inteligente)",
@@ -292,6 +294,13 @@ export default function IaPage() {
                                             </div>
                                         </div>
                                     </CardContent>
+                                    {service.cta && (
+                                        <CardFooter className="p-0 pt-4">
+                                            <Button asChild variant="secondary">
+                                                <Link href={service.cta.href}>{service.cta.text}</Link>
+                                            </Button>
+                                        </CardFooter>
+                                    )}
                                 </Card>
                             </div>
                         ))}
@@ -345,5 +354,7 @@ export default function IaPage() {
     </>
   );
 }
+
+    
 
     
