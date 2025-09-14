@@ -1,8 +1,9 @@
+
 import { Button } from '@/components/ui/button';
 import { ContactModal } from '@/components/contact-modal';
 import { FadeIn } from './fade-in';
 import Image from 'next/image';
-import heroBackground from '@/images/hero.principal-evol-vance.jpg';
+import heroBackground from '@/images/hero-evolvance-software.jpg';
 
 export default function Hero() {
   return (
@@ -41,7 +42,7 @@ export default function Hero() {
           <div className="mt-10">
             <ContactModal>
               <Button size="lg" className="font-bold">
-                Inicia tu Transformación
+                Descubre nuestros servicios
               </Button>
             </ContactModal>
           </div>
