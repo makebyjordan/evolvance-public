@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState } from 'react';
@@ -39,7 +38,7 @@ const SOLUTIONS = {
         description: "Implementamos agentes virtuales que entienden la intención, el contexto y el sentimiento del usuario, resolviendo dudas complejas y guiando a tus clientes 24/7.",
         problem: "Elimina tiempos de espera, cualifica leads de forma automática y libera a tu equipo humano para que se enfoque en tareas estratégicas.",
         how: "Utilizamos plataformas de IA líderes y las integramos con tu CRM. Diseñamos flujos que pueden escalar a un agente humano de forma transparente.",
-        cta: { text: "Saber más", href: "#" }
+        cta: { text: "Saber más", href: "/view-service/ia/chatbots" }
       },
       {
         title: "Asistentes de Voz (IVR Inteligente)",
@@ -354,7 +353,3 @@ export default function IaPage() {
     </>
   );
 }
-
-    
-
-    
