@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useEffect, useRef } from 'react';
@@ -15,7 +14,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { AlertTriangle, Loader2, ArrowLeft, Printer, FileText, Save, CheckCircle } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 
 export default function SignContractPage() {
@@ -138,12 +136,22 @@ export default function SignContractPage() {
       const printWindow = window.open('', '', 'height=800,width=800');
       if (printWindow) {
         printWindow.document.write('<html><head><title>Imprimir Contrato</title>');
-        printWindow.document.write('<style>body{font-family:sans-serif;} input{border:none; border-bottom:1px solid #000;}</style>');
-        printWindow.document.write('</head><body >');
+        // Inject Tailwind CSS
+        printWindow.document.write('<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">');
+        printWindow.document.write('<style>body { font-family: sans-serif; } @page { size: A4; margin: 20mm; } .printable-area { max-width: 210mm; margin: auto; padding: 20px;} input { border: none !important; border-bottom: 1px solid #ccc !important; background-color: transparent !important; } </style>');
+        printWindow.document.write('</head><body>');
+        // Wrap content in a styled container for better print layout
+        printWindow.document.write('<div class="printable-area prose">');
         printWindow.document.write(printableContent);
+        printWindow.document.write('</div>');
         printWindow.document.write('</body></html>');
         printWindow.document.close();
-        printWindow.print();
+        
+        // Wait for styles to load before printing
+        setTimeout(() => {
+            printWindow.print();
+            printWindow.close();
+        }, 500); 
       }
   }
 
