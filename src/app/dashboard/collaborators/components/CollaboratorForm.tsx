@@ -38,6 +38,7 @@ const contractStatuses = [
     "A Presentar",
     "Presentado",
     "Firmado",
+    "Contrato Generado",
     "Cancelado"
 ] as const;
 

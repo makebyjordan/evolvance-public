@@ -10,10 +10,11 @@ export interface Collaborator {
   name: string;
   phone: string;
   email: string;
-  contractStatus: string;
+  contractStatus: 'A Presentar' | 'Presentado' | 'Firmado' | 'Cancelado' | 'Contrato Generado';
   description: string;
   createdAt: any;
   updatedAt: any;
+  contractHtml?: string; // HTML del contrato
 }
 
 // Type for creating/updating a collaborator
@@ -34,7 +35,7 @@ const collaboratorsCollectionRef = collection(db, 'collaborators');
 /**
  * Saves a new collaborator or updates an existing one.
  */
-export async function saveCollaborator(data: CollaboratorInput): Promise<ActionResult<string>> {
+export async function saveCollaborator(data: Partial<CollaboratorInput>): Promise<ActionResult<string>> {
   try {
     let docId: string;
 

@@ -75,7 +75,7 @@ export default function ChatbotsPage() {
                     </FadeIn>
                     <FadeIn delay={0.4}>
                         <div className="mt-12">
-                            <Image src="https://picsum.photos/seed/graph/1200/600" alt="Gráfico de Satisfacción del Cliente" width={1200} height={600} className="rounded-xl shadow-lg mx-auto" data-ai-hint="customer satisfaction graph"/>
+                            <Image src="https://iili.io/Ku43Rjt.jpg" alt="Gráfico de Satisfacción del Cliente" width={1200} height={600} className="rounded-xl shadow-lg mx-auto" data-ai-hint="customer satisfaction graph"/>
                         </div>
                     </FadeIn>
                 </div>

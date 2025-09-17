@@ -2,7 +2,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { PlusCircle, MoreHorizontal, FileText, Trash2, Pencil, AlertTriangle } from "lucide-react";
+import { PlusCircle, MoreHorizontal, FileText, Trash2, Pencil, AlertTriangle, FileSignature } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -37,6 +37,8 @@ import { db } from "@/lib/firebase";
 import { collection, onSnapshot, query, orderBy, Timestamp } from "firebase/firestore";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Badge } from "@/components/ui/badge";
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 export function CollaboratorsClientPage() {
   const [collaborators, setCollaborators] = useState<Collaborator[]>([]);
@@ -46,6 +48,7 @@ export function CollaboratorsClientPage() {
   const [isAlertOpen, setIsAlertOpen] = useState(false);
   const [selectedCollaborator, setSelectedCollaborator] = useState<Collaborator | null>(null);
   const { toast } = useToast();
+  const router = useRouter();
 
   useEffect(() => {
     const q = query(collection(db, "collaborators"), orderBy("createdAt", "desc"));
@@ -90,6 +93,10 @@ export function CollaboratorsClientPage() {
   const handleEditClick = (collaborator: Collaborator) => {
     setSelectedCollaborator(collaborator);
     setIsFormOpen(true);
+  };
+  
+  const handleSignClick = (collaboratorId: string) => {
+    router.push(`/dashboard/contracts/${collaboratorId}`);
   };
 
   const confirmDelete = async () => {
@@ -193,6 +200,10 @@ export function CollaboratorsClientPage() {
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
+                         <DropdownMenuItem onClick={() => handleSignClick(collaborator.id)}>
+                          <FileSignature className="mr-2 h-4 w-4" />
+                          Firmar Contrato
+                        </DropdownMenuItem>
                         <DropdownMenuItem onClick={() => handleEditClick(collaborator)}>
                           <Pencil className="mr-2 h-4 w-4" />
                           Editar
