@@ -31,7 +31,7 @@ export default function ContractPage() {
   const [collaboratorSignature, setCollaboratorSignature] = useState('');
 
   const { toast } = useToast();
-
+  
   useEffect(() => {
     if (!collaboratorId) {
       setError("ID de colaborador no válido.");
@@ -40,61 +40,55 @@ export default function ContractPage() {
     }
 
     const unsubCollaborator = onSnapshot(doc(db, 'collaborators', collaboratorId), 
-      (docSnap) => {
+      async (docSnap) => {
         if (docSnap.exists()) {
           const data = docSnap.data() as DocumentData;
           const collabData = { id: docSnap.id, ...data } as Collaborator;
           setCollaborator(collabData);
+
           if (collabData.contractHtml) {
-              // Si ya hay un contrato, extraemos las firmas si existen
               const companySigMatch = collabData.contractHtml.match(/<strong>Firma de la Empresa:<\/strong> (.*?)(<\/p>|<br>)/);
               if (companySigMatch) setCompanySignature(companySigMatch[1]);
               const collabSigMatch = collabData.contractHtml.match(/<strong>Firma del Colaborador:<\/strong> (.*?)(<\/p>|<br>)/);
               if (collabSigMatch) setCollaboratorSignature(collabSigMatch[1]);
+              setLoading(false); // Contract exists, we are done loading.
+          } else {
+              // No contract yet, fetch template
+              try {
+                const q = query(
+                  collection(db, "htmls"),
+                  where("owner", "==", "jordan"),
+                  where("title", "==", "Contrato colaboración")
+                );
+                const querySnapshot = await getDocs(q);
+                if (!querySnapshot.empty) {
+                  const docData = querySnapshot.docs[0].data() as DocumentData;
+                  setContractTemplate({ id: querySnapshot.docs[0].id, ...docData } as Html);
+                } else {
+                  setError("No se encontró la plantilla de contrato 'Contrato colaboración' de Jordan.");
+                }
+              } catch (err) {
+                console.error("Error fetching contract template:", err);
+                setError("No se pudo cargar la plantilla del contrato.");
+              } finally {
+                setLoading(false); // Finished fetching template
+              }
           }
         } else {
           setError("Colaborador no encontrado.");
+          setLoading(false);
         }
       },
       (err) => {
         console.error("Error fetching collaborator:", err);
         setError("No se pudo cargar el colaborador.");
+        setLoading(false);
       }
     );
 
-    const fetchContractTemplate = async () => {
-      if (collaborator?.contractHtml) {
-        setLoading(false);
-        return;
-      }
-      try {
-        const q = query(
-          collection(db, "htmls"),
-          where("owner", "==", "jordan"),
-          where("title", "==", "Contrato colaboración")
-        );
-        const querySnapshot = await getDocs(q);
-        if (!querySnapshot.empty) {
-          const docData = querySnapshot.docs[0].data() as DocumentData;
-          setContractTemplate({ id: querySnapshot.docs[0].id, ...docData } as Html);
-        } else {
-          setError("No se encontró la plantilla de contrato 'Contrato colaboración' de Jordan.");
-        }
-      } catch (err) {
-        console.error("Error fetching contract template:", err);
-        setError("No se pudo cargar la plantilla del contrato.");
-      } finally {
-        setLoading(false);
-      }
-    };
-    
-    if (collaborator) {
-        fetchContractTemplate();
-    } else {
-        // We wait for collaborator to be loaded first by the snapshot listener.
-    }
+    return () => unsubCollaborator();
 
-  }, [collaboratorId, collaborator?.contractHtml]);
+  }, [collaboratorId]);
   
   const getRenderedContract = () => {
     if (!collaborator) return '';
