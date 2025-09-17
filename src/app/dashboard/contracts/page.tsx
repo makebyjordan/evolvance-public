@@ -13,7 +13,7 @@ export default function ContractsPage() {
                 <div className="flex items-center gap-4">
                     <FileSignature className="w-8 h-8 text-primary" />
                     <div>
-                        <CardTitle className="text-2xl font-headline">Gestión de Contratos</CardTitle>
+                        <CardTitle className="text-2xl font-headline">Gestión de Plantillas de Contrato</CardTitle>
                         <CardDescription>
                             Crea, edita y gestiona las plantillas HTML para tus contratos de colaboración.
                         </CardDescription>

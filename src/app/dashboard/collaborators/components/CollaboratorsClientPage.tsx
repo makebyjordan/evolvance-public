@@ -66,6 +66,7 @@ export function CollaboratorsClientPage() {
             description: data.description,
             createdAt: (data.createdAt as Timestamp).toDate().toISOString(),
             updatedAt: (data.updatedAt as Timestamp).toDate().toISOString(),
+            contractHtml: data.contractHtml || undefined,
           });
         });
         setCollaborators(collaboratorsData);
@@ -95,7 +96,7 @@ export function CollaboratorsClientPage() {
     setIsFormOpen(true);
   };
   
-  const handleSignClick = (collaboratorId: string) => {
+  const handleContractClick = (collaboratorId: string) => {
     router.push(`/dashboard/contracts/${collaboratorId}`);
   };
 
@@ -157,7 +158,7 @@ export function CollaboratorsClientPage() {
         <Button variant="outline" asChild>
           <Link href="/dashboard/contracts">
              <FileCog className="mr-2 h-4 w-4" />
-            Gestionar Contratos
+            Gestionar Plantillas
           </Link>
         </Button>
         <Button onClick={() => {
@@ -206,9 +207,9 @@ export function CollaboratorsClientPage() {
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
-                         <DropdownMenuItem onClick={() => handleSignClick(collaborator.id)}>
+                         <DropdownMenuItem onClick={() => handleContractClick(collaborator.id)}>
                           <FileSignature className="mr-2 h-4 w-4" />
-                          Firmar Contrato
+                          Gestionar Contrato
                         </DropdownMenuItem>
                         <DropdownMenuItem onClick={() => handleEditClick(collaborator)}>
                           <Pencil className="mr-2 h-4 w-4" />
