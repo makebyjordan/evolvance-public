@@ -46,24 +46,25 @@ export default function ContractPage() {
           const collabData = { id: docSnap.id, ...data } as Collaborator;
           setCollaborator(collabData);
 
-          if (collabData.contractHtml) {
+          if (collabData.contractHtml && collabData.contractStatus === 'Firmado') {
               const companySigMatch = collabData.contractHtml.match(/<strong>Firma de la Empresa:<\/strong> (.*?)(<\/p>|<br>)/);
               if (companySigMatch) setCompanySignature(companySigMatch[1]);
               const collabSigMatch = collabData.contractHtml.match(/<strong>Firma del Colaborador:<\/strong> (.*?)(<\/p>|<br>)/);
               if (collabSigMatch) setCollaboratorSignature(collabSigMatch[1]);
-              setLoading(false); // Contract exists, we are done loading.
+              setLoading(false);
           } else {
-              // No contract yet, fetch template
               try {
                 const q = query(
                   collection(db, "htmls"),
-                  where("owner", "==", "jordan"),
-                  where("title", "==", "Contrato colaboración")
+                  where("owner", "==", "jordan")
                 );
                 const querySnapshot = await getDocs(q);
-                if (!querySnapshot.empty) {
-                  const docData = querySnapshot.docs[0].data() as DocumentData;
-                  setContractTemplate({ id: querySnapshot.docs[0].id, ...docData } as Html);
+                
+                const template = querySnapshot.docs.find(doc => doc.data().title?.toLowerCase() === 'contrato colaboración');
+
+                if (template) {
+                  const docData = template.data() as DocumentData;
+                  setContractTemplate({ id: template.id, ...docData } as Html);
                 } else {
                   setError("No se encontró la plantilla de contrato 'Contrato colaboración' de Jordan.");
                 }
@@ -71,7 +72,7 @@ export default function ContractPage() {
                 console.error("Error fetching contract template:", err);
                 setError("No se pudo cargar la plantilla del contrato.");
               } finally {
-                setLoading(false); // Finished fetching template
+                setLoading(false);
               }
           }
         } else {
@@ -115,34 +116,32 @@ export default function ContractPage() {
     setIsSaving(true);
     
     let finalHtml = getRenderedContract();
-    
-    // Add signature section if it doesn't exist
+    const signatureSection = `
+        <div id="signature-section" style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #ccc;">
+            <p><strong>Firma de la Empresa:</strong> ${companySignature}</p>
+            <p><strong>Firma del Colaborador:</strong> ${collaboratorSignature || 'Pendiente de firma'}</p>
+        </div>`;
+
     if (!finalHtml.includes('id="signature-section"')) {
-        finalHtml += `
-            <div id="signature-section" style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #ccc;">
-                <p><strong>Firma de la Empresa:</strong> ${companySignature}</p>
-            </div>`;
+        finalHtml += signatureSection;
     } else {
-         finalHtml = finalHtml.replace(
-            /<p><strong>Firma de la Empresa:<\/strong>.*?(<\/p>|<br>)/,
-            `<p><strong>Firma de la Empresa:</strong> ${companySignature}</p>`
-         );
+         finalHtml = finalHtml.replace(/<div id="signature-section".*?<\/div>/s, signatureSection);
     }
         
     const result = await saveCollaborator({
         id: collaborator.id,
         contractHtml: finalHtml,
-        contractStatus: 'Contrato Generado',
+        contractStatus: 'Firmado',
     });
 
     setIsSaving(false);
 
     if (result.success) {
       toast({
-        title: "Contrato Guardado",
+        title: "Contrato Guardado y Firmado",
         description: "El contrato se ha guardado para el colaborador.",
       });
-      router.push('/dashboard/collaborators');
+      // No redirigir, permitir imprimir
     } else {
       toast({
         variant: "destructive",
@@ -153,10 +152,22 @@ export default function ContractPage() {
   };
 
   const handlePrint = () => {
-      const contractContent = getRenderedContract();
+      let contractContent = getRenderedContract();
+       if (!contractContent.includes('id="signature-section"')) {
+            contractContent += `
+                <div id="signature-section" style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #ccc;">
+                    <p><strong>Firma de la Empresa:</strong> ${companySignature}</p>
+                    <p><strong>Firma del Colaborador:</strong> ${collaboratorSignature || 'Pendiente de firma'}</p>
+                </div>`;
+      }
       const printWindow = window.open('', '_blank');
       if (printWindow) {
-          printWindow.document.write(contractContent);
+          printWindow.document.write(`
+            <html>
+                <head><title>Contrato de ${collaborator?.name}</title></head>
+                <body>${contractContent}</body>
+            </html>
+          `);
           printWindow.document.close();
           printWindow.focus();
           printWindow.print();
@@ -176,6 +187,10 @@ export default function ContractPage() {
   if (error) {
     return (
       <div className="container mx-auto p-4">
+         <Button variant="outline" onClick={() => router.push('/dashboard/collaborators')} className="mb-4">
+            <ArrowLeft className="mr-2 h-4 w-4" />
+            Volver
+        </Button>
         <Alert variant="destructive">
           <AlertTriangle className="h-4 w-4" />
           <AlertTitle>Error</AlertTitle>
@@ -198,7 +213,7 @@ export default function ContractPage() {
         <CardHeader>
           <CardTitle>Contrato de Colaboración: {collaborator?.name}</CardTitle>
           <CardDescription>
-            Revisa la plantilla, completa los campos de firma y guarda el contrato.
+             {isSigned ? 'El contrato ha sido firmado. Ahora puedes imprimirlo.' : 'Revisa la plantilla, completa los campos de firma y guarda el contrato.'}
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -221,25 +236,25 @@ export default function ContractPage() {
                <Label htmlFor="collaborator-signature">Firma (Colaborador)</Label>
               <Input 
                 id="collaborator-signature"
-                placeholder="El colaborador firmará digitalmente"
+                placeholder={isSigned ? collaboratorSignature : "El colaborador firmará digitalmente"}
                 value={collaboratorSignature}
                 onChange={(e) => setCollaboratorSignature(e.target.value)}
                 disabled={isSigned}
               />
+               <p className="text-xs text-muted-foreground mt-1">Este campo simula la firma del colaborador.</p>
             </div>
           </div>
           
           <div className="flex justify-end mt-8 space-x-4">
-             {isSigned && (
-                <Button onClick={handlePrint} variant="outline">
+             {isSigned ? (
+                <Button onClick={handlePrint}>
                     <Printer className="mr-2 h-4 w-4" />
-                    Imprimir
+                    Imprimir Contrato
                 </Button>
-            )}
-            {!isSigned && (
-                <Button onClick={handleSaveContract} disabled={isSaving}>
+            ) : (
+                <Button onClick={handleSaveContract} disabled={isSaving || !companySignature}>
                 {isSaving ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Save className="mr-2 h-4 w-4" />}
-                {isSaving ? 'Guardando...' : 'Guardar Contrato'}
+                {isSaving ? 'Guardando...' : 'Guardar y Firmar'}
                 </Button>
             )}
           </div>
