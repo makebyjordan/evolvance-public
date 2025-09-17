@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { db } from '@/lib/firebase';
 import { doc, onSnapshot, getDocs, collection, query, where, Timestamp, orderBy } from 'firebase/firestore';
@@ -22,6 +22,8 @@ export default function SignContractPage() {
   const params = useParams();
   const router = useRouter();
   const { toast } = useToast();
+  const contractContainerRef = useRef<HTMLDivElement>(null);
+
 
   const collaboratorId = Array.isArray(params.collaboratorId) ? params.collaboratorId[0] : params.collaboratorId;
   
@@ -97,9 +99,8 @@ export default function SignContractPage() {
     if (!collaborator || !generatedContractHtml) return;
     setIsSaving(true);
     
-    // Simulate getting the final HTML from the iframe/div
-    // In a real scenario, you'd need a more robust way to capture inputs
-    const finalHtmlToSave = generatedContractHtml;
+    // Capture the current state of the innerHTML, including user inputs
+    const finalHtmlToSave = contractContainerRef.current?.innerHTML || generatedContractHtml;
 
     const result = await saveCollaborator({
         id: collaborator.id,
@@ -123,7 +124,11 @@ export default function SignContractPage() {
   }
   
   const handlePrint = () => {
-      const printableContent = generatedContractHtml;
+      const printableContent = contractContainerRef.current?.innerHTML;
+      if (!printableContent) {
+          toast({ variant: "destructive", title: "Error", description: "No hay contenido para imprimir."});
+          return;
+      }
       const printWindow = window.open('', '', 'height=800,width=800');
       if (printWindow) {
         printWindow.document.write('<html><head><title>Imprimir Contrato</title>');
@@ -175,7 +180,7 @@ export default function SignContractPage() {
                         <CheckCircle className="h-4 w-4 text-green-500" />
                         <AlertTitle className="text-green-400">Contrato ya generado</AlertTitle>
                         <AlertDescription className="text-green-500/80">
-                            Este colaborador ya tiene un contrato guardado. Puedes visualizarlo o imprimirlo. Para generar uno nuevo, primero elimina el existente (funcionalidad futura).
+                            Este colaborador ya tiene un contrato guardado. Puedes visualizarlo, imprimirlo, o generar uno nuevo si es necesario.
                         </AlertDescription>
                     </Alert>
                 )}
@@ -206,16 +211,17 @@ export default function SignContractPage() {
                 {generatedContractHtml && (
                     <div>
                         <div className="flex justify-end gap-2 mb-4">
-                           <Button onClick={handleSaveContract} disabled={isSaving || collaborator?.contractStatus === 'Contrato Generado'}>
+                           <Button onClick={handleSaveContract} disabled={isSaving}>
                                 {isSaving ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Save className="mr-2 h-4 w-4" />}
                                 Guardar Contrato
                             </Button>
-                            <Button onClick={handlePrint} variant="outline" disabled={!collaborator?.contractHtml}>
+                            <Button onClick={handlePrint} variant="outline">
                                 <Printer className="mr-2 h-4 w-4" />
                                 Imprimir
                             </Button>
                         </div>
                         <div
+                            ref={contractContainerRef}
                             className="p-8 border rounded-lg bg-white text-black prose max-w-none"
                             dangerouslySetInnerHTML={{ __html: generatedContractHtml }}
                          />
@@ -226,5 +232,3 @@ export default function SignContractPage() {
     </div>
   )
 }
-
-    
