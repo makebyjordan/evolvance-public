@@ -2,7 +2,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { PlusCircle, MoreHorizontal, FileText, Trash2, Pencil, AlertTriangle, FileSignature } from "lucide-react";
+import { PlusCircle, MoreHorizontal, FileText, Trash2, Pencil, AlertTriangle, FileSignature, FileCog } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -153,7 +153,13 @@ export function CollaboratorsClientPage() {
 
   return (
     <>
-      <div className="flex justify-end mb-4">
+      <div className="flex justify-end mb-4 gap-2">
+        <Button variant="outline" asChild>
+          <Link href="/dashboard/contracts">
+             <FileCog className="mr-2 h-4 w-4" />
+            Gestionar Contratos
+          </Link>
+        </Button>
         <Button onClick={() => {
           setSelectedCollaborator(null);
           setIsFormOpen(true);
