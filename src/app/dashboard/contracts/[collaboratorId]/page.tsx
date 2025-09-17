@@ -11,7 +11,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { AlertTriangle, Loader2, Save, ArrowLeft } from 'lucide-react';
+import { AlertTriangle, Loader2, Save, ArrowLeft, Printer } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -32,7 +32,6 @@ export default function ContractPage() {
 
   const { toast } = useToast();
 
-  // Fetch collaborator and contract template
   useEffect(() => {
     if (!collaboratorId) {
       setError("ID de colaborador no válido.");
@@ -44,7 +43,15 @@ export default function ContractPage() {
       (docSnap) => {
         if (docSnap.exists()) {
           const data = docSnap.data() as DocumentData;
-          setCollaborator({ id: docSnap.id, ...data } as Collaborator);
+          const collabData = { id: docSnap.id, ...data } as Collaborator;
+          setCollaborator(collabData);
+          if (collabData.contractHtml) {
+              // Si ya hay un contrato, extraemos las firmas si existen
+              const companySigMatch = collabData.contractHtml.match(/<strong>Firma de la Empresa:<\/strong> (.*?)(<\/p>|<br>)/);
+              if (companySigMatch) setCompanySignature(companySigMatch[1]);
+              const collabSigMatch = collabData.contractHtml.match(/<strong>Firma del Colaborador:<\/strong> (.*?)(<\/p>|<br>)/);
+              if (collabSigMatch) setCollaboratorSignature(collabSigMatch[1]);
+          }
         } else {
           setError("Colaborador no encontrado.");
         }
@@ -56,6 +63,10 @@ export default function ContractPage() {
     );
 
     const fetchContractTemplate = async () => {
+      if (collaborator?.contractHtml) {
+        setLoading(false);
+        return;
+      }
       try {
         const q = query(
           collection(db, "htmls"),
@@ -72,23 +83,28 @@ export default function ContractPage() {
       } catch (err) {
         console.error("Error fetching contract template:", err);
         setError("No se pudo cargar la plantilla del contrato.");
+      } finally {
+        setLoading(false);
       }
     };
+    
+    if (collaborator) {
+        fetchContractTemplate();
+    } else {
+        // We wait for collaborator to be loaded first by the snapshot listener.
+    }
 
-    Promise.all([fetchContractTemplate()]).finally(() => setLoading(false));
-
-    return () => {
-      unsubCollaborator();
-    };
-  }, [collaboratorId]);
+  }, [collaboratorId, collaborator?.contractHtml]);
   
   const getRenderedContract = () => {
-    if (!collaborator || !contractTemplate) return '';
+    if (!collaborator) return '';
+    if (collaborator.contractHtml) return collaborator.contractHtml;
+    if (!contractTemplate) return 'Cargando plantilla...';
+    
     let html = contractTemplate.htmlText;
     html = html.replace(/{{name}}/g, collaborator.name);
     html = html.replace(/{{email}}/g, collaborator.email);
     html = html.replace(/{{phone}}/g, collaborator.phone);
-    // You can add more placeholders here
     return html;
   };
   
@@ -104,8 +120,20 @@ export default function ContractPage() {
     
     setIsSaving(true);
     
-    const finalHtml = getRenderedContract()
-        .replace('</body>', `<hr><p><strong>Firma de la Empresa:</strong> ${companySignature}</p></body>`);
+    let finalHtml = getRenderedContract();
+    
+    // Add signature section if it doesn't exist
+    if (!finalHtml.includes('id="signature-section"')) {
+        finalHtml += `
+            <div id="signature-section" style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #ccc;">
+                <p><strong>Firma de la Empresa:</strong> ${companySignature}</p>
+            </div>`;
+    } else {
+         finalHtml = finalHtml.replace(
+            /<p><strong>Firma de la Empresa:<\/strong>.*?(<\/p>|<br>)/,
+            `<p><strong>Firma de la Empresa:</strong> ${companySignature}</p>`
+         );
+    }
         
     const result = await saveCollaborator({
         id: collaborator.id,
@@ -130,6 +158,22 @@ export default function ContractPage() {
     }
   };
 
+  const handlePrint = () => {
+      const contractContent = getRenderedContract();
+      const printWindow = window.open('', '_blank');
+      if (printWindow) {
+          printWindow.document.write(contractContent);
+          printWindow.document.close();
+          printWindow.focus();
+          printWindow.print();
+      } else {
+          toast({
+              variant: "destructive",
+              title: "Error de Impresión",
+              description: "No se pudo abrir la ventana para imprimir. Revisa la configuración de tu navegador."
+          });
+      }
+  };
 
   if (loading) {
     return <div className="flex justify-center items-center h-screen"><Loader2 className="w-8 h-8 animate-spin" /></div>;
@@ -146,6 +190,8 @@ export default function ContractPage() {
       </div>
     );
   }
+  
+  const isSigned = collaborator?.contractStatus === 'Firmado';
 
   return (
     <div className="container mx-auto p-4">
@@ -163,11 +209,7 @@ export default function ContractPage() {
         </CardHeader>
         <CardContent>
           <div className="border rounded-lg p-4 bg-white text-black h-96 overflow-y-auto mb-6">
-            {contractTemplate ? (
-              <div dangerouslySetInnerHTML={{ __html: getRenderedContract() }} />
-            ) : (
-              <Skeleton className="w-full h-full" />
-            )}
+            <div dangerouslySetInnerHTML={{ __html: getRenderedContract() }} />
           </div>
           
           <div className="grid md:grid-cols-2 gap-6 mt-4">
@@ -178,27 +220,37 @@ export default function ContractPage() {
                 placeholder="Escribe el nombre de la persona que firma por la empresa"
                 value={companySignature}
                 onChange={(e) => setCompanySignature(e.target.value)}
+                disabled={isSigned}
               />
             </div>
             <div>
-               <Label htmlFor="collaborator-signature" className="text-muted-foreground">Firma (Colaborador) - Próximamente</Label>
+               <Label htmlFor="collaborator-signature">Firma (Colaborador)</Label>
               <Input 
                 id="collaborator-signature"
-                placeholder="El colaborador firmará más adelante"
-                disabled
+                placeholder="El colaborador firmará digitalmente"
+                value={collaboratorSignature}
+                onChange={(e) => setCollaboratorSignature(e.target.value)}
+                disabled={isSigned}
               />
             </div>
           </div>
           
-          <div className="flex justify-end mt-8">
-            <Button onClick={handleSaveContract} disabled={isSaving}>
-              {isSaving ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Save className="mr-2 h-4 w-4" />}
-              {isSaving ? 'Guardando...' : 'Guardar Contrato'}
-            </Button>
+          <div className="flex justify-end mt-8 space-x-4">
+             {isSigned && (
+                <Button onClick={handlePrint} variant="outline">
+                    <Printer className="mr-2 h-4 w-4" />
+                    Imprimir
+                </Button>
+            )}
+            {!isSigned && (
+                <Button onClick={handleSaveContract} disabled={isSaving}>
+                {isSaving ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Save className="mr-2 h-4 w-4" />}
+                {isSaving ? 'Guardando...' : 'Guardar Contrato'}
+                </Button>
+            )}
           </div>
         </CardContent>
       </Card>
     </div>
   );
 }
-
