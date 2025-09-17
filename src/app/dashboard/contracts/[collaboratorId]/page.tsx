@@ -96,11 +96,17 @@ export default function SignContractPage() {
   }
 
   const handleSaveContract = async () => {
-    if (!collaborator || !generatedContractHtml) return;
+    if (!collaborator || !generatedContractHtml || !contractContainerRef.current) return;
     setIsSaving(true);
     
-    // Capture the current state of the innerHTML, including user inputs
-    const finalHtmlToSave = contractContainerRef.current?.innerHTML || generatedContractHtml;
+    // Explicitly update the 'value' attribute of all inputs before saving
+    const inputs = contractContainerRef.current.querySelectorAll('input, textarea');
+    inputs.forEach(input => {
+      const el = input as HTMLInputElement | HTMLTextAreaElement;
+      el.setAttribute('value', el.value);
+    });
+
+    const finalHtmlToSave = contractContainerRef.current.innerHTML;
 
     const result = await saveCollaborator({
         id: collaborator.id,
@@ -111,7 +117,7 @@ export default function SignContractPage() {
     if (result.success) {
         toast({
             title: "Contrato Guardado",
-            description: "El contrato se ha guardado para el colaborador.",
+            description: "El contrato se ha guardado para el colaborador. Los datos introducidos se han conservado.",
         });
     } else {
         toast({
