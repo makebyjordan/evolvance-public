@@ -1,12 +1,25 @@
 rules_version = '2';
 
+// Define el servicio para Storage
 service firebase.storage {
+  // Coincide con cualquier archivo dentro de tu bucket de almacenamiento
   match /b/{bucket}/o {
-    match /{allPaths=**} {
-      // Allow public read access
-      allow read;
-      // Allow write access only for authenticated users
-      allow write: if request.auth != null;
+
+    // Regla específica para la carpeta de contratos
+    // {collaboratorId} es un comodín que captura el ID del colaborador de la URL del archivo
+    match /contratos/{collaboratorId}/{fileName} {
+
+      // PERMISO DE LECTURA (read):
+      // Quién puede ver/descargar el contrato. Por ahora, solo usuarios autenticados.
+      allow read: if request.auth != null;
+
+      // PERMISO DE ESCRITURA (write):
+      // Quién puede subir/actualizar/borrar el contrato.
+      // Permitimos la escritura si se cumplen DOS condiciones (unidas por &&):
+      // 1. El usuario que hace la petición está autenticado (request.auth != null)
+      // 2. Existe un documento en la colección "collaborators" de Firestore
+      //    con un ID que coincide con el {collaboratorId} de la ruta del archivo.
+      allow write: if request.auth != null && firestore.exists(/databases/(default)/documents/collaborators/$(collaboratorId));
     }
   }
 }

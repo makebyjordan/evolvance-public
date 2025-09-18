@@ -98,7 +98,7 @@ export async function uploadContractPdf(collaboratorId: string, formData: FormDa
   }
 
   try {
-    const storageRef = ref(storage, `collaborators/${collaboratorId}/${file.name}`);
+    const storageRef = ref(storage, `contratos/${collaboratorId}/${file.name}`);
     await uploadBytes(storageRef, file);
     const downloadURL = await getDownloadURL(storageRef);
 
