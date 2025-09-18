@@ -1,4 +1,3 @@
-
 'use server';
 
 import { db, storage } from '@/lib/firebase';
@@ -39,7 +38,7 @@ const collaboratorsCollectionRef = collection(db, 'collaborators');
 /**
  * Saves a new collaborator or updates an existing one.
  */
-export async function saveCollaborator(data: Partial<CollaboratorInput & {contractHtml?: string; contractPdfUrl?: string; contractStatus?: string; id: string}>): Promise<ActionResult<string>> {
+export async function saveCollaborator(data: Partial<CollaboratorInput & { contractHtml?: string; contractPdfUrl?: string; contractStatus?: string; id: string }>): Promise<ActionResult<string>> {
   try {
     let docId: string;
 
@@ -87,6 +86,9 @@ export async function deleteCollaborator(id: string): Promise<ActionResult<null>
  * Uploads a contract PDF for a collaborator.
  */
 export async function uploadContractPdf(collaboratorId: string, formData: FormData): Promise<ActionResult<string>> {
+  // --- LÍNEA DE DEPURACIÓN AÑADIDA AQUÍ ---
+  console.log("Intentando subir PDF para el collaboratorId:", collaboratorId);
+
   const file = formData.get('pdf-file') as File;
 
   if (!file) {
@@ -107,7 +109,7 @@ export async function uploadContractPdf(collaboratorId: string, formData: FormDa
       contractPdfUrl: downloadURL,
       updatedAt: serverTimestamp(),
     });
-    
+
     revalidatePath('/dashboard/collaborators');
 
     return { success: true, data: downloadURL };
