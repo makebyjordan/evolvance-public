@@ -2,7 +2,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { PlusCircle, MoreHorizontal, FileText, Trash2, Pencil, AlertTriangle, FileSignature, FileCog } from "lucide-react";
+import { PlusCircle, MoreHorizontal, FileText, Trash2, Pencil, AlertTriangle, FileSignature, FileCog, Upload, File, FileSymlink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -39,6 +39,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Badge } from "@/components/ui/badge";
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { UploadPdfForm } from "./UploadPdfForm";
 
 export function CollaboratorsClientPage() {
   const [collaborators, setCollaborators] = useState<Collaborator[]>([]);
@@ -46,6 +47,7 @@ export function CollaboratorsClientPage() {
   const [error, setError] = useState<string | null>(null);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [isAlertOpen, setIsAlertOpen] = useState(false);
+  const [isUploadFormOpen, setIsUploadFormOpen] = useState(false);
   const [selectedCollaborator, setSelectedCollaborator] = useState<Collaborator | null>(null);
   const { toast } = useToast();
   const router = useRouter();
@@ -67,6 +69,7 @@ export function CollaboratorsClientPage() {
             createdAt: (data.createdAt as Timestamp).toDate().toISOString(),
             updatedAt: (data.updatedAt as Timestamp).toDate().toISOString(),
             contractHtml: data.contractHtml || undefined,
+            contractPdfUrl: data.contractPdfUrl || undefined,
           });
         });
         setCollaborators(collaboratorsData);
@@ -98,6 +101,15 @@ export function CollaboratorsClientPage() {
   
   const handleContractClick = (collaboratorId: string) => {
     router.push(`/dashboard/contracts/${collaboratorId}`);
+  };
+
+  const handleUploadClick = (collaborator: Collaborator) => {
+    setSelectedCollaborator(collaborator);
+    setIsUploadFormOpen(true);
+  };
+
+  const handleViewPdfClick = (pdfUrl: string) => {
+    window.open(pdfUrl, '_blank');
   };
 
   const confirmDelete = async () => {
@@ -176,6 +188,12 @@ export function CollaboratorsClientPage() {
         onFormSubmit={handleFormSubmit}
         collaborator={selectedCollaborator}
       />
+
+       <UploadPdfForm
+        isOpen={isUploadFormOpen}
+        setIsOpen={setIsUploadFormOpen}
+        collaborator={selectedCollaborator}
+      />
       
       <div className="border rounded-lg">
         <Table>
@@ -209,8 +227,18 @@ export function CollaboratorsClientPage() {
                       <DropdownMenuContent align="end">
                          <DropdownMenuItem onClick={() => handleContractClick(collaborator.id)}>
                           <FileSignature className="mr-2 h-4 w-4" />
-                          Gestionar Contrato
+                          Gestionar Contrato HTML
                         </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => handleUploadClick(collaborator)}>
+                            <Upload className="mr-2 h-4 w-4" />
+                            Subir Contrato PDF
+                        </DropdownMenuItem>
+                         {collaborator.contractPdfUrl && (
+                            <DropdownMenuItem onClick={() => handleViewPdfClick(collaborator.contractPdfUrl!)}>
+                                <FileSymlink className="mr-2 h-4 w-4" />
+                                Ver Contrato PDF
+                            </DropdownMenuItem>
+                        )}
                         <DropdownMenuItem onClick={() => handleEditClick(collaborator)}>
                           <Pencil className="mr-2 h-4 w-4" />
                           Editar
