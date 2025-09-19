@@ -11,7 +11,6 @@ import { Menu } from 'lucide-react';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import type { SiteConfigContent } from '@/app/actions/web-content-actions';
 import { getWebContent } from '@/app/actions/web-content-actions';
-import logoEvolVance from '@/images/logo-evol-vance.png';
 
 
 function SvgRenderer({ svgString, className }: { svgString: string, className?: string }) {
@@ -63,7 +62,7 @@ export default function Header() {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
           <Link href="/" className="flex items-center gap-2 text-foreground">
-             <Image src={logoEvolVance} alt="Evol-vance Logo" width={55} height={55} />
+             <Image src="https://iili.io/K78fXyb.png" alt="Evol-vance Logo" width={55} height={55} />
             <span className="text-xl font-headline font-bold">Evol-vance</span>
           </Link>
 
@@ -101,7 +100,7 @@ export default function Header() {
                 <SheetHeader>
                    <SheetTitle>
                      <Link href="/" className="flex items-center gap-2 text-foreground" onClick={() => setIsMobileMenuOpen(false)}>
-                        <Image src={logoEvolVance} alt="Evol-vance Logo" width={55} height={55} />
+                        <Image src="https://iili.io/K78fXyb.png" alt="Evol-vance Logo" width={55} height={55} />
                         <span className="text-xl font-headline font-bold">Evol-vance</span>
                     </Link>
                   </SheetTitle>

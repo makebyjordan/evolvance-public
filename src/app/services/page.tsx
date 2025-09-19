@@ -13,7 +13,6 @@ import Footer from '@/components/footer';
 import teamImages from '@/lib/placeholder-images.json';
 import Link from 'next/link';
 import Image from 'next/image';
-import logoEvolVance from './logo-evol-vance.svg';
 import heroImage from '@/images/hero-evolvance-software.jpg';
 
 
@@ -249,7 +248,7 @@ export default function ServicesPage() {
                             <div className="container mx-auto px-6">
                                 <div className="flex flex-col md:flex-row items-center gap-12">
                                     <div className="md:w-1/2">
-                                        <Image src={logoEvolVance} alt="Evol-vance Logo" className="w-full h-auto text-primary" />
+                                        <Image src="https://iili.io/K78fXyb.png" alt="Evol-vance Logo" width={512} height={512} className="w-full h-auto text-primary" />
                                     </div>
                                     <div className="md:w-1/2">
                                         <h2 className="text-sm font-bold uppercase text-accent tracking-widest">¿Por Qué Elegirnos?</h2>
