@@ -63,7 +63,7 @@ export default function Header() {
         <div className="flex items-center justify-between h-20">
           <Link href="/" className="flex items-center gap-2 text-foreground">
              <Image src="https://iili.io/K78fXyb.png" alt="Evol-vance Logo" width={55} height={55} />
-            <span className="text-xl font-headline font-bold">Evol-vance</span>
+            
           </Link>
 
           {/* Desktop Navigation */}
@@ -101,7 +101,7 @@ export default function Header() {
                    <SheetTitle>
                      <Link href="/" className="flex items-center gap-2 text-foreground" onClick={() => setIsMobileMenuOpen(false)}>
                         <Image src="https://iili.io/K78fXyb.png" alt="Evol-vance Logo" width={55} height={55} />
-                        <span className="text-xl font-headline font-bold">Evol-vance</span>
+                        
                     </Link>
                   </SheetTitle>
                 </SheetHeader>
