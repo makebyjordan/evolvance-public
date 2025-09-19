@@ -52,7 +52,7 @@ export default function DashboardLayout({
       <aside className="w-64 flex-shrink-0 border-r bg-card border-border/20 flex flex-col">
         <div className="h-20 flex items-center px-6 border-b border-border/20">
            <Link href="/" className="flex items-center gap-2">
-            <Image src="https://iili.io/K78fXyb.png" alt="Evol-vance Logo" width={96} height={96} />
+            <Image src="https://iili.io/K78fXyb.png" alt="Evol-vance Logo" width={288} height={288} />
           </Link>
         </div>
         <nav className="flex-1 py-6 px-4 space-y-2">
