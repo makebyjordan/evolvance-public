@@ -1,0 +1,79 @@
+
+'use server';
+
+import { db } from '@/lib/firebase';
+import { collection, doc, addDoc, updateDoc, deleteDoc, serverTimestamp } from 'firebase/firestore';
+import { revalidatePath } from 'next/cache';
+
+// Main Presentation Type
+export interface Presentation {
+  id: string;
+  title: string;
+  code: string;
+  htmlText: string;
+  createdAt: any;
+  updatedAt: any;
+}
+
+// Type for creating/updating a presentation
+export type PresentationInput = Omit<Presentation, 'id' | 'createdAt' | 'updatedAt'> & {
+  id?: string;
+};
+
+// Return type for our server actions
+type ActionResult<T> = {
+  success: boolean;
+  data?: T;
+  error?: string;
+};
+
+// Collection reference
+const presentationsCollectionRef = collection(db, 'presentations');
+
+/**
+ * Saves a new presentation or updates an existing one.
+ */
+export async function savePresentation(data: PresentationInput): Promise<ActionResult<string>> {
+  try {
+    let docId: string;
+
+    if (data.id) {
+      // Update
+      docId = data.id;
+      const docRef = doc(db, 'presentations', docId);
+      await updateDoc(docRef, {
+        ...data,
+        updatedAt: serverTimestamp(),
+      });
+    } else {
+      // Create
+      const docRef = await addDoc(presentationsCollectionRef, {
+        ...data,
+        createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp(),
+      });
+      docId = docRef.id;
+    }
+    
+    revalidatePath('/dashboard/presentations');
+    return { success: true, data: docId };
+
+  } catch (error: any) {
+    console.error('Error saving presentation:', error);
+    return { success: false, error: 'La presentación no se pudo guardar. ' + error.message };
+  }
+}
+
+/**
+ * Deletes a presentation by its ID.
+ */
+export async function deletePresentation(id: string): Promise<ActionResult<null>> {
+  try {
+    await deleteDoc(doc(db, 'presentations', id));
+    revalidatePath('/dashboard/presentations');
+    return { success: true };
+  } catch (error: any) {
+    console.error('Error deleting presentation:', error);
+    return { success: false, error: 'No se pudo eliminar la presentación. ' + error.message };
+  }
+}
