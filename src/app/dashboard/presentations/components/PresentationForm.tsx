@@ -388,7 +388,8 @@ export function PresentationForm({ isOpen, setIsOpen, onFormSubmit, presentation
                                 <FormMessage />
                                 </FormItem>
                             )}
-                             <FormField
+                             />
+                            <FormField
                             control={form.control}
                             name={`featureSectionCards.${index}.description`}
                             render={({ field }) => (
@@ -494,5 +495,3 @@ export function PresentationForm({ isOpen, setIsOpen, onFormSubmit, presentation
     </Dialog>
   );
 }
-
-    
