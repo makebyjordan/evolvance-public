@@ -1,7 +1,6 @@
-
 "use client";
 
-import { useForm } from "react-hook-form";
+import { useForm, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { Button } from "@/components/ui/button";
@@ -29,6 +28,15 @@ import { savePresentation, type Presentation } from "@/app/actions/presentations
 import { useEffect } from "react";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
+import { Separator } from "@/components/ui/separator";
+import { PlusCircle, Trash2 } from "lucide-react";
+
+const featureCardSchema = z.object({
+  icon: z.string().optional(),
+  title: z.string().optional(),
+  description: z.string().optional(),
+});
+
 
 const formSchema = z.object({
   title: z.string().min(2, { message: "El título es requerido." }),
@@ -40,6 +48,12 @@ const formSchema = z.object({
   heroCtaText: z.string().optional(),
   heroCtaUrl: z.string().optional(),
   heroImageUrl: z.string().optional(),
+  featureSectionEnabled: z.boolean().default(false),
+  featureSectionTitle: z.string().optional(),
+  featureSectionDescription: z.string().optional(),
+  featureSectionCtaText: z.string().optional(),
+  featureSectionCtaUrl: z.string().optional(),
+  featureSectionCards: z.array(featureCardSchema).optional(),
 });
 
 type PresentationFormValues = z.infer<typeof formSchema>;
@@ -67,23 +81,41 @@ export function PresentationForm({ isOpen, setIsOpen, onFormSubmit, presentation
       heroCtaText: "",
       heroCtaUrl: "",
       heroImageUrl: "",
+      featureSectionEnabled: false,
+      featureSectionTitle: "",
+      featureSectionDescription: "",
+      featureSectionCtaText: "",
+      featureSectionCtaUrl: "",
+      featureSectionCards: [],
     },
   });
   
   const heroEnabled = form.watch("heroEnabled");
+  const featureSectionEnabled = form.watch("featureSectionEnabled");
+
+  const { fields, append, remove } = useFieldArray({
+    control: form.control,
+    name: "featureSectionCards",
+  });
 
   useEffect(() => {
     if (isEditing && presentation) {
       form.reset({
         title: presentation.title,
         code: presentation.code,
-        htmlText: presentation.htmlText,
+        htmlText: presentation.htmlText || "",
         heroEnabled: presentation.heroEnabled || false,
         heroTitle: presentation.heroTitle || "",
         heroDescription: presentation.heroDescription || "",
         heroCtaText: presentation.heroCtaText || "",
         heroCtaUrl: presentation.heroCtaUrl || "",
         heroImageUrl: presentation.heroImageUrl || "",
+        featureSectionEnabled: presentation.featureSectionEnabled || false,
+        featureSectionTitle: presentation.featureSectionTitle || "",
+        featureSectionDescription: presentation.featureSectionDescription || "",
+        featureSectionCtaText: presentation.featureSectionCtaText || "",
+        featureSectionCtaUrl: presentation.featureSectionCtaUrl || "",
+        featureSectionCards: presentation.featureSectionCards || [],
       });
     } else {
       form.reset({
@@ -96,6 +128,12 @@ export function PresentationForm({ isOpen, setIsOpen, onFormSubmit, presentation
         heroCtaText: "",
         heroCtaUrl: "",
         heroImageUrl: "",
+        featureSectionEnabled: false,
+        featureSectionTitle: "",
+        featureSectionDescription: "",
+        featureSectionCtaText: "",
+        featureSectionCtaUrl: "",
+        featureSectionCards: [],
       });
     }
   }, [isEditing, presentation, form]);
@@ -134,7 +172,7 @@ export function PresentationForm({ isOpen, setIsOpen, onFormSubmit, presentation
 
   return (
     <Dialog open={isOpen} onOpenChange={handleOpenChange}>
-      <DialogContent className="sm:max-w-2xl bg-card max-h-[90vh] overflow-y-auto">
+      <DialogContent className="sm:max-w-3xl bg-card max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="font-headline text-primary">{isEditing ? 'Editar Presentación' : 'Nueva Presentación'}</DialogTitle>
           <DialogDescription>
@@ -171,6 +209,8 @@ export function PresentationForm({ isOpen, setIsOpen, onFormSubmit, presentation
                 )}
                 />
             </div>
+            
+            <Separator />
             
              <FormField
                 control={form.control}
@@ -234,13 +274,131 @@ export function PresentationForm({ isOpen, setIsOpen, onFormSubmit, presentation
                 </div>
               </div>
             )}
+            
+            <Separator />
+            
+             <FormField
+                control={form.control}
+                name="featureSectionEnabled"
+                render={({ field }) => (
+                    <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
+                    <div className="space-y-0.5">
+                        <FormLabel>Activar Sección de Características</FormLabel>
+                        <FormDescription>
+                        Añade una sección con título, texto y tarjetas (estilo IA &amp; Ads).
+                        </FormDescription>
+                    </div>
+                    <FormControl>
+                        <Switch
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                        />
+                    </FormControl>
+                    </FormItem>
+                )}
+             />
+
+            {featureSectionEnabled && (
+                <div className="space-y-4 p-4 border rounded-md">
+                     <FormField
+                        control={form.control}
+                        name="featureSectionTitle"
+                        render={({ field }) => (
+                            <FormItem><FormLabel>Título de la Sección</FormLabel><FormControl><Input placeholder="Título principal de la sección" {...field} /></FormControl><FormMessage /></FormItem>
+                        )}
+                    />
+                    <FormField
+                        control={form.control}
+                        name="featureSectionDescription"
+                        render={({ field }) => (
+                            <FormItem><FormLabel>Descripción de la Sección</FormLabel><FormControl><Textarea placeholder="Texto descriptivo de la sección" {...field} /></FormControl><FormMessage /></FormItem>
+                        )}
+                    />
+                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <FormField
+                            control={form.control}
+                            name="featureSectionCtaText"
+                            render={({ field }) => (
+                                <FormItem><FormLabel>Texto del Botón CTA</FormLabel><FormControl><Input placeholder="Ej: Contactar" {...field} /></FormControl><FormMessage /></FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="featureSectionCtaUrl"
+                            render={({ field }) => (
+                                <FormItem><FormLabel>URL del Botón CTA</FormLabel><FormControl><Input placeholder="https://ejemplo.com/contacto" {...field} /></FormControl><FormMessage /></FormItem>
+                            )}
+                        />
+                    </div>
+                    <Separator className="my-6" />
+                    <div>
+                        <h3 className="text-lg font-medium mb-2">Tarjetas de Características</h3>
+                        {fields.map((field, index) => (
+                        <div key={field.id} className="p-4 border rounded-lg relative space-y-4 mb-4">
+                            <Button
+                            type="button"
+                            variant="destructive"
+                            size="icon"
+                            className="absolute -top-3 -right-3 h-7 w-7"
+                            onClick={() => remove(index)}
+                            >
+                            <Trash2 className="h-4 w-4" />
+                            </Button>
+                            <FormField
+                            control={form.control}
+                            name={`featureSectionCards.${index}.icon`}
+                            render={({ field }) => (
+                                <FormItem>
+                                <FormLabel>Icono (SVG)</FormLabel>
+                                <FormControl><Textarea rows={3} placeholder="Pega el código SVG del icono" {...field} /></FormControl>
+                                <FormMessage />
+                                </FormItem>
+                            )}
+                            />
+                            <FormField
+                            control={form.control}
+                            name={`featureSectionCards.${index}.title`}
+                            render={({ field }) => (
+                                <FormItem>
+                                <FormLabel>Título de la Tarjeta</FormLabel>
+                                <FormControl><Input placeholder="Título de la característica" {...field} /></FormControl>
+                                <FormMessage />
+                                </FormItem>
+                            )}
+                            />
+                             <FormField
+                            control={form.control}
+                            name={`featureSectionCards.${index}.description`}
+                            render={({ field }) => (
+                                <FormItem>
+                                <FormLabel>Descripción de la Tarjeta</FormLabel>
+                                <FormControl><Textarea rows={2} placeholder="Descripción de la característica" {...field} /></FormControl>
+                                <FormMessage />
+                                </FormItem>
+                            )}
+                            />
+                        </div>
+                        ))}
+                        <Button
+                        type="button"
+                        variant="outline"
+                        className="mt-2"
+                        onClick={() => append({ icon: "", title: "", description: "" })}
+                        >
+                        <PlusCircle className="mr-2 h-4 w-4" />
+                        Añadir Tarjeta
+                        </Button>
+                    </div>
+                </div>
+            )}
+             <Separator />
 
             <FormField
               control={form.control}
               name="htmlText"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Contenido HTML Principal</FormLabel>
+                  <FormLabel>Contenido HTML Principal (Opcional)</FormLabel>
                   <FormControl>
                     <Textarea rows={10} placeholder="Escribe el contenido de la presentación aquí. Puedes usar HTML." {...field} />
                   </FormControl>

@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useEffect } from 'react';
@@ -14,20 +13,21 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { FadeIn } from '@/components/fade-in';
 import { ContactModal } from '@/components/contact-modal';
+import type { Presentation } from '@/app/actions/presentations-actions';
+import { InteractiveCard } from '@/components/interactive-card';
+import { CardHeader, CardTitle } from '@/components/ui/card';
 
-interface PresentationData {
-    id: string;
-    title: string;
-    htmlText: string;
-    heroEnabled?: boolean;
-    heroTitle?: string;
-    heroDescription?: string;
-    heroCtaText?: string;
-    heroCtaUrl?: string;
-    heroImageUrl?: string;
+// Helper component to safely render SVG
+function SvgRenderer({ svgString, className }: { svgString: string, className: string }) {
+    if (!svgString || typeof svgString !== 'string') return null;
+    const modifiedSvgString = svgString.replace('<svg', `<svg class="${className}"`);
+    return <div dangerouslySetInnerHTML={{ __html: modifiedSvgString }} />;
 }
 
-function HeroSection({ presentation }: { presentation: PresentationData }) {
+const defaultIconSVG = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-zap"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2z"></polygon></svg>`;
+
+
+function HeroSection({ presentation }: { presentation: Presentation }) {
     if (!presentation.heroEnabled || !presentation.heroImageUrl) return null;
 
     return (
@@ -59,11 +59,67 @@ function HeroSection({ presentation }: { presentation: PresentationData }) {
     );
 }
 
+function FeatureSection({ presentation }: { presentation: Presentation }) {
+    if (!presentation.featureSectionEnabled) return null;
+
+    return (
+        <section className="py-20 sm:py-32">
+            <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                    <FadeIn>
+                        <div className="text-left">
+                            {presentation.featureSectionTitle && (
+                                <h2 className="text-3xl md:text-4xl font-extrabold text-foreground">
+                                    {presentation.featureSectionTitle}
+                                </h2>
+                            )}
+                            {presentation.featureSectionDescription && (
+                                <p className="mt-4 text-lg text-muted-foreground">
+                                    {presentation.featureSectionDescription}
+                                </p>
+                            )}
+                            {presentation.featureSectionCtaText && presentation.featureSectionCtaUrl && (
+                                <div className="mt-8 text-center lg:text-left">
+                                     <Button asChild size="lg">
+                                        <Link href={presentation.featureSectionCtaUrl}>{presentation.featureSectionCtaText}</Link>
+                                    </Button>
+                                </div>
+                            )}
+                        </div>
+                    </FadeIn>
+                    {presentation.featureSectionCards && presentation.featureSectionCards.length > 0 && (
+                        <FadeIn delay={0.2}>
+                            <div className="grid grid-cols-2 gap-6">
+                                {presentation.featureSectionCards.map((card, index) => (
+                                    <div className="card-animated-border" key={index}>
+                                        <InteractiveCard className="h-full text-center p-4 card-gradient-hover">
+                                            <CardHeader className="p-2">
+                                                {card.icon && (
+                                                    <div className="flex justify-center mb-3">
+                                                        <div className="p-3 bg-primary/10 rounded-lg text-primary">
+                                                            <SvgRenderer svgString={card.icon || defaultIconSVG} className="w-8 h-8 text-primary" />
+                                                        </div>
+                                                    </div>
+                                                )}
+                                                {card.title && <CardTitle className="text-base font-bold">{card.title}</CardTitle>}
+                                                 {card.description && <p className="text-sm text-muted-foreground mt-2">{card.description}</p>}
+                                            </CardHeader>
+                                        </InteractiveCard>
+                                    </div>
+                                ))}
+                            </div>
+                        </FadeIn>
+                    )}
+                </div>
+            </div>
+        </section>
+    );
+}
 
 export default function ViewPresentationPage() {
   const params = useParams();
   const id = Array.isArray(params.id) ? params.id[0] : params.id;
-  const [presentation, setPresentation] = useState<PresentationData | null>(null);
+  const [presentation, setPresentation] = useState<Presentation | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -82,7 +138,7 @@ export default function ViewPresentationPage() {
           setPresentation({
             id: docSnap.id,
             ...data
-          } as PresentationData);
+          } as Presentation);
           document.title = `Presentación: ${data.title}`;
         } else {
           setError("No se encontró la presentación.");
@@ -141,9 +197,12 @@ export default function ViewPresentationPage() {
         <Header />
         <main>
             <HeroSection presentation={presentation} />
-            <article className="prose dark:prose-invert prose-lg max-w-4xl mx-auto py-16 px-4"
-                dangerouslySetInnerHTML={{ __html: presentation.htmlText }}
-             />
+            <FeatureSection presentation={presentation} />
+            {presentation.htmlText && (
+                <article className="prose dark:prose-invert prose-lg max-w-4xl mx-auto py-16 px-4"
+                    dangerouslySetInnerHTML={{ __html: presentation.htmlText }}
+                />
+            )}
              <section className="bg-card">
                 <div className="container mx-auto px-6 py-20 text-center">
                     <FadeIn>

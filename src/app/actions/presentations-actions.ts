@@ -1,9 +1,14 @@
-
 'use server';
 
 import { db } from '@/lib/firebase';
 import { collection, doc, addDoc, updateDoc, deleteDoc, serverTimestamp } from 'firebase/firestore';
 import { revalidatePath } from 'next/cache';
+
+export interface FeatureCard {
+  icon?: string;
+  title?: string;
+  description?: string;
+}
 
 // Main Presentation Type
 export interface Presentation {
@@ -20,6 +25,13 @@ export interface Presentation {
   heroCtaText?: string;
   heroCtaUrl?: string;
   heroImageUrl?: string;
+  // Feature section fields
+  featureSectionEnabled?: boolean;
+  featureSectionTitle?: string;
+  featureSectionDescription?: string;
+  featureSectionCtaText?: string;
+  featureSectionCtaUrl?: string;
+  featureSectionCards?: FeatureCard[];
 }
 
 // Type for creating/updating a presentation
