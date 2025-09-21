@@ -68,19 +68,12 @@ export default function Header() {
       isDropdown: true,
       items: [
         { href: '/#timeline', label: 'Nuestra Trayectoria' },
+        { href: '/#philosophy', label: 'Filosofía' },
         { href: '/#team', label: 'Equipo' },
-      ]
-    },
-    { href: '/#philosophy', label: 'Filosofía' },
-    { href: '/#faq', label: 'FAQ' },
-    { 
-      label: 'Intranet',
-      isDropdown: true,
-      items: [
         { href: '/dashboard', label: 'Dashboard' },
-        { href: '/clients-login', label: 'Portal Clientes' },
       ]
     },
+    { href: '/#faq', label: 'FAQ' },
   ];
 
   return (
@@ -126,6 +119,9 @@ export default function Header() {
           </nav>
           
           <div className="hidden md:flex items-center gap-2">
+             <Button asChild variant="secondary">
+                <Link href="/clients-login">Portal Clientes</Link>
+             </Button>
              <ContactModal>
                 <Button>
                     Agendar Reunión
@@ -186,9 +182,12 @@ export default function Header() {
                     ))}
                   </Accordion>
 
-                   <div className="pt-8">
+                   <div className="pt-8 space-y-4">
+                     <Button className="w-full" asChild>
+                       <Link href="/clients-login" onClick={() => setIsMobileMenuOpen(false)}>Portal Clientes</Link>
+                     </Button>
                      <ContactModal>
-                        <Button className="w-full">
+                        <Button className="w-full" variant="secondary">
                             Agendar Reunión
                         </Button>
                     </ContactModal>

@@ -6,12 +6,6 @@ import { AuthProvider } from '@/contexts/AuthContext';
 export const metadata: Metadata = {
   title: 'Evol-vance',
   description: 'Diseñamos el Futuro de tu Crecimiento.',
-  // --- AÑADE ESTO ---
-  icons: {
-    icon: '/favicon.ico', // O la ruta a tu icono en la carpeta /public
-    apple: '/apple-touch-icon.png', // Opcional: para dispositivos Apple
-  },
-  // --------------------
 };
 
 export default function RootLayout({
