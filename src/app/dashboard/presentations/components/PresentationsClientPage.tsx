@@ -62,6 +62,18 @@ export function PresentationsClientPage() {
             htmlText: data.htmlText,
             createdAt: (data.createdAt as Timestamp).toDate().toISOString(),
             updatedAt: (data.updatedAt as Timestamp).toDate().toISOString(),
+            heroEnabled: data.heroEnabled,
+            heroTitle: data.heroTitle,
+            heroDescription: data.heroDescription,
+            heroCtaText: data.heroCtaText,
+            heroCtaUrl: data.heroCtaUrl,
+            heroImageUrl: data.heroImageUrl,
+            featureSectionEnabled: data.featureSectionEnabled,
+            featureSectionTitle: data.featureSectionTitle,
+            featureSectionDescription: data.featureSectionDescription,
+            featureSectionCtaText: data.featureSectionCtaText,
+            featureSectionCtaUrl: data.featureSectionCtaUrl,
+            featureSectionCards: data.featureSectionCards,
           });
         });
         setPresentations(presentationsData);
@@ -92,11 +104,7 @@ export function PresentationsClientPage() {
   };
 
   const handleViewClick = (presentation: Presentation) => {
-    // This could be a dedicated page in the future
-    const blob = new Blob([presentation.htmlText], { type: 'text/html' });
-    const url = URL.createObjectURL(blob);
-    window.open(url, '_blank');
-    URL.revokeObjectURL(url);
+    window.open(`/view-presentation/${presentation.id}`, '_blank');
   };
 
   const confirmDelete = async () => {
