@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useEffect } from 'react';
@@ -15,7 +16,7 @@ import { FadeIn } from '@/components/fade-in';
 import { ContactModal } from '@/components/contact-modal';
 import type { Presentation } from '@/app/actions/presentations-actions';
 import { InteractiveCard } from '@/components/interactive-card';
-import { CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardHeader, CardTitle, CardContent, CardFooter } from '@/components/ui/card';
 
 // Helper component to safely render SVG
 function SvgRenderer({ svgString, className }: { svgString: string, className: string }) {
@@ -116,6 +117,58 @@ function FeatureSection({ presentation }: { presentation: Presentation }) {
     );
 }
 
+function MediaGridSection({ presentation }: { presentation: Presentation }) {
+  if (!presentation.mediaGridSectionEnabled || !presentation.mediaGridSectionCards || presentation.mediaGridSectionCards.length === 0) return null;
+
+  return (
+    <section className="py-20 sm:py-32 bg-card/50">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {presentation.mediaGridSectionCards.map((card, index) => (
+            <FadeIn key={index} delay={index * 0.1}>
+              <div className="card-animated-border h-full">
+                <Card className="h-full flex flex-col overflow-hidden">
+                    {(card.videoUrl || card.imageUrl) && (
+                        <div className="aspect-video relative w-full">
+                            {card.videoUrl ? (
+                                <iframe
+                                    src={card.videoUrl}
+                                    title={card.title || 'Video'}
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                    allowFullScreen
+                                    className="w-full h-full"
+                                />
+                            ) : card.imageUrl && (
+                                <Image
+                                    src={card.imageUrl}
+                                    alt={card.title || 'Imagen de la tarjeta'}
+                                    fill
+                                    className="object-cover"
+                                />
+                            )}
+                        </div>
+                    )}
+                  <CardHeader>
+                    {card.title && <CardTitle>{card.title}</CardTitle>}
+                    {card.description && <CardDescription>{card.description}</CardDescription>}
+                  </CardHeader>
+                  {(card.ctaText && card.ctaUrl) && (
+                    <CardFooter className="mt-auto">
+                        <Button asChild>
+                            <Link href={card.ctaUrl}>{card.ctaText}</Link>
+                        </Button>
+                    </CardFooter>
+                  )}
+                </Card>
+              </div>
+            </FadeIn>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 export default function ViewPresentationPage() {
   const params = useParams();
   const id = Array.isArray(params.id) ? params.id[0] : params.id;
@@ -198,6 +251,7 @@ export default function ViewPresentationPage() {
         <main>
             <HeroSection presentation={presentation} />
             <FeatureSection presentation={presentation} />
+            <MediaGridSection presentation={presentation} />
             {presentation.htmlText && (
                 <article className="prose dark:prose-invert prose-lg max-w-4xl mx-auto py-16 px-4"
                     dangerouslySetInnerHTML={{ __html: presentation.htmlText }}

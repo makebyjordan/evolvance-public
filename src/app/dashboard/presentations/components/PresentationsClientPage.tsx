@@ -74,6 +74,8 @@ export function PresentationsClientPage() {
             featureSectionCtaText: data.featureSectionCtaText,
             featureSectionCtaUrl: data.featureSectionCtaUrl,
             featureSectionCards: data.featureSectionCards,
+            mediaGridSectionEnabled: data.mediaGridSectionEnabled,
+            mediaGridSectionCards: data.mediaGridSectionCards,
           });
         });
         setPresentations(presentationsData);

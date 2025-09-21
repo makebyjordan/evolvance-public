@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useForm, useFieldArray } from "react-hook-form";
@@ -27,7 +28,6 @@ import { useToast } from "@/hooks/use-toast";
 import { savePresentation, type Presentation } from "@/app/actions/presentations-actions";
 import { useEffect } from "react";
 import { Switch } from "@/components/ui/switch";
-import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { PlusCircle, Trash2 } from "lucide-react";
 
@@ -35,6 +35,15 @@ const featureCardSchema = z.object({
   icon: z.string().optional(),
   title: z.string().optional(),
   description: z.string().optional(),
+});
+
+const mediaGridCardSchema = z.object({
+  title: z.string().optional(),
+  description: z.string().optional(),
+  imageUrl: z.string().optional(),
+  videoUrl: z.string().optional(),
+  ctaText: z.string().optional(),
+  ctaUrl: z.string().optional(),
 });
 
 
@@ -54,6 +63,8 @@ const formSchema = z.object({
   featureSectionCtaText: z.string().optional(),
   featureSectionCtaUrl: z.string().optional(),
   featureSectionCards: z.array(featureCardSchema).optional(),
+  mediaGridSectionEnabled: z.boolean().default(false),
+  mediaGridSectionCards: z.array(mediaGridCardSchema).optional(),
 });
 
 type PresentationFormValues = z.infer<typeof formSchema>;
@@ -87,15 +98,23 @@ export function PresentationForm({ isOpen, setIsOpen, onFormSubmit, presentation
       featureSectionCtaText: "",
       featureSectionCtaUrl: "",
       featureSectionCards: [],
+      mediaGridSectionEnabled: false,
+      mediaGridSectionCards: [],
     },
   });
   
   const heroEnabled = form.watch("heroEnabled");
   const featureSectionEnabled = form.watch("featureSectionEnabled");
+  const mediaGridSectionEnabled = form.watch("mediaGridSectionEnabled");
 
-  const { fields, append, remove } = useFieldArray({
+  const { fields: featureFields, append: appendFeature, remove: removeFeature } = useFieldArray({
     control: form.control,
     name: "featureSectionCards",
+  });
+
+  const { fields: mediaGridFields, append: appendMediaGrid, remove: removeMediaGrid } = useFieldArray({
+    control: form.control,
+    name: "mediaGridSectionCards",
   });
 
   useEffect(() => {
@@ -116,6 +135,8 @@ export function PresentationForm({ isOpen, setIsOpen, onFormSubmit, presentation
         featureSectionCtaText: presentation.featureSectionCtaText || "",
         featureSectionCtaUrl: presentation.featureSectionCtaUrl || "",
         featureSectionCards: presentation.featureSectionCards || [],
+        mediaGridSectionEnabled: presentation.mediaGridSectionEnabled || false,
+        mediaGridSectionCards: presentation.mediaGridSectionCards || [],
       });
     } else {
       form.reset({
@@ -134,6 +155,8 @@ export function PresentationForm({ isOpen, setIsOpen, onFormSubmit, presentation
         featureSectionCtaText: "",
         featureSectionCtaUrl: "",
         featureSectionCards: [],
+        mediaGridSectionEnabled: false,
+        mediaGridSectionCards: [],
       });
     }
   }, [isEditing, presentation, form]);
@@ -333,14 +356,14 @@ export function PresentationForm({ isOpen, setIsOpen, onFormSubmit, presentation
                     <Separator className="my-6" />
                     <div>
                         <h3 className="text-lg font-medium mb-2">Tarjetas de Características</h3>
-                        {fields.map((field, index) => (
+                        {featureFields.map((field, index) => (
                         <div key={field.id} className="p-4 border rounded-lg relative space-y-4 mb-4">
                             <Button
                             type="button"
                             variant="destructive"
                             size="icon"
                             className="absolute -top-3 -right-3 h-7 w-7"
-                            onClick={() => remove(index)}
+                            onClick={() => removeFeature(index)}
                             >
                             <Trash2 className="h-4 w-4" />
                             </Button>
@@ -383,15 +406,64 @@ export function PresentationForm({ isOpen, setIsOpen, onFormSubmit, presentation
                         type="button"
                         variant="outline"
                         className="mt-2"
-                        onClick={() => append({ icon: "", title: "", description: "" })}
+                        onClick={() => appendFeature({ icon: "", title: "", description: "" })}
                         >
                         <PlusCircle className="mr-2 h-4 w-4" />
-                        Añadir Tarjeta
+                        Añadir Tarjeta de Característica
                         </Button>
                     </div>
                 </div>
             )}
              <Separator />
+
+             <FormField
+                control={form.control}
+                name="mediaGridSectionEnabled"
+                render={({ field }) => (
+                    <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
+                    <div className="space-y-0.5">
+                        <FormLabel>Activar Sección de Tarjetas Multimedia</FormLabel>
+                        <FormDescription>
+                        Añade una cuadrícula de tarjetas con imagen, video, texto y CTA.
+                        </FormDescription>
+                    </div>
+                    <FormControl>
+                        <Switch
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                        />
+                    </FormControl>
+                    </FormItem>
+                )}
+             />
+
+             {mediaGridSectionEnabled && (
+                <div className="space-y-4 p-4 border rounded-md">
+                    <h3 className="text-lg font-medium mb-2">Tarjetas Multimedia</h3>
+                    {mediaGridFields.map((field, index) => (
+                        <div key={field.id} className="p-4 border rounded-lg relative space-y-4 mb-4">
+                            <Button type="button" variant="destructive" size="icon" className="absolute -top-3 -right-3 h-7 w-7" onClick={() => removeMediaGrid(index)}>
+                                <Trash2 className="h-4 w-4" />
+                            </Button>
+                            <FormField control={form.control} name={`mediaGridSectionCards.${index}.title`} render={({ field }) => (<FormItem><FormLabel>Título</FormLabel><FormControl><Input placeholder="Título de la tarjeta" {...field} /></FormControl><FormMessage /></FormItem>)} />
+                            <FormField control={form.control} name={`mediaGridSectionCards.${index}.description`} render={({ field }) => (<FormItem><FormLabel>Descripción</FormLabel><FormControl><Textarea placeholder="Descripción de la tarjeta" {...field} /></FormControl><FormMessage /></FormItem>)} />
+                            <FormField control={form.control} name={`mediaGridSectionCards.${index}.imageUrl`} render={({ field }) => (<FormItem><FormLabel>URL de Imagen</FormLabel><FormControl><Input placeholder="https://ejemplo.com/imagen.jpg" {...field} /></FormControl><FormMessage /></FormItem>)} />
+                            <FormField control={form.control} name={`mediaGridSectionCards.${index}.videoUrl`} render={({ field }) => (<FormItem><FormLabel>URL de Video (YouTube, Vimeo, etc.)</FormLabel><FormControl><Input placeholder="https://youtube.com/embed/..." {...field} /></FormControl><FormMessage /></FormItem>)} />
+                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                               <FormField control={form.control} name={`mediaGridSectionCards.${index}.ctaText`} render={({ field }) => (<FormItem><FormLabel>Texto del Botón CTA</FormLabel><FormControl><Input placeholder="Ej: Ver Proyecto" {...field} /></FormControl><FormMessage /></FormItem>)} />
+                               <FormField control={form.control} name={`mediaGridSectionCards.${index}.ctaUrl`} render={({ field }) => (<FormItem><FormLabel>URL del Botón CTA</FormLabel><FormControl><Input placeholder="https://ejemplo.com/proyecto" {...field} /></FormControl><FormMessage /></FormItem>)} />
+                            </div>
+                        </div>
+                    ))}
+                    <Button type="button" variant="outline" className="mt-2" onClick={() => appendMediaGrid({ title: "", description: "", imageUrl: "", videoUrl: "", ctaText: "", ctaUrl: "" })}>
+                        <PlusCircle className="mr-2 h-4 w-4" />
+                        Añadir Tarjeta Multimedia
+                    </Button>
+                </div>
+             )}
+
+
+            <Separator />
 
             <FormField
               control={form.control}

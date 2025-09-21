@@ -1,3 +1,4 @@
+
 'use server';
 
 import { db } from '@/lib/firebase';
@@ -8,6 +9,15 @@ export interface FeatureCard {
   icon?: string;
   title?: string;
   description?: string;
+}
+
+export interface MediaGridCard {
+  title?: string;
+  description?: string;
+  imageUrl?: string;
+  videoUrl?: string;
+  ctaText?: string;
+  ctaUrl?: string;
 }
 
 // Main Presentation Type
@@ -32,6 +42,9 @@ export interface Presentation {
   featureSectionCtaText?: string;
   featureSectionCtaUrl?: string;
   featureSectionCards?: FeatureCard[];
+  // Media Grid Section
+  mediaGridSectionEnabled?: boolean;
+  mediaGridSectionCards?: MediaGridCard[];
 }
 
 // Type for creating/updating a presentation
