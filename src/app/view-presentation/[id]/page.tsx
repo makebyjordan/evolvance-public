@@ -14,7 +14,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { FadeIn } from '@/components/fade-in';
 import { ContactModal } from '@/components/contact-modal';
-import type { Presentation } from '@/app/actions/presentations-actions';
+import type { Presentation, PricingCard } from '@/app/actions/presentations-actions';
 import { InteractiveCard } from '@/components/interactive-card';
 import { Card, CardHeader, CardTitle, CardContent, CardFooter, CardDescription } from '@/components/ui/card';
 
@@ -169,29 +169,30 @@ function MediaGridSection({ presentation }: { presentation: Presentation }) {
   );
 }
 
-function PricingHtmlSection({ htmlContent }: { htmlContent: string | undefined }) {
-  if (!htmlContent) return null;
+function PricingHtmlSection({ presentation }: { presentation: Presentation }) {
+  if (!presentation.pricingSectionEnabled || !presentation.pricingSectionCards || presentation.pricingSectionCards.length === 0) return null;
 
-  const adaptedHtml = htmlContent
+  const adaptHtml = (html: string) => {
+    if (!html) return '';
+    return html
       .replace(/class="/g, 'class="')
-       // Replace card-like divs with ShadCN Card component classes
       .replace(/border-slate-200 rounded-2xl/g, 'bg-card border border-border rounded-lg')
-      // Replace text colors
       .replace(/text-slate-900/g, 'text-foreground')
       .replace(/text-slate-500/g, 'text-muted-foreground')
       .replace(/text-slate-600/g, 'text-muted-foreground')
       .replace(/text-slate-800/g, 'text-secondary-foreground')
-      // Replace button-like links
       .replace(/bg-slate-100/g, 'bg-secondary')
       .replace(/hover:bg-slate-200/g, 'hover:bg-secondary/80')
-      // Replace icons
       .replace(/text-indigo-500/g, 'text-primary');
+  };
 
   return (
     <section className="py-20 sm:py-32">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <div dangerouslySetInnerHTML={{ __html: adaptedHtml }} />
+                {presentation.pricingSectionCards.map((card, index) => (
+                    <div key={index} dangerouslySetInnerHTML={{ __html: adaptHtml(card.htmlContent) }} />
+                ))}
             </div>
         </div>
     </section>
@@ -281,7 +282,7 @@ export default function ViewPresentationPage() {
             <HeroSection presentation={presentation} />
             <FeatureSection presentation={presentation} />
             <MediaGridSection presentation={presentation} />
-            <PricingHtmlSection htmlContent={presentation.htmlText} />
+            <PricingHtmlSection presentation={presentation} />
              <section className="bg-card">
                 <div className="container mx-auto px-6 py-20 text-center">
                     <FadeIn>

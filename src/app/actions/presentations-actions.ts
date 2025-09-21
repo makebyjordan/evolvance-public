@@ -20,12 +20,15 @@ export interface MediaGridCard {
   ctaUrl?: string;
 }
 
+export interface PricingCard {
+    htmlContent: string;
+}
+
 // Main Presentation Type
 export interface Presentation {
   id: string;
   title: string;
   code: string;
-  htmlText: string;
   createdAt: any;
   updatedAt: any;
   // Hero section fields
@@ -45,6 +48,9 @@ export interface Presentation {
   // Media Grid Section
   mediaGridSectionEnabled?: boolean;
   mediaGridSectionCards?: MediaGridCard[];
+  // Pricing Section
+  pricingSectionEnabled?: boolean;
+  pricingSectionCards?: PricingCard[];
 }
 
 // Type for creating/updating a presentation

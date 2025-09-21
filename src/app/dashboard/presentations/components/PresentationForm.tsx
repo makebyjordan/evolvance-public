@@ -46,11 +46,14 @@ const mediaGridCardSchema = z.object({
   ctaUrl: z.string().optional(),
 });
 
+const pricingCardSchema = z.object({
+  htmlContent: z.string().min(1, "El contenido HTML no puede estar vacío."),
+});
+
 
 const formSchema = z.object({
   title: z.string().min(2, { message: "El título es requerido." }),
   code: z.string().min(2, { message: "El código es requerido." }),
-  htmlText: z.string().optional(),
   heroEnabled: z.boolean().default(false),
   heroTitle: z.string().optional(),
   heroDescription: z.string().optional(),
@@ -65,6 +68,8 @@ const formSchema = z.object({
   featureSectionCards: z.array(featureCardSchema).optional(),
   mediaGridSectionEnabled: z.boolean().default(false),
   mediaGridSectionCards: z.array(mediaGridCardSchema).optional(),
+  pricingSectionEnabled: z.boolean().default(false),
+  pricingSectionCards: z.array(pricingCardSchema).optional(),
 });
 
 type PresentationFormValues = z.infer<typeof formSchema>;
@@ -85,7 +90,6 @@ export function PresentationForm({ isOpen, setIsOpen, onFormSubmit, presentation
     defaultValues: {
       title: "",
       code: "",
-      htmlText: "",
       heroEnabled: false,
       heroTitle: "",
       heroDescription: "",
@@ -100,12 +104,15 @@ export function PresentationForm({ isOpen, setIsOpen, onFormSubmit, presentation
       featureSectionCards: [],
       mediaGridSectionEnabled: false,
       mediaGridSectionCards: [],
+      pricingSectionEnabled: false,
+      pricingSectionCards: [],
     },
   });
   
   const heroEnabled = form.watch("heroEnabled");
   const featureSectionEnabled = form.watch("featureSectionEnabled");
   const mediaGridSectionEnabled = form.watch("mediaGridSectionEnabled");
+  const pricingSectionEnabled = form.watch("pricingSectionEnabled");
 
   const { fields: featureFields, append: appendFeature, remove: removeFeature } = useFieldArray({
     control: form.control,
@@ -117,12 +124,16 @@ export function PresentationForm({ isOpen, setIsOpen, onFormSubmit, presentation
     name: "mediaGridSectionCards",
   });
 
+  const { fields: pricingFields, append: appendPricing, remove: removePricing } = useFieldArray({
+    control: form.control,
+    name: "pricingSectionCards",
+  });
+
   useEffect(() => {
     if (isEditing && presentation) {
       form.reset({
         title: presentation.title,
         code: presentation.code,
-        htmlText: presentation.htmlText || "",
         heroEnabled: presentation.heroEnabled || false,
         heroTitle: presentation.heroTitle || "",
         heroDescription: presentation.heroDescription || "",
@@ -137,12 +148,13 @@ export function PresentationForm({ isOpen, setIsOpen, onFormSubmit, presentation
         featureSectionCards: presentation.featureSectionCards || [],
         mediaGridSectionEnabled: presentation.mediaGridSectionEnabled || false,
         mediaGridSectionCards: presentation.mediaGridSectionCards || [],
+        pricingSectionEnabled: presentation.pricingSectionEnabled || false,
+        pricingSectionCards: presentation.pricingSectionCards || [],
       });
     } else {
       form.reset({
         title: "",
         code: "",
-        htmlText: "",
         heroEnabled: false,
         heroTitle: "",
         heroDescription: "",
@@ -157,6 +169,8 @@ export function PresentationForm({ isOpen, setIsOpen, onFormSubmit, presentation
         featureSectionCards: [],
         mediaGridSectionEnabled: false,
         mediaGridSectionCards: [],
+        pricingSectionEnabled: false,
+        pricingSectionCards: [],
       });
     }
   }, [isEditing, presentation, form]);
@@ -464,23 +478,57 @@ export function PresentationForm({ isOpen, setIsOpen, onFormSubmit, presentation
 
 
             <Separator />
+            
+             <FormField
+                control={form.control}
+                name="pricingSectionEnabled"
+                render={({ field }) => (
+                    <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
+                    <div className="space-y-0.5">
+                        <FormLabel>Activar Sección de Precios/HTML</FormLabel>
+                        <FormDescription>
+                        Añade tarjetas personalizadas usando código HTML.
+                        </FormDescription>
+                    </div>
+                    <FormControl>
+                        <Switch
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                        />
+                    </FormControl>
+                    </FormItem>
+                )}
+             />
 
-            <FormField
-              control={form.control}
-              name="htmlText"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Contenido HTML (Precios, etc.)</FormLabel>
-                   <FormDescription>
-                    Pega aquí el código HTML para secciones personalizadas, como tablas de precios.
-                  </FormDescription>
-                  <FormControl>
-                    <Textarea rows={10} placeholder="Pega el código HTML aquí..." {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            {pricingSectionEnabled && (
+                <div className="space-y-4 p-4 border rounded-md">
+                    <h3 className="text-lg font-medium mb-2">Tarjetas HTML</h3>
+                     {pricingFields.map((field, index) => (
+                        <div key={field.id} className="p-4 border rounded-lg relative space-y-4 mb-4">
+                             <Button type="button" variant="destructive" size="icon" className="absolute -top-3 -right-3 h-7 w-7" onClick={() => removePricing(index)}>
+                                <Trash2 className="h-4 w-4" />
+                            </Button>
+                            <FormField
+                                control={form.control}
+                                name={`pricingSectionCards.${index}.htmlContent`}
+                                render={({ field }) => (
+                                    <FormItem>
+                                    <FormLabel>Código HTML de la Tarjeta {index + 1}</FormLabel>
+                                    <FormControl><Textarea rows={10} placeholder="Pega el código HTML de una tarjeta aquí" {...field} /></FormControl>
+                                    <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                        </div>
+                    ))}
+                     <Button type="button" variant="outline" className="mt-2" onClick={() => appendPricing({ htmlContent: "" })}>
+                        <PlusCircle className="mr-2 h-4 w-4" />
+                        Añadir Tarjeta HTML
+                    </Button>
+                </div>
+            )}
+
+
             <DialogFooter>
               <Button type="button" variant="outline" onClick={() => handleOpenChange(false)}>
                 Cancelar

@@ -59,7 +59,6 @@ export function PresentationsClientPage() {
             id: doc.id,
             title: data.title,
             code: data.code,
-            htmlText: data.htmlText,
             createdAt: (data.createdAt as Timestamp).toDate().toISOString(),
             updatedAt: (data.updatedAt as Timestamp).toDate().toISOString(),
             heroEnabled: data.heroEnabled,
@@ -76,6 +75,8 @@ export function PresentationsClientPage() {
             featureSectionCards: data.featureSectionCards,
             mediaGridSectionEnabled: data.mediaGridSectionEnabled,
             mediaGridSectionCards: data.mediaGridSectionCards,
+            pricingSectionEnabled: data.pricingSectionEnabled,
+            pricingSectionCards: data.pricingSectionCards,
           });
         });
         setPresentations(presentationsData);
