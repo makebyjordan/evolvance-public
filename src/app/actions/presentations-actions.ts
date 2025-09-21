@@ -11,6 +11,11 @@ export interface FeatureCard {
   description?: string;
 }
 
+export interface IconListItem {
+  icon?: string;
+  title?: string;
+}
+
 export interface MediaGridCard {
   title?: string;
   description?: string;
@@ -45,6 +50,10 @@ export interface Presentation {
   featureSectionCtaText?: string;
   featureSectionCtaUrl?: string;
   featureSectionCards?: FeatureCard[];
+  // Icon List Section
+  iconListSectionEnabled?: boolean;
+  iconListSectionDescription?: string;
+  iconListSectionItems?: IconListItem[];
   // Media Grid Section
   mediaGridSectionEnabled?: boolean;
   mediaGridSectionCards?: MediaGridCard[];

@@ -37,6 +37,11 @@ const featureCardSchema = z.object({
   description: z.string().optional(),
 });
 
+const iconListItemSchema = z.object({
+  icon: z.string().optional(),
+  title: z.string().optional(),
+});
+
 const mediaGridCardSchema = z.object({
   title: z.string().optional(),
   description: z.string().optional(),
@@ -66,6 +71,9 @@ const formSchema = z.object({
   featureSectionCtaText: z.string().optional(),
   featureSectionCtaUrl: z.string().optional(),
   featureSectionCards: z.array(featureCardSchema).optional(),
+  iconListSectionEnabled: z.boolean().default(false),
+  iconListSectionDescription: z.string().optional(),
+  iconListSectionItems: z.array(iconListItemSchema).optional(),
   mediaGridSectionEnabled: z.boolean().default(false),
   mediaGridSectionCards: z.array(mediaGridCardSchema).optional(),
   pricingSectionEnabled: z.boolean().default(false),
@@ -107,6 +115,9 @@ export function PresentationForm({ isOpen, setIsOpen, onFormSubmit, presentation
       featureSectionCtaText: "",
       featureSectionCtaUrl: "",
       featureSectionCards: [],
+      iconListSectionEnabled: false,
+      iconListSectionDescription: "",
+      iconListSectionItems: [],
       mediaGridSectionEnabled: false,
       mediaGridSectionCards: [],
       pricingSectionEnabled: false,
@@ -121,6 +132,7 @@ export function PresentationForm({ isOpen, setIsOpen, onFormSubmit, presentation
   
   const heroEnabled = form.watch("heroEnabled");
   const featureSectionEnabled = form.watch("featureSectionEnabled");
+  const iconListSectionEnabled = form.watch("iconListSectionEnabled");
   const mediaGridSectionEnabled = form.watch("mediaGridSectionEnabled");
   const pricingSectionEnabled = form.watch("pricingSectionEnabled");
   const fullWidthMediaSectionEnabled = form.watch("fullWidthMediaSectionEnabled");
@@ -128,6 +140,11 @@ export function PresentationForm({ isOpen, setIsOpen, onFormSubmit, presentation
   const { fields: featureFields, append: appendFeature, remove: removeFeature } = useFieldArray({
     control: form.control,
     name: "featureSectionCards",
+  });
+
+  const { fields: iconListFields, append: appendIconList, remove: removeIconList } = useFieldArray({
+    control: form.control,
+    name: "iconListSectionItems",
   });
 
   const { fields: mediaGridFields, append: appendMediaGrid, remove: removeMediaGrid } = useFieldArray({
@@ -157,6 +174,9 @@ export function PresentationForm({ isOpen, setIsOpen, onFormSubmit, presentation
         featureSectionCtaText: presentation.featureSectionCtaText || "",
         featureSectionCtaUrl: presentation.featureSectionCtaUrl || "",
         featureSectionCards: presentation.featureSectionCards || [],
+        iconListSectionEnabled: presentation.iconListSectionEnabled || false,
+        iconListSectionDescription: presentation.iconListSectionDescription || "",
+        iconListSectionItems: presentation.iconListSectionItems || [],
         mediaGridSectionEnabled: presentation.mediaGridSectionEnabled || false,
         mediaGridSectionCards: presentation.mediaGridSectionCards || [],
         pricingSectionEnabled: presentation.pricingSectionEnabled || false,
@@ -183,6 +203,9 @@ export function PresentationForm({ isOpen, setIsOpen, onFormSubmit, presentation
         featureSectionCtaText: "",
         featureSectionCtaUrl: "",
         featureSectionCards: [],
+        iconListSectionEnabled: false,
+        iconListSectionDescription: "",
+        iconListSectionItems: [],
         mediaGridSectionEnabled: false,
         mediaGridSectionCards: [],
         pricingSectionEnabled: false,
@@ -449,6 +472,56 @@ export function PresentationForm({ isOpen, setIsOpen, onFormSubmit, presentation
                     </div>
                 </div>
             )}
+             <Separator />
+
+            <FormField
+              control={form.control}
+              name="iconListSectionEnabled"
+              render={({ field }) => (
+                  <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
+                  <div className="space-y-0.5">
+                      <FormLabel>Activar Sección Lista de Iconos</FormLabel>
+                      <FormDescription>
+                        Muestra una lista de items con icono y título.
+                      </FormDescription>
+                  </div>
+                  <FormControl>
+                      <Switch
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                      />
+                  </FormControl>
+                  </FormItem>
+              )}
+            />
+
+            {iconListSectionEnabled && (
+               <div className="space-y-4 p-4 border rounded-md">
+                 <FormField
+                    control={form.control}
+                    name="iconListSectionDescription"
+                    render={({ field }) => (
+                      <FormItem><FormLabel>Descripción de la Sección</FormLabel><FormControl><Input placeholder="Ideal para todo tipo de..." {...field} /></FormControl><FormMessage /></FormItem>
+                    )}
+                  />
+                  <h3 className="text-lg font-medium pt-4">Items de la lista</h3>
+                  {iconListFields.map((field, index) => (
+                      <div key={field.id} className="p-4 border rounded-lg relative space-y-4 mb-4">
+                           <Button type="button" variant="destructive" size="icon" className="absolute -top-3 -right-3 h-7 w-7" onClick={() => removeIconList(index)}>
+                              <Trash2 className="h-4 w-4" />
+                          </Button>
+                           <FormField control={form.control} name={`iconListSectionItems.${index}.title`} render={({ field }) => (<FormItem><FormLabel>Título</FormLabel><FormControl><Input placeholder="Título del item" {...field} /></FormControl><FormMessage /></FormItem>)} />
+                          <FormField control={form.control} name={`iconListSectionItems.${index}.icon`} render={({ field }) => (<FormItem><FormLabel>Icono (SVG)</FormLabel><FormControl><Textarea rows={3} placeholder="Pega el código SVG del icono" {...field} /></FormControl><FormMessage /></FormItem>)} />
+                      </div>
+                  ))}
+                  <Button type="button" variant="outline" className="mt-2" onClick={() => appendIconList({ title: "", icon: "" })}>
+                      <PlusCircle className="mr-2 h-4 w-4" />
+                      Añadir Item
+                  </Button>
+               </div>
+            )}
+
+
              <Separator />
 
              <FormField

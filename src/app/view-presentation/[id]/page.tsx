@@ -14,7 +14,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { FadeIn } from '@/components/fade-in';
 import { ContactModal } from '@/components/contact-modal';
-import type { Presentation, PricingCard } from '@/app/actions/presentations-actions';
+import type { Presentation } from '@/app/actions/presentations-actions';
 import { InteractiveCard } from '@/components/interactive-card';
 import { Card, CardHeader, CardTitle, CardContent, CardFooter, CardDescription } from '@/components/ui/card';
 
@@ -116,6 +116,31 @@ function FeatureSection({ presentation }: { presentation: Presentation }) {
         </section>
     );
 }
+
+function IconListSection({ presentation }: { presentation: Presentation }) {
+  if (!presentation.iconListSectionEnabled || !presentation.iconListSectionItems || presentation.iconListSectionItems.length === 0) return null;
+
+  return (
+    <section className="py-20 sm:py-32 bg-card/30">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+        <FadeIn>
+          {presentation.iconListSectionDescription && (
+            <p className="text-center text-muted-foreground mb-12">{presentation.iconListSectionDescription}</p>
+          )}
+          <div className="flex flex-wrap items-center justify-center gap-x-10 gap-y-6">
+            {presentation.iconListSectionItems.map((item, index) => (
+              <div key={index} className="flex items-center gap-3 text-muted-foreground">
+                <SvgRenderer svgString={item.icon || ''} className="w-6 h-6" />
+                <span className="font-medium">{item.title}</span>
+              </div>
+            ))}
+          </div>
+        </FadeIn>
+      </div>
+    </section>
+  );
+}
+
 
 function MediaGridSection({ presentation }: { presentation: Presentation }) {
   if (!presentation.mediaGridSectionEnabled || !presentation.mediaGridSectionCards || presentation.mediaGridSectionCards.length === 0) return null;
@@ -321,6 +346,7 @@ export default function ViewPresentationPage() {
         <main>
             <HeroSection presentation={presentation} />
             <FeatureSection presentation={presentation} />
+            <IconListSection presentation={presentation} />
             <MediaGridSection presentation={presentation} />
             <PricingHtmlSection presentation={presentation} />
             <FullWidthMediaSection presentation={presentation} />
