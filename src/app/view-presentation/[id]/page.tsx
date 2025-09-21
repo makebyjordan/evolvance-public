@@ -17,6 +17,9 @@ import { ContactModal } from '@/components/contact-modal';
 import type { Presentation } from '@/app/actions/presentations-actions';
 import { InteractiveCard } from '@/components/interactive-card';
 import { Card, CardHeader, CardTitle, CardContent, CardFooter, CardDescription } from '@/components/ui/card';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 
 // Helper component to safely render SVG
 function SvgRenderer({ svgString, className }: { svgString: string, className: string }) {
@@ -264,6 +267,37 @@ function FullWidthMediaSection({ presentation }: { presentation: Presentation })
   )
 }
 
+function FaqSection({ presentation }: { presentation: Presentation }) {
+  if (!presentation.faqSectionEnabled || !presentation.faqSectionItems || presentation.faqSectionItems.length === 0) return null;
+
+  return (
+    <section className="py-20 sm:py-32">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-3xl">
+        <FadeIn>
+          <h2 className="text-3xl md:text-4xl font-extrabold text-center text-foreground">
+            Preguntas Frecuentes
+          </h2>
+        </FadeIn>
+        <FadeIn delay={0.2}>
+          <div className="mt-12 bg-card p-6 rounded-lg">
+            <Accordion type="single" collapsible className="w-full">
+              {presentation.faqSectionItems.map((item, index) => (
+                <AccordionItem value={`item-${index}`} key={index}>
+                  <AccordionTrigger className="text-left font-bold text-lg">{item.question}</AccordionTrigger>
+                  <AccordionContent className="text-muted-foreground text-base">
+                    {item.answer}
+                  </AccordionContent>
+                </AccordionItem>
+              ))}
+            </Accordion>
+          </div>
+        </FadeIn>
+      </div>
+    </section>
+  );
+}
+
+
 export default function ViewPresentationPage() {
   const params = useParams();
   const id = Array.isArray(params.id) ? params.id[0] : params.id;
@@ -345,11 +379,23 @@ export default function ViewPresentationPage() {
         <Header />
         <main>
             <HeroSection presentation={presentation} />
+            {presentation.htmlText && (
+                <section className="py-20 sm:py-32">
+                    <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+                        <article className="prose dark:prose-invert prose-lg max-w-4xl mx-auto">
+                            <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                                {presentation.htmlText}
+                            </ReactMarkdown>
+                        </article>
+                    </div>
+                </section>
+            )}
             <FeatureSection presentation={presentation} />
             <IconListSection presentation={presentation} />
             <MediaGridSection presentation={presentation} />
             <PricingHtmlSection presentation={presentation} />
             <FullWidthMediaSection presentation={presentation} />
+            <FaqSection presentation={presentation} />
              <section className="bg-card">
                 <div className="container mx-auto px-6 py-20 text-center">
                     <FadeIn>

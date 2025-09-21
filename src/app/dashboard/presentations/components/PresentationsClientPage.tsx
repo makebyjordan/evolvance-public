@@ -59,6 +59,7 @@ export function PresentationsClientPage() {
             id: doc.id,
             title: data.title,
             code: data.code,
+            htmlText: data.htmlText,
             createdAt: (data.createdAt as Timestamp).toDate().toISOString(),
             updatedAt: (data.updatedAt as Timestamp).toDate().toISOString(),
             // --- ALL fields should be loaded here ---
@@ -86,6 +87,8 @@ export function PresentationsClientPage() {
             fullWidthMediaSectionDescription: data.fullWidthMediaSectionDescription,
             fullWidthMediaSectionImageUrl: data.fullWidthMediaSectionImageUrl,
             fullWidthMediaSectionVideoUrl: data.fullWidthMediaSectionVideoUrl,
+            faqSectionEnabled: data.faqSectionEnabled,
+            faqSectionItems: data.faqSectionItems,
           });
         });
         setPresentations(presentationsData);

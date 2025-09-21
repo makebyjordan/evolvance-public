@@ -29,6 +29,11 @@ export interface PricingCard {
     htmlContent: string;
 }
 
+export interface FaqItem {
+  question: string;
+  answer: string;
+}
+
 // Main Presentation Type
 export interface Presentation {
   id: string;
@@ -36,6 +41,7 @@ export interface Presentation {
   code: string;
   createdAt: any;
   updatedAt: any;
+  htmlText?: string;
   // Hero section fields
   heroEnabled?: boolean;
   heroTitle?: string;
@@ -66,6 +72,9 @@ export interface Presentation {
   fullWidthMediaSectionDescription?: string;
   fullWidthMediaSectionImageUrl?: string;
   fullWidthMediaSectionVideoUrl?: string;
+  // FAQ Section
+  faqSectionEnabled?: boolean;
+  faqSectionItems?: FaqItem[];
 }
 
 // Type for creating/updating a presentation

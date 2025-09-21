@@ -55,10 +55,15 @@ const pricingCardSchema = z.object({
   htmlContent: z.string().min(1, "El contenido HTML no puede estar vacío."),
 });
 
+const faqItemSchema = z.object({
+  question: z.string().min(1, "La pregunta no puede estar vacía."),
+  answer: z.string().min(1, "La respuesta no puede estar vacía."),
+});
 
 const formSchema = z.object({
   title: z.string().min(2, { message: "El título es requerido." }),
   code: z.string().min(2, { message: "El código es requerido." }),
+  htmlText: z.string().optional(),
   heroEnabled: z.boolean().default(false),
   heroTitle: z.string().optional(),
   heroDescription: z.string().optional(),
@@ -83,6 +88,8 @@ const formSchema = z.object({
   fullWidthMediaSectionDescription: z.string().optional(),
   fullWidthMediaSectionImageUrl: z.string().optional(),
   fullWidthMediaSectionVideoUrl: z.string().optional(),
+  faqSectionEnabled: z.boolean().default(false),
+  faqSectionItems: z.array(faqItemSchema).optional(),
 });
 
 type PresentationFormValues = z.infer<typeof formSchema>;
@@ -103,6 +110,7 @@ export function PresentationForm({ isOpen, setIsOpen, onFormSubmit, presentation
     defaultValues: {
       title: "",
       code: "",
+      htmlText: "",
       heroEnabled: false,
       heroTitle: "",
       heroDescription: "",
@@ -127,6 +135,8 @@ export function PresentationForm({ isOpen, setIsOpen, onFormSubmit, presentation
       fullWidthMediaSectionDescription: "",
       fullWidthMediaSectionImageUrl: "",
       fullWidthMediaSectionVideoUrl: "",
+      faqSectionEnabled: false,
+      faqSectionItems: [],
     },
   });
   
@@ -136,6 +146,7 @@ export function PresentationForm({ isOpen, setIsOpen, onFormSubmit, presentation
   const mediaGridSectionEnabled = form.watch("mediaGridSectionEnabled");
   const pricingSectionEnabled = form.watch("pricingSectionEnabled");
   const fullWidthMediaSectionEnabled = form.watch("fullWidthMediaSectionEnabled");
+  const faqSectionEnabled = form.watch("faqSectionEnabled");
 
   const { fields: featureFields, append: appendFeature, remove: removeFeature } = useFieldArray({
     control: form.control,
@@ -157,11 +168,17 @@ export function PresentationForm({ isOpen, setIsOpen, onFormSubmit, presentation
     name: "pricingSectionCards",
   });
 
+  const { fields: faqFields, append: appendFaq, remove: removeFaq } = useFieldArray({
+    control: form.control,
+    name: "faqSectionItems",
+  });
+
   useEffect(() => {
     if (isEditing && presentation) {
       form.reset({
         title: presentation.title,
         code: presentation.code,
+        htmlText: presentation.htmlText || "",
         heroEnabled: presentation.heroEnabled || false,
         heroTitle: presentation.heroTitle || "",
         heroDescription: presentation.heroDescription || "",
@@ -186,36 +203,11 @@ export function PresentationForm({ isOpen, setIsOpen, onFormSubmit, presentation
         fullWidthMediaSectionDescription: presentation.fullWidthMediaSectionDescription || "",
         fullWidthMediaSectionImageUrl: presentation.fullWidthMediaSectionImageUrl || "",
         fullWidthMediaSectionVideoUrl: presentation.fullWidthMediaSectionVideoUrl || "",
+        faqSectionEnabled: presentation.faqSectionEnabled || false,
+        faqSectionItems: presentation.faqSectionItems || [],
       });
     } else {
-      form.reset({
-        title: "",
-        code: "",
-        heroEnabled: false,
-        heroTitle: "",
-        heroDescription: "",
-        heroCtaText: "",
-        heroCtaUrl: "",
-        heroImageUrl: "",
-        featureSectionEnabled: false,
-        featureSectionTitle: "",
-        featureSectionDescription: "",
-        featureSectionCtaText: "",
-        featureSectionCtaUrl: "",
-        featureSectionCards: [],
-        iconListSectionEnabled: false,
-        iconListSectionDescription: "",
-        iconListSectionItems: [],
-        mediaGridSectionEnabled: false,
-        mediaGridSectionCards: [],
-        pricingSectionEnabled: false,
-        pricingSectionCards: [],
-        fullWidthMediaSectionEnabled: false,
-        fullWidthMediaSectionTitle: "",
-        fullWidthMediaSectionDescription: "",
-        fullWidthMediaSectionImageUrl: "",
-        fullWidthMediaSectionVideoUrl: "",
-      });
+      form.reset();
     }
   }, [isEditing, presentation, form]);
 
@@ -290,6 +282,20 @@ export function PresentationForm({ isOpen, setIsOpen, onFormSubmit, presentation
                 )}
                 />
             </div>
+
+            <FormField
+              control={form.control}
+              name="htmlText"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Contenido HTML Principal</FormLabel>
+                  <FormControl>
+                    <Textarea rows={10} placeholder="Escribe el contenido principal de la presentación aquí. Puedes usar HTML." {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
             
             <Separator />
             
@@ -653,6 +659,67 @@ export function PresentationForm({ isOpen, setIsOpen, onFormSubmit, presentation
                 </div>
             )}
 
+            <Separator />
+
+            <FormField
+              control={form.control}
+              name="faqSectionEnabled"
+              render={({ field }) => (
+                <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
+                  <div className="space-y-0.5">
+                    <FormLabel>Activar Sección de Preguntas Frecuentes</FormLabel>
+                    <FormDescription>
+                      Añade una sección de preguntas y respuestas en formato acordeón.
+                    </FormDescription>
+                  </div>
+                  <FormControl>
+                    <Switch
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+
+            {faqSectionEnabled && (
+              <div className="space-y-4 p-4 border rounded-md">
+                <h3 className="text-lg font-medium mb-2">Preguntas y Respuestas</h3>
+                {faqFields.map((field, index) => (
+                  <div key={field.id} className="p-4 border rounded-lg relative space-y-4 mb-4">
+                    <Button type="button" variant="destructive" size="icon" className="absolute -top-3 -right-3 h-7 w-7" onClick={() => removeFaq(index)}>
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                    <FormField
+                      control={form.control}
+                      name={`faqSectionItems.${index}.question`}
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Pregunta</FormLabel>
+                          <FormControl><Input placeholder="Escribe la pregunta" {...field} /></FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name={`faqSectionItems.${index}.answer`}
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Respuesta</FormLabel>
+                          <FormControl><Textarea placeholder="Escribe la respuesta" {...field} /></FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                ))}
+                <Button type="button" variant="outline" className="mt-2" onClick={() => appendFaq({ question: "", answer: "" })}>
+                  <PlusCircle className="mr-2 h-4 w-4" />
+                  Añadir Pregunta
+                </Button>
+              </div>
+            )}
 
             <DialogFooter>
               <Button type="button" variant="outline" onClick={() => handleOpenChange(false)}>
