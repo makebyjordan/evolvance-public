@@ -70,6 +70,11 @@ const formSchema = z.object({
   mediaGridSectionCards: z.array(mediaGridCardSchema).optional(),
   pricingSectionEnabled: z.boolean().default(false),
   pricingSectionCards: z.array(pricingCardSchema).optional(),
+  fullWidthMediaSectionEnabled: z.boolean().default(false),
+  fullWidthMediaSectionTitle: z.string().optional(),
+  fullWidthMediaSectionDescription: z.string().optional(),
+  fullWidthMediaSectionImageUrl: z.string().optional(),
+  fullWidthMediaSectionVideoUrl: z.string().optional(),
 });
 
 type PresentationFormValues = z.infer<typeof formSchema>;
@@ -106,6 +111,11 @@ export function PresentationForm({ isOpen, setIsOpen, onFormSubmit, presentation
       mediaGridSectionCards: [],
       pricingSectionEnabled: false,
       pricingSectionCards: [],
+      fullWidthMediaSectionEnabled: false,
+      fullWidthMediaSectionTitle: "",
+      fullWidthMediaSectionDescription: "",
+      fullWidthMediaSectionImageUrl: "",
+      fullWidthMediaSectionVideoUrl: "",
     },
   });
   
@@ -113,6 +123,7 @@ export function PresentationForm({ isOpen, setIsOpen, onFormSubmit, presentation
   const featureSectionEnabled = form.watch("featureSectionEnabled");
   const mediaGridSectionEnabled = form.watch("mediaGridSectionEnabled");
   const pricingSectionEnabled = form.watch("pricingSectionEnabled");
+  const fullWidthMediaSectionEnabled = form.watch("fullWidthMediaSectionEnabled");
 
   const { fields: featureFields, append: appendFeature, remove: removeFeature } = useFieldArray({
     control: form.control,
@@ -150,6 +161,11 @@ export function PresentationForm({ isOpen, setIsOpen, onFormSubmit, presentation
         mediaGridSectionCards: presentation.mediaGridSectionCards || [],
         pricingSectionEnabled: presentation.pricingSectionEnabled || false,
         pricingSectionCards: presentation.pricingSectionCards || [],
+        fullWidthMediaSectionEnabled: presentation.fullWidthMediaSectionEnabled || false,
+        fullWidthMediaSectionTitle: presentation.fullWidthMediaSectionTitle || "",
+        fullWidthMediaSectionDescription: presentation.fullWidthMediaSectionDescription || "",
+        fullWidthMediaSectionImageUrl: presentation.fullWidthMediaSectionImageUrl || "",
+        fullWidthMediaSectionVideoUrl: presentation.fullWidthMediaSectionVideoUrl || "",
       });
     } else {
       form.reset({
@@ -171,6 +187,11 @@ export function PresentationForm({ isOpen, setIsOpen, onFormSubmit, presentation
         mediaGridSectionCards: [],
         pricingSectionEnabled: false,
         pricingSectionCards: [],
+        fullWidthMediaSectionEnabled: false,
+        fullWidthMediaSectionTitle: "",
+        fullWidthMediaSectionDescription: "",
+        fullWidthMediaSectionImageUrl: "",
+        fullWidthMediaSectionVideoUrl: "",
       });
     }
   }, [isEditing, presentation, form]);
@@ -525,6 +546,37 @@ export function PresentationForm({ isOpen, setIsOpen, onFormSubmit, presentation
                         <PlusCircle className="mr-2 h-4 w-4" />
                         Añadir Tarjeta HTML
                     </Button>
+                </div>
+            )}
+            
+            <Separator />
+            
+             <FormField
+                control={form.control}
+                name="fullWidthMediaSectionEnabled"
+                render={({ field }) => (
+                    <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
+                    <div className="space-y-0.5">
+                        <FormLabel>Activar Sección de Contenido Destacado</FormLabel>
+                        <FormDescription>
+                        Añade una sección a pantalla completa con imagen o video.
+                        </FormDescription>
+                    </div>
+                    <FormControl>
+                        <Switch
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                        />
+                    </FormControl>
+                    </FormItem>
+                )}
+             />
+             {fullWidthMediaSectionEnabled && (
+                <div className="space-y-4 p-4 border rounded-md">
+                    <FormField control={form.control} name="fullWidthMediaSectionTitle" render={({ field }) => (<FormItem><FormLabel>Título</FormLabel><FormControl><Input placeholder="Título de la sección" {...field} /></FormControl><FormMessage /></FormItem>)} />
+                    <FormField control={form.control} name="fullWidthMediaSectionDescription" render={({ field }) => (<FormItem><FormLabel>Descripción</FormLabel><FormControl><Textarea placeholder="Descripción de la sección" {...field} /></FormControl><FormMessage /></FormItem>)} />
+                    <FormField control={form.control} name="fullWidthMediaSectionImageUrl" render={({ field }) => (<FormItem><FormLabel>URL de Imagen</FormLabel><FormControl><Input placeholder="https://ejemplo.com/imagen.jpg" {...field} /></FormControl><FormMessage /></FormItem>)} />
+                    <FormField control={form.control} name="fullWidthMediaSectionVideoUrl" render={({ field }) => (<FormItem><FormLabel>URL de Video (MP4, WebM)</FormLabel><FormControl><Input placeholder="https://ejemplo.com/video.mp4" {...field} /></FormControl><FormMessage /></FormItem>)} />
                 </div>
             )}
 

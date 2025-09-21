@@ -51,6 +51,12 @@ export interface Presentation {
   // Pricing Section
   pricingSectionEnabled?: boolean;
   pricingSectionCards?: PricingCard[];
+  // Full Width Media Section
+  fullWidthMediaSectionEnabled?: boolean;
+  fullWidthMediaSectionTitle?: string;
+  fullWidthMediaSectionDescription?: string;
+  fullWidthMediaSectionImageUrl?: string;
+  fullWidthMediaSectionVideoUrl?: string;
 }
 
 // Type for creating/updating a presentation

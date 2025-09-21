@@ -199,6 +199,46 @@ function PricingHtmlSection({ presentation }: { presentation: Presentation }) {
   );
 }
 
+function FullWidthMediaSection({ presentation }: { presentation: Presentation }) {
+  if (!presentation.fullWidthMediaSectionEnabled) return null;
+
+  const hasMedia = presentation.fullWidthMediaSectionImageUrl || presentation.fullWidthMediaSectionVideoUrl;
+
+  return (
+    <section className="relative h-screen flex items-center justify-center text-center">
+      {presentation.fullWidthMediaSectionVideoUrl && (
+        <video
+          src={presentation.fullWidthMediaSectionVideoUrl}
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="absolute inset-0 w-full h-full object-cover -z-10"
+        />
+      )}
+      {presentation.fullWidthMediaSectionImageUrl && !presentation.fullWidthMediaSectionVideoUrl && (
+        <Image
+          src={presentation.fullWidthMediaSectionImageUrl}
+          alt={presentation.fullWidthMediaSectionTitle || 'Fondo de sección'}
+          fill
+          className="object-cover"
+        />
+      )}
+       <div className="absolute inset-0 bg-black/60" />
+       <div className="container mx-auto px-6 py-20 relative z-10">
+         <FadeIn>
+           {presentation.fullWidthMediaSectionTitle && (
+              <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4">{presentation.fullWidthMediaSectionTitle}</h2>
+           )}
+           {presentation.fullWidthMediaSectionDescription && (
+              <p className="text-lg md:text-xl max-w-3xl mx-auto text-primary-foreground/80">{presentation.fullWidthMediaSectionDescription}</p>
+           )}
+         </FadeIn>
+       </div>
+    </section>
+  )
+}
+
 export default function ViewPresentationPage() {
   const params = useParams();
   const id = Array.isArray(params.id) ? params.id[0] : params.id;
@@ -283,6 +323,7 @@ export default function ViewPresentationPage() {
             <FeatureSection presentation={presentation} />
             <MediaGridSection presentation={presentation} />
             <PricingHtmlSection presentation={presentation} />
+            <FullWidthMediaSection presentation={presentation} />
              <section className="bg-card">
                 <div className="container mx-auto px-6 py-20 text-center">
                     <FadeIn>

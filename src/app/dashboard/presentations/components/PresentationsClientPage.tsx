@@ -61,6 +61,7 @@ export function PresentationsClientPage() {
             code: data.code,
             createdAt: (data.createdAt as Timestamp).toDate().toISOString(),
             updatedAt: (data.updatedAt as Timestamp).toDate().toISOString(),
+            // --- ALL fields should be loaded here ---
             heroEnabled: data.heroEnabled,
             heroTitle: data.heroTitle,
             heroDescription: data.heroDescription,
@@ -77,6 +78,11 @@ export function PresentationsClientPage() {
             mediaGridSectionCards: data.mediaGridSectionCards,
             pricingSectionEnabled: data.pricingSectionEnabled,
             pricingSectionCards: data.pricingSectionCards,
+            fullWidthMediaSectionEnabled: data.fullWidthMediaSectionEnabled,
+            fullWidthMediaSectionTitle: data.fullWidthMediaSectionTitle,
+            fullWidthMediaSectionDescription: data.fullWidthMediaSectionDescription,
+            fullWidthMediaSectionImageUrl: data.fullWidthMediaSectionImageUrl,
+            fullWidthMediaSectionVideoUrl: data.fullWidthMediaSectionVideoUrl,
           });
         });
         setPresentations(presentationsData);
