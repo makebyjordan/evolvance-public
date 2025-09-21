@@ -33,7 +33,7 @@ import { Label } from "@/components/ui/label";
 const formSchema = z.object({
   title: z.string().min(2, { message: "El título es requerido." }),
   code: z.string().min(2, { message: "El código es requerido." }),
-  htmlText: z.string().min(10, { message: "El contenido es requerido." }),
+  htmlText: z.string().optional(),
   heroEnabled: z.boolean().default(false),
   heroTitle: z.string().optional(),
   heroDescription: z.string().optional(),
