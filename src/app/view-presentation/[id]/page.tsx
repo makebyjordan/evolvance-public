@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useEffect } from 'react';
@@ -16,7 +15,7 @@ import { FadeIn } from '@/components/fade-in';
 import { ContactModal } from '@/components/contact-modal';
 import type { Presentation } from '@/app/actions/presentations-actions';
 import { InteractiveCard } from '@/components/interactive-card';
-import { Card, CardHeader, CardTitle, CardContent, CardFooter } from '@/components/ui/card';
+import { Card, CardHeader, CardTitle, CardContent, CardFooter, CardDescription } from '@/components/ui/card';
 
 // Helper component to safely render SVG
 function SvgRenderer({ svgString, className }: { svgString: string, className: string }) {
