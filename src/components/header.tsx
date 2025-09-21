@@ -7,10 +7,22 @@ import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { ContactModal } from '@/components/contact-modal';
 import { cn } from '@/lib/utils';
-import { Menu } from 'lucide-react';
+import { Menu, ChevronDown } from 'lucide-react';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import type { SiteConfigContent } from '@/app/actions/web-content-actions';
 import { getWebContent } from '@/app/actions/web-content-actions';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion"
 
 
 function SvgRenderer({ svgString, className }: { svgString: string, className?: string }) {
@@ -43,14 +55,32 @@ export default function Header() {
   }, []);
 
   const navLinks = [
-    { href: '/#marketing-ai', label: 'IA & Ads' },
-    { href: '/services', label: 'Servicios' },
-    { href: '/#timeline', label: 'Trayectoria' },
+    { 
+      label: 'Servicios',
+      isDropdown: true,
+      items: [
+        { href: '/services', label: 'Todos los Servicios' },
+        { href: '/#marketing-ai', label: 'IA & Ads' },
+      ]
+    },
+     { 
+      label: 'Trayectoria',
+      isDropdown: true,
+      items: [
+        { href: '/#timeline', label: 'Nuestra Trayectoria' },
+        { href: '/#team', label: 'Equipo' },
+      ]
+    },
     { href: '/#philosophy', label: 'Filosofía' },
-    { href: '/#team', label: 'Equipo' },
     { href: '/#faq', label: 'FAQ' },
-    { href: '/clients-login', label: 'Clientes' },
-    { href: '/dashboard', label: 'Intranet' },
+    { 
+      label: 'Intranet',
+      isDropdown: true,
+      items: [
+        { href: '/dashboard', label: 'Dashboard' },
+        { href: '/clients-login', label: 'Portal Clientes' },
+      ]
+    },
   ];
 
   return (
@@ -70,13 +100,28 @@ export default function Header() {
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-6">
             {navLinks.map((link) => (
-              <Link
-                key={link.label}
-                href={link.href}
-                className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
-              >
-                {link.label}
-              </Link>
+              link.isDropdown ? (
+                <DropdownMenu key={link.label}>
+                  <DropdownMenuTrigger className="flex items-center gap-1 text-sm font-medium text-muted-foreground hover:text-primary transition-colors outline-none">
+                    {link.label} <ChevronDown className="h-4 w-4" />
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent>
+                    {link.items?.map(item => (
+                       <DropdownMenuItem key={item.label} asChild>
+                         <Link href={item.href}>{item.label}</Link>
+                       </DropdownMenuItem>
+                    ))}
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              ) : (
+                <Link
+                  key={link.label}
+                  href={link.href!}
+                  className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
+                >
+                  {link.label}
+                </Link>
+              )
             ))}
           </nav>
           
@@ -105,18 +150,43 @@ export default function Header() {
                     </Link>
                   </SheetTitle>
                 </SheetHeader>
-                <div className="mt-8 flex flex-col gap-4">
-                  {navLinks.map((link) => (
-                    <Link
-                      key={link.label}
-                      href={link.href}
-                      className="text-lg font-medium text-muted-foreground hover:text-primary transition-colors"
-                      onClick={() => setIsMobileMenuOpen(false)}
-                    >
-                      {link.label}
-                    </Link>
-                  ))}
-                   <div className="pt-4">
+                <div className="mt-8 flex flex-col gap-1">
+                   <Accordion type="multiple" className="w-full">
+                    {navLinks.map((link) => (
+                        link.isDropdown ? (
+                            <AccordionItem value={link.label} key={link.label} className="border-none">
+                                <AccordionTrigger className="py-3 text-lg font-medium text-muted-foreground hover:text-primary hover:no-underline">
+                                    {link.label}
+                                </AccordionTrigger>
+                                <AccordionContent className="pl-4">
+                                    <div className="flex flex-col gap-3">
+                                        {link.items?.map(item => (
+                                            <Link
+                                                key={item.label}
+                                                href={item.href}
+                                                className="text-lg font-medium text-muted-foreground/80 hover:text-primary transition-colors"
+                                                onClick={() => setIsMobileMenuOpen(false)}
+                                                >
+                                                {item.label}
+                                            </Link>
+                                        ))}
+                                    </div>
+                                </AccordionContent>
+                            </AccordionItem>
+                        ) : (
+                             <Link
+                                key={link.label}
+                                href={link.href!}
+                                className="block py-3 text-lg font-medium text-muted-foreground hover:text-primary transition-colors"
+                                onClick={() => setIsMobileMenuOpen(false)}
+                                >
+                                {link.label}
+                            </Link>
+                        )
+                    ))}
+                  </Accordion>
+
+                   <div className="pt-8">
                      <ContactModal>
                         <Button className="w-full">
                             Agendar Reunión
