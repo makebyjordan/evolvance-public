@@ -388,7 +388,6 @@ export function PresentationForm({ isOpen, setIsOpen, onFormSubmit, presentation
                                 <FormMessage />
                                 </FormItem>
                             )}
-                            />
                              <FormField
                             control={form.control}
                             name={`featureSectionCards.${index}.description`}
@@ -470,9 +469,12 @@ export function PresentationForm({ isOpen, setIsOpen, onFormSubmit, presentation
               name="htmlText"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Contenido HTML Principal (Opcional)</FormLabel>
+                  <FormLabel>Contenido HTML (Precios, etc.)</FormLabel>
+                   <FormDescription>
+                    Pega aquí el código HTML para secciones personalizadas, como tablas de precios.
+                  </FormDescription>
                   <FormControl>
-                    <Textarea rows={10} placeholder="Escribe el contenido de la presentación aquí. Puedes usar HTML." {...field} />
+                    <Textarea rows={10} placeholder="Pega el código HTML aquí..." {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -492,3 +494,5 @@ export function PresentationForm({ isOpen, setIsOpen, onFormSubmit, presentation
     </Dialog>
   );
 }
+
+    

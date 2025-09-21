@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useEffect } from 'react';
@@ -168,6 +169,35 @@ function MediaGridSection({ presentation }: { presentation: Presentation }) {
   );
 }
 
+function PricingHtmlSection({ htmlContent }: { htmlContent: string | undefined }) {
+  if (!htmlContent) return null;
+
+  const adaptedHtml = htmlContent
+      .replace(/class="/g, 'class="')
+       // Replace card-like divs with ShadCN Card component classes
+      .replace(/border-slate-200 rounded-2xl/g, 'bg-card border border-border rounded-lg')
+      // Replace text colors
+      .replace(/text-slate-900/g, 'text-foreground')
+      .replace(/text-slate-500/g, 'text-muted-foreground')
+      .replace(/text-slate-600/g, 'text-muted-foreground')
+      .replace(/text-slate-800/g, 'text-secondary-foreground')
+      // Replace button-like links
+      .replace(/bg-slate-100/g, 'bg-secondary')
+      .replace(/hover:bg-slate-200/g, 'hover:bg-secondary/80')
+      // Replace icons
+      .replace(/text-indigo-500/g, 'text-primary');
+
+  return (
+    <section className="py-20 sm:py-32">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div dangerouslySetInnerHTML={{ __html: adaptedHtml }} />
+            </div>
+        </div>
+    </section>
+  );
+}
+
 export default function ViewPresentationPage() {
   const params = useParams();
   const id = Array.isArray(params.id) ? params.id[0] : params.id;
@@ -251,11 +281,7 @@ export default function ViewPresentationPage() {
             <HeroSection presentation={presentation} />
             <FeatureSection presentation={presentation} />
             <MediaGridSection presentation={presentation} />
-            {presentation.htmlText && (
-                <article className="prose dark:prose-invert prose-lg max-w-4xl mx-auto py-16 px-4"
-                    dangerouslySetInnerHTML={{ __html: presentation.htmlText }}
-                />
-            )}
+            <PricingHtmlSection htmlContent={presentation.htmlText} />
              <section className="bg-card">
                 <div className="container mx-auto px-6 py-20 text-center">
                     <FadeIn>
@@ -274,3 +300,5 @@ export default function ViewPresentationPage() {
     </div>
   );
 }
+
+    
