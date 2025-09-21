@@ -70,10 +70,16 @@ export default function Header() {
         { href: '/#timeline', label: 'Nuestra Trayectoria' },
         { href: '/#philosophy', label: 'Filosofía' },
         { href: '/#team', label: 'Equipo' },
-        { href: '/dashboard', label: 'Dashboard' },
       ]
     },
     { href: '/#faq', label: 'FAQ' },
+    {
+      label: 'Intranet',
+      isDropdown: true,
+      items: [
+        { href: '/dashboard', label: 'Dashboard' },
+      ]
+    }
   ];
 
   return (
