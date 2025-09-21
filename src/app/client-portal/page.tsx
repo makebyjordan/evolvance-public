@@ -4,7 +4,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { FileText, MessageSquare, Briefcase } from 'lucide-react';
+import { FileText, MessageSquare, Briefcase, Presentation as PresentationIcon } from 'lucide-react';
 import { useState } from "react";
 import { ContactForm } from "@/components/contact-form";
 
@@ -19,7 +19,7 @@ export default function ClientPortalPage() {
               <p className="text-muted-foreground mt-2">Bienvenido a tu área privada. Aquí puedes gestionar tus proyectos.</p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl w-full">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl w-full">
               <div className="card-animated-border">
                 <Card className="h-full">
                     <CardHeader>
@@ -30,6 +30,21 @@ export default function ClientPortalPage() {
                     <CardContent>
                       <Button asChild variant="outline" className="w-full">
                         <Link href="/proposals">Ver Propuestas</Link>
+                      </Button>
+                    </CardContent>
+                </Card>
+              </div>
+
+               <div className="card-animated-border">
+                <Card className="h-full">
+                    <CardHeader>
+                        <PresentationIcon className="h-8 w-8 text-primary mb-2" />
+                        <CardTitle>Presentaciones</CardTitle>
+                        <CardDescription>Accede a presentaciones exclusivas de servicios y productos.</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <Button asChild variant="outline" className="w-full">
+                        <Link href="/presentations">Ver Presentaciones</Link>
                       </Button>
                     </CardContent>
                 </Card>

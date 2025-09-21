@@ -13,6 +13,13 @@ export interface Presentation {
   htmlText: string;
   createdAt: any;
   updatedAt: any;
+  // Hero section fields
+  heroEnabled?: boolean;
+  heroTitle?: string;
+  heroDescription?: string;
+  heroCtaText?: string;
+  heroCtaUrl?: string;
+  heroImageUrl?: string;
 }
 
 // Type for creating/updating a presentation
@@ -56,6 +63,9 @@ export async function savePresentation(data: PresentationInput): Promise<ActionR
     }
     
     revalidatePath('/dashboard/presentations');
+    revalidatePath('/presentations');
+    revalidatePath(`/view-presentation/${docId}`);
+
     return { success: true, data: docId };
 
   } catch (error: any) {
@@ -71,6 +81,7 @@ export async function deletePresentation(id: string): Promise<ActionResult<null>
   try {
     await deleteDoc(doc(db, 'presentations', id));
     revalidatePath('/dashboard/presentations');
+     revalidatePath('/presentations');
     return { success: true };
   } catch (error: any) {
     console.error('Error deleting presentation:', error);
