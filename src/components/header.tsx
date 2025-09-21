@@ -49,6 +49,7 @@ export default function Header() {
     { href: '/#philosophy', label: 'Filosofía' },
     { href: '/#team', label: 'Equipo' },
     { href: '/#faq', label: 'FAQ' },
+    { href: '/clients-login', label: 'Clientes' },
     { href: '/dashboard', label: 'Intranet' },
   ];
 
