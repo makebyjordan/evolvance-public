@@ -1,12 +1,17 @@
 rules_version = '2';
+
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    match /webContent/{section} {
+    // Allow public read access to web content, but only authenticated users can write.
+    match /webContent/{document=**} {
       allow read: if true;
       allow write: if request.auth != null;
     }
 
+    // Allow authenticated users to read and write to all other collections.
+    // This is a broad rule for simplicity in the dashboard.
+    // For production apps with different user roles, you'd want more specific rules.
     match /{document=**} {
       allow read, write: if request.auth != null;
     }
