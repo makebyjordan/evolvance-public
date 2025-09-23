@@ -1,14 +1,16 @@
+
 rules_version = '2';
+
 service cloud.firestore {
   match /databases/{database}/documents {
-  
-    // Allow public read access to web content, but only authed users can write
-    match /webContent/{documentId} {
+    
+    // Regla para la web pública: cualquiera puede leer, solo admins pueden escribir.
+    match /webContent/{document} {
       allow read: if true;
       allow write: if request.auth != null;
     }
     
-    // Allow authenticated users to read/write to all other collections
+    // Regla para el resto de colecciones: solo usuarios autenticados pueden leer y escribir.
     match /{document=**} {
       allow read, write: if request.auth != null;
     }

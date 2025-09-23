@@ -1,0 +1,737 @@
+
+"use client";
+
+import { useForm, useFieldArray } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+  DialogDescription,
+} from "@/components/ui/dialog";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { useToast } from "@/hooks/use-toast";
+import { saveLandAd, type LandAd } from "@/app/actions/land-ads-actions";
+import { useEffect } from "react";
+import { Switch } from "@/components/ui/switch";
+import { Separator } from "@/components/ui/separator";
+import { PlusCircle, Trash2 } from "lucide-react";
+
+const featureCardSchema = z.object({
+  icon: z.string().optional(),
+  title: z.string().optional(),
+  description: z.string().optional(),
+});
+
+const iconListItemSchema = z.object({
+  icon: z.string().optional(),
+  title: z.string().optional(),
+});
+
+const mediaGridCardSchema = z.object({
+  title: z.string().optional(),
+  description: z.string().optional(),
+  imageUrl: z.string().optional(),
+  videoUrl: z.string().optional(),
+  ctaText: z.string().optional(),
+  ctaUrl: z.string().optional(),
+});
+
+const pricingCardSchema = z.object({
+  htmlContent: z.string().min(1, "El contenido HTML no puede estar vacío."),
+});
+
+const faqItemSchema = z.object({
+  question: z.string().min(1, "La pregunta no puede estar vacía."),
+  answer: z.string().min(1, "La respuesta no puede estar vacía."),
+});
+
+const formSchema = z.object({
+  title: z.string().min(2, { message: "El título es requerido." }),
+  code: z.string().min(2, { message: "El código es requerido." }),
+  htmlText: z.string().optional(),
+  heroEnabled: z.boolean().default(false),
+  heroTitle: z.string().optional(),
+  heroDescription: z.string().optional(),
+  heroCtaText: z.string().optional(),
+  heroCtaUrl: z.string().optional(),
+  heroImageUrl: z.string().optional(),
+  featureSectionEnabled: z.boolean().default(false),
+  featureSectionTitle: z.string().optional(),
+  featureSectionDescription: z.string().optional(),
+  featureSectionCtaText: z.string().optional(),
+  featureSectionCtaUrl: z.string().optional(),
+  featureSectionCards: z.array(featureCardSchema).optional(),
+  iconListSectionEnabled: z.boolean().default(false),
+  iconListSectionDescription: z.string().optional(),
+  iconListSectionItems: z.array(iconListItemSchema).optional(),
+  mediaGridSectionEnabled: z.boolean().default(false),
+  mediaGridSectionCards: z.array(mediaGridCardSchema).optional(),
+  pricingSectionEnabled: z.boolean().default(false),
+  pricingSectionCards: z.array(pricingCardSchema).optional(),
+  fullWidthMediaSectionEnabled: z.boolean().default(false),
+  fullWidthMediaSectionTitle: z.string().optional(),
+  fullWidthMediaSectionDescription: z.string().optional(),
+  fullWidthMediaSectionImageUrl: z.string().optional(),
+  fullWidthMediaSectionVideoUrl: z.string().optional(),
+  faqSectionEnabled: z.boolean().default(false),
+  faqSectionItems: z.array(faqItemSchema).optional(),
+});
+
+type LandAdFormValues = z.infer<typeof formSchema>;
+
+interface LandAdFormProps {
+  isOpen: boolean;
+  setIsOpen: (open: boolean) => void;
+  onFormSubmit: () => void;
+  landAd: LandAd | null;
+}
+
+export function LandAdForm({ isOpen, setIsOpen, onFormSubmit, landAd }: LandAdFormProps) {
+  const { toast } = useToast();
+  const isEditing = !!landAd;
+
+  const form = useForm<LandAdFormValues>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      title: "",
+      code: "",
+      htmlText: "",
+      heroEnabled: false,
+      heroTitle: "",
+      heroDescription: "",
+      heroCtaText: "",
+      heroCtaUrl: "",
+      heroImageUrl: "",
+      featureSectionEnabled: false,
+      featureSectionTitle: "",
+      featureSectionDescription: "",
+      featureSectionCtaText: "",
+      featureSectionCtaUrl: "",
+      featureSectionCards: [],
+      iconListSectionEnabled: false,
+      iconListSectionDescription: "",
+      iconListSectionItems: [],
+      mediaGridSectionEnabled: false,
+      mediaGridSectionCards: [],
+      pricingSectionEnabled: false,
+      pricingSectionCards: [],
+      fullWidthMediaSectionEnabled: false,
+      fullWidthMediaSectionTitle: "",
+      fullWidthMediaSectionDescription: "",
+      fullWidthMediaSectionImageUrl: "",
+      fullWidthMediaSectionVideoUrl: "",
+      faqSectionEnabled: false,
+      faqSectionItems: [],
+    },
+  });
+  
+  const heroEnabled = form.watch("heroEnabled");
+  const featureSectionEnabled = form.watch("featureSectionEnabled");
+  const iconListSectionEnabled = form.watch("iconListSectionEnabled");
+  const mediaGridSectionEnabled = form.watch("mediaGridSectionEnabled");
+  const pricingSectionEnabled = form.watch("pricingSectionEnabled");
+  const fullWidthMediaSectionEnabled = form.watch("fullWidthMediaSectionEnabled");
+  const faqSectionEnabled = form.watch("faqSectionEnabled");
+
+  const { fields: featureFields, append: appendFeature, remove: removeFeature } = useFieldArray({
+    control: form.control,
+    name: "featureSectionCards",
+  });
+
+  const { fields: iconListFields, append: appendIconList, remove: removeIconList } = useFieldArray({
+    control: form.control,
+    name: "iconListSectionItems",
+  });
+
+  const { fields: mediaGridFields, append: appendMediaGrid, remove: removeMediaGrid } = useFieldArray({
+    control: form.control,
+    name: "mediaGridSectionCards",
+  });
+
+  const { fields: pricingFields, append: appendPricing, remove: removePricing } = useFieldArray({
+    control: form.control,
+    name: "pricingSectionCards",
+  });
+
+  const { fields: faqFields, append: appendFaq, remove: removeFaq } = useFieldArray({
+    control: form.control,
+    name: "faqSectionItems",
+  });
+
+  useEffect(() => {
+    if (isEditing && landAd) {
+      form.reset({
+        title: landAd.title,
+        code: landAd.code,
+        htmlText: landAd.htmlText || "",
+        heroEnabled: landAd.heroEnabled || false,
+        heroTitle: landAd.heroTitle || "",
+        heroDescription: landAd.heroDescription || "",
+        heroCtaText: landAd.heroCtaText || "",
+        heroCtaUrl: landAd.heroCtaUrl || "",
+        heroImageUrl: landAd.heroImageUrl || "",
+        featureSectionEnabled: landAd.featureSectionEnabled || false,
+        featureSectionTitle: landAd.featureSectionTitle || "",
+        featureSectionDescription: landAd.featureSectionDescription || "",
+        featureSectionCtaText: landAd.featureSectionCtaText || "",
+        featureSectionCtaUrl: landAd.featureSectionCtaUrl || "",
+        featureSectionCards: landAd.featureSectionCards || [],
+        iconListSectionEnabled: landAd.iconListSectionEnabled || false,
+        iconListSectionDescription: landAd.iconListSectionDescription || "",
+        iconListSectionItems: landAd.iconListSectionItems || [],
+        mediaGridSectionEnabled: landAd.mediaGridSectionEnabled || false,
+        mediaGridSectionCards: landAd.mediaGridSectionCards || [],
+        pricingSectionEnabled: landAd.pricingSectionEnabled || false,
+        pricingSectionCards: landAd.pricingSectionCards || [],
+        fullWidthMediaSectionEnabled: landAd.fullWidthMediaSectionEnabled || false,
+        fullWidthMediaSectionTitle: landAd.fullWidthMediaSectionTitle || "",
+        fullWidthMediaSectionDescription: landAd.fullWidthMediaSectionDescription || "",
+        fullWidthMediaSectionImageUrl: landAd.fullWidthMediaSectionImageUrl || "",
+        fullWidthMediaSectionVideoUrl: landAd.fullWidthMediaSectionVideoUrl || "",
+        faqSectionEnabled: landAd.faqSectionEnabled || false,
+        faqSectionItems: landAd.faqSectionItems || [],
+      });
+    } else {
+      form.reset();
+    }
+  }, [isEditing, landAd, form]);
+
+
+  const onSubmit = async (values: LandAdFormValues) => {
+    const landAdData = {
+      ...values,
+      id: isEditing ? landAd!.id : undefined,
+    };
+    
+    const result = await saveLandAd(landAdData);
+
+    if (result.success) {
+      toast({
+        title: `LandAD ${isEditing ? 'Actualizado' : 'Creado'}`,
+        description: `El LandAD "${values.title}" ha sido guardado.`,
+      });
+      onFormSubmit();
+      handleOpenChange(false);
+    } else {
+      toast({
+        variant: "destructive",
+        title: `Error al ${isEditing ? 'actualizar' : 'crear'}`,
+        description: result.error || 'Ocurrió un error desconocido.',
+      });
+    }
+  };
+  
+  const handleOpenChange = (open: boolean) => {
+    if (!open) {
+      form.reset();
+    }
+    setIsOpen(open);
+  };
+
+  return (
+    <Dialog open={isOpen} onOpenChange={handleOpenChange}>
+      <DialogContent className="sm:max-w-3xl bg-card max-h-[90vh] overflow-y-auto">
+        <DialogHeader>
+          <DialogTitle className="font-headline text-primary">{isEditing ? 'Editar LandAD' : 'Nuevo LandAD'}</DialogTitle>
+          <DialogDescription>
+            Rellena los campos para {isEditing ? 'actualizar' : 'crear'} un LandAD.
+          </DialogDescription>
+        </DialogHeader>
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <FormField
+                control={form.control}
+                name="title"
+                render={({ field }) => (
+                    <FormItem>
+                    <FormLabel>Título</FormLabel>
+                    <FormControl>
+                        <Input placeholder="Ej: Landing Page de Servicios" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                    </FormItem>
+                )}
+                />
+                <FormField
+                control={form.control}
+                name="code"
+                render={({ field }) => (
+                    <FormItem>
+                    <FormLabel>Código</FormLabel>
+                    <FormControl>
+                        <Input placeholder="Ej: LAND-001" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                    </FormItem>
+                )}
+                />
+            </div>
+
+            <FormField
+              control={form.control}
+              name="htmlText"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Contenido HTML Principal</FormLabel>
+                  <FormControl>
+                    <Textarea rows={10} placeholder="Escribe el contenido principal aquí. Puedes usar HTML." {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            
+            <Separator />
+            
+             <FormField
+                control={form.control}
+                name="heroEnabled"
+                render={({ field }) => (
+                    <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
+                    <div className="space-y-0.5">
+                        <FormLabel>Activar Sección Hero</FormLabel>
+                        <FormDescription>
+                        Añade una cabecera con imagen y CTA.
+                        </FormDescription>
+                    </div>
+                    <FormControl>
+                        <Switch
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                        />
+                    </FormControl>
+                    </FormItem>
+                )}
+             />
+
+            {heroEnabled && (
+              <div className="space-y-4 p-4 border rounded-md">
+                <FormField
+                  control={form.control}
+                  name="heroTitle"
+                  render={({ field }) => (
+                    <FormItem><FormLabel>Título del Hero (H1)</FormLabel><FormControl><Input placeholder="El titular principal" {...field} /></FormControl><FormMessage /></FormItem>
+                  )}
+                />
+                 <FormField
+                  control={form.control}
+                  name="heroDescription"
+                  render={({ field }) => (
+                    <FormItem><FormLabel>Descripción del Hero</FormLabel><FormControl><Textarea placeholder="Una descripción que enganche" {...field} /></FormControl><FormMessage /></FormItem>
+                  )}
+                />
+                 <FormField
+                  control={form.control}
+                  name="heroImageUrl"
+                  render={({ field }) => (
+                    <FormItem><FormLabel>URL de la Imagen de Fondo</FormLabel><FormControl><Input placeholder="https://ejemplo.com/imagen.jpg" {...field} /></FormControl><FormMessage /></FormItem>
+                  )}
+                />
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <FormField
+                    control={form.control}
+                    name="heroCtaText"
+                    render={({ field }) => (
+                      <FormItem><FormLabel>Texto del Botón CTA</FormLabel><FormControl><Input placeholder="Ej: Saber más" {...field} /></FormControl><FormMessage /></FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="heroCtaUrl"
+                    render={({ field }) => (
+                      <FormItem><FormLabel>URL del Botón CTA</FormLabel><FormControl><Input placeholder="https://ejemplo.com/destino" {...field} /></FormControl><FormMessage /></FormItem>
+                    )}
+                  />
+                </div>
+              </div>
+            )}
+            
+            <Separator />
+            
+             <FormField
+                control={form.control}
+                name="featureSectionEnabled"
+                render={({ field }) => (
+                    <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
+                    <div className="space-y-0.5">
+                        <FormLabel>Activar Sección de Características</FormLabel>
+                        <FormDescription>
+                        Añade una sección con título, texto y tarjetas.
+                        </FormDescription>
+                    </div>
+                    <FormControl>
+                        <Switch
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                        />
+                    </FormControl>
+                    </FormItem>
+                )}
+             />
+
+            {featureSectionEnabled && (
+                <div className="space-y-4 p-4 border rounded-md">
+                     <FormField
+                        control={form.control}
+                        name="featureSectionTitle"
+                        render={({ field }) => (
+                            <FormItem><FormLabel>Título de la Sección</FormLabel><FormControl><Input placeholder="Título principal de la sección" {...field} /></FormControl><FormMessage /></FormItem>
+                        )}
+                    />
+                    <FormField
+                        control={form.control}
+                        name="featureSectionDescription"
+                        render={({ field }) => (
+                            <FormItem><FormLabel>Descripción de la Sección</FormLabel><FormControl><Textarea placeholder="Texto descriptivo de la sección" {...field} /></FormControl><FormMessage /></FormItem>
+                        )}
+                    />
+                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <FormField
+                            control={form.control}
+                            name="featureSectionCtaText"
+                            render={({ field }) => (
+                                <FormItem><FormLabel>Texto del Botón CTA</FormLabel><FormControl><Input placeholder="Ej: Contactar" {...field} /></FormControl><FormMessage /></FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="featureSectionCtaUrl"
+                            render={({ field }) => (
+                                <FormItem><FormLabel>URL del Botón CTA</FormLabel><FormControl><Input placeholder="https://ejemplo.com/contacto" {...field} /></FormControl><FormMessage /></FormItem>
+                            )}
+                        />
+                    </div>
+                    <Separator className="my-6" />
+                    <div>
+                        <h3 className="text-lg font-medium mb-2">Tarjetas de Características</h3>
+                        {featureFields.map((field, index) => (
+                        <div key={field.id} className="p-4 border rounded-lg relative space-y-4 mb-4">
+                            <Button
+                            type="button"
+                            variant="destructive"
+                            size="icon"
+                            className="absolute -top-3 -right-3 h-7 w-7"
+                            onClick={() => removeFeature(index)}
+                            >
+                            <Trash2 className="h-4 w-4" />
+                            </Button>
+                            <FormField
+                            control={form.control}
+                            name={`featureSectionCards.${index}.icon`}
+                            render={({ field }) => (
+                                <FormItem>
+                                <FormLabel>Icono (SVG)</FormLabel>
+                                <FormControl><Textarea rows={3} placeholder="Pega el código SVG del icono" {...field} /></FormControl>
+                                <FormMessage />
+                                </FormItem>
+                            )}
+                            />
+                            <FormField
+                            control={form.control}
+                            name={`featureSectionCards.${index}.title`}
+                            render={({ field }) => (
+                                <FormItem>
+                                <FormLabel>Título de la Tarjeta</FormLabel>
+                                <FormControl><Input placeholder="Título de la característica" {...field} /></FormControl>
+                                <FormMessage />
+                                </FormItem>
+                            )}
+                             />
+                            <FormField
+                            control={form.control}
+                            name={`featureSectionCards.${index}.description`}
+                            render={({ field }) => (
+                                <FormItem>
+                                <FormLabel>Descripción de la Tarjeta</FormLabel>
+                                <FormControl><Textarea rows={2} placeholder="Descripción de la característica" {...field} /></FormControl>
+                                <FormMessage />
+                                </FormItem>
+                            )}
+                            />
+                        </div>
+                        ))}
+                        <Button
+                        type="button"
+                        variant="outline"
+                        className="mt-2"
+                        onClick={() => appendFeature({ icon: "", title: "", description: "" })}
+                        >
+                        <PlusCircle className="mr-2 h-4 w-4" />
+                        Añadir Tarjeta de Característica
+                        </Button>
+                    </div>
+                </div>
+            )}
+             <Separator />
+
+            <FormField
+              control={form.control}
+              name="iconListSectionEnabled"
+              render={({ field }) => (
+                  <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
+                  <div className="space-y-0.5">
+                      <FormLabel>Activar Sección Lista de Iconos</FormLabel>
+                      <FormDescription>
+                        Muestra una lista de items con icono y título.
+                      </FormDescription>
+                  </div>
+                  <FormControl>
+                      <Switch
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                      />
+                  </FormControl>
+                  </FormItem>
+              )}
+            />
+
+            {iconListSectionEnabled && (
+               <div className="space-y-4 p-4 border rounded-md">
+                 <FormField
+                    control={form.control}
+                    name="iconListSectionDescription"
+                    render={({ field }) => (
+                      <FormItem><FormLabel>Descripción de la Sección</FormLabel><FormControl><Input placeholder="Ideal para todo tipo de..." {...field} /></FormControl><FormMessage /></FormItem>
+                    )}
+                  />
+                  <h3 className="text-lg font-medium pt-4">Items de la lista</h3>
+                  {iconListFields.map((field, index) => (
+                      <div key={field.id} className="p-4 border rounded-lg relative space-y-4 mb-4">
+                           <Button type="button" variant="destructive" size="icon" className="absolute -top-3 -right-3 h-7 w-7" onClick={() => removeIconList(index)}>
+                              <Trash2 className="h-4 w-4" />
+                          </Button>
+                           <FormField control={form.control} name={`iconListSectionItems.${index}.title`} render={({ field }) => (<FormItem><FormLabel>Título</FormLabel><FormControl><Input placeholder="Título del item" {...field} /></FormControl><FormMessage /></FormItem>)} />
+                          <FormField control={form.control} name={`iconListSectionItems.${index}.icon`} render={({ field }) => (<FormItem><FormLabel>Icono (SVG)</FormLabel><FormControl><Textarea rows={3} placeholder="Pega el código SVG del icono" {...field} /></FormControl><FormMessage /></FormItem>)} />
+                      </div>
+                  ))}
+                  <Button type="button" variant="outline" className="mt-2" onClick={() => appendIconList({ title: "", icon: "" })}>
+                      <PlusCircle className="mr-2 h-4 w-4" />
+                      Añadir Item
+                  </Button>
+               </div>
+            )}
+
+
+             <Separator />
+
+             <FormField
+                control={form.control}
+                name="mediaGridSectionEnabled"
+                render={({ field }) => (
+                    <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
+                    <div className="space-y-0.5">
+                        <FormLabel>Activar Sección de Tarjetas Multimedia</FormLabel>
+                        <FormDescription>
+                        Añade una cuadrícula de tarjetas con imagen, video, texto y CTA.
+                        </FormDescription>
+                    </div>
+                    <FormControl>
+                        <Switch
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                        />
+                    </FormControl>
+                    </FormItem>
+                )}
+             />
+
+             {mediaGridSectionEnabled && (
+                <div className="space-y-4 p-4 border rounded-md">
+                    <h3 className="text-lg font-medium mb-2">Tarjetas Multimedia</h3>
+                    {mediaGridFields.map((field, index) => (
+                        <div key={field.id} className="p-4 border rounded-lg relative space-y-4 mb-4">
+                            <Button type="button" variant="destructive" size="icon" className="absolute -top-3 -right-3 h-7 w-7" onClick={() => removeMediaGrid(index)}>
+                                <Trash2 className="h-4 w-4" />
+                            </Button>
+                            <FormField control={form.control} name={`mediaGridSectionCards.${index}.title`} render={({ field }) => (<FormItem><FormLabel>Título</FormLabel><FormControl><Input placeholder="Título de la tarjeta" {...field} /></FormControl><FormMessage /></FormItem>)} />
+                            <FormField control={form.control} name={`mediaGridSectionCards.${index}.description`} render={({ field }) => (<FormItem><FormLabel>Descripción</FormLabel><FormControl><Textarea placeholder="Descripción de la tarjeta" {...field} /></FormControl><FormMessage /></FormItem>)} />
+                            <FormField control={form.control} name={`mediaGridSectionCards.${index}.imageUrl`} render={({ field }) => (<FormItem><FormLabel>URL de Imagen</FormLabel><FormControl><Input placeholder="https://ejemplo.com/imagen.jpg" {...field} /></FormControl><FormMessage /></FormItem>)} />
+                            <FormField control={form.control} name={`mediaGridSectionCards.${index}.videoUrl`} render={({ field }) => (<FormItem><FormLabel>URL de Video (YouTube, Vimeo, etc.)</FormLabel><FormControl><Input placeholder="https://youtube.com/embed/..." {...field} /></FormControl><FormMessage /></FormItem>)} />
+                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                               <FormField control={form.control} name={`mediaGridSectionCards.${index}.ctaText`} render={({ field }) => (<FormItem><FormLabel>Texto del Botón CTA</FormLabel><FormControl><Input placeholder="Ej: Ver Proyecto" {...field} /></FormControl><FormMessage /></FormItem>)} />
+                               <FormField control={form.control} name={`mediaGridSectionCards.${index}.ctaUrl`} render={({ field }) => (<FormItem><FormLabel>URL del Botón CTA</FormLabel><FormControl><Input placeholder="https://ejemplo.com/proyecto" {...field} /></FormControl><FormMessage /></FormItem>)} />
+                            </div>
+                        </div>
+                    ))}
+                    <Button type="button" variant="outline" className="mt-2" onClick={() => appendMediaGrid({ title: "", description: "", imageUrl: "", videoUrl: "", ctaText: "", ctaUrl: "" })}>
+                        <PlusCircle className="mr-2 h-4 w-4" />
+                        Añadir Tarjeta Multimedia
+                    </Button>
+                </div>
+             )}
+
+
+            <Separator />
+            
+             <FormField
+                control={form.control}
+                name="pricingSectionEnabled"
+                render={({ field }) => (
+                    <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
+                    <div className="space-y-0.5">
+                        <FormLabel>Activar Sección de Precios/HTML</FormLabel>
+                        <FormDescription>
+                        Añade tarjetas personalizadas usando código HTML.
+                        </FormDescription>
+                    </div>
+                    <FormControl>
+                        <Switch
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                        />
+                    </FormControl>
+                    </FormItem>
+                )}
+             />
+
+            {pricingSectionEnabled && (
+                <div className="space-y-4 p-4 border rounded-md">
+                    <h3 className="text-lg font-medium mb-2">Tarjetas HTML</h3>
+                     {pricingFields.map((field, index) => (
+                        <div key={field.id} className="p-4 border rounded-lg relative space-y-4 mb-4">
+                             <Button type="button" variant="destructive" size="icon" className="absolute -top-3 -right-3 h-7 w-7" onClick={() => removePricing(index)}>
+                                <Trash2 className="h-4 w-4" />
+                            </Button>
+                            <FormField
+                                control={form.control}
+                                name={`pricingSectionCards.${index}.htmlContent`}
+                                render={({ field }) => (
+                                    <FormItem>
+                                    <FormLabel>Código HTML de la Tarjeta {index + 1}</FormLabel>
+                                    <FormControl><Textarea rows={10} placeholder="Pega el código HTML de una tarjeta aquí" {...field} /></FormControl>
+                                    <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                        </div>
+                    ))}
+                     <Button type="button" variant="outline" className="mt-2" onClick={() => appendPricing({ htmlContent: "" })}>
+                        <PlusCircle className="mr-2 h-4 w-4" />
+                        Añadir Tarjeta HTML
+                    </Button>
+                </div>
+            )}
+            
+            <Separator />
+            
+             <FormField
+                control={form.control}
+                name="fullWidthMediaSectionEnabled"
+                render={({ field }) => (
+                    <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
+                    <div className="space-y-0.5">
+                        <FormLabel>Activar Sección de Contenido Destacado</FormLabel>
+                        <FormDescription>
+                        Añade una sección a pantalla completa con imagen o video.
+                        </FormDescription>
+                    </div>
+                    <FormControl>
+                        <Switch
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                        />
+                    </FormControl>
+                    </FormItem>
+                )}
+             />
+             {fullWidthMediaSectionEnabled && (
+                <div className="space-y-4 p-4 border rounded-md">
+                    <FormField control={form.control} name="fullWidthMediaSectionTitle" render={({ field }) => (<FormItem><FormLabel>Título</FormLabel><FormControl><Input placeholder="Título de la sección" {...field} /></FormControl><FormMessage /></FormItem>)} />
+                    <FormField control={form.control} name="fullWidthMediaSectionDescription" render={({ field }) => (<FormItem><FormLabel>Descripción</FormLabel><FormControl><Textarea placeholder="Descripción de la sección" {...field} /></FormControl><FormMessage /></FormItem>)} />
+                    <FormField control={form.control} name="fullWidthMediaSectionImageUrl" render={({ field }) => (<FormItem><FormLabel>URL de Imagen</FormLabel><FormControl><Input placeholder="https://ejemplo.com/imagen.jpg" {...field} /></FormControl><FormMessage /></FormItem>)} />
+                    <FormField control={form.control} name="fullWidthMediaSectionVideoUrl" render={({ field }) => (<FormItem><FormLabel>URL de Video (MP4, WebM)</FormLabel><FormControl><Input placeholder="https://ejemplo.com/video.mp4" {...field} /></FormControl><FormMessage /></FormItem>)} />
+                </div>
+            )}
+
+            <Separator />
+
+            <FormField
+              control={form.control}
+              name="faqSectionEnabled"
+              render={({ field }) => (
+                <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
+                  <div className="space-y-0.5">
+                    <FormLabel>Activar Sección de Preguntas Frecuentes</FormLabel>
+                    <FormDescription>
+                      Añade una sección de preguntas y respuestas en formato acordeón.
+                    </FormDescription>
+                  </div>
+                  <FormControl>
+                    <Switch
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+
+            {faqSectionEnabled && (
+              <div className="space-y-4 p-4 border rounded-md">
+                <h3 className="text-lg font-medium mb-2">Preguntas y Respuestas</h3>
+                {faqFields.map((field, index) => (
+                  <div key={field.id} className="p-4 border rounded-lg relative space-y-4 mb-4">
+                    <Button type="button" variant="destructive" size="icon" className="absolute -top-3 -right-3 h-7 w-7" onClick={() => removeFaq(index)}>
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                    <FormField
+                      control={form.control}
+                      name={`faqSectionItems.${index}.question`}
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Pregunta</FormLabel>
+                          <FormControl><Input placeholder="Escribe la pregunta" {...field} /></FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name={`faqSectionItems.${index}.answer`}
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Respuesta</FormLabel>
+                          <FormControl><Textarea placeholder="Escribe la respuesta" {...field} /></FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                ))}
+                <Button type="button" variant="outline" className="mt-2" onClick={() => appendFaq({ question: "", answer: "" })}>
+                  <PlusCircle className="mr-2 h-4 w-4" />
+                  Añadir Pregunta
+                </Button>
+              </div>
+            )}
+
+            <DialogFooter>
+              <Button type="button" variant="outline" onClick={() => handleOpenChange(false)}>
+                Cancelar
+              </Button>
+              <Button type="submit" disabled={form.formState.isSubmitting}>
+                {form.formState.isSubmitting ? 'Guardando...' : (isEditing ? 'Guardar Cambios' : 'Crear LandAD')}
+              </Button>
+            </DialogFooter>
+          </form>
+        </Form>
+      </DialogContent>
+    </Dialog>
+  );
+}
