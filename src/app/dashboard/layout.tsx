@@ -9,7 +9,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { auth } from '@/lib/firebase';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import Image from 'next/image';
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { useState } from 'react';
 
 const navItems = [
@@ -138,6 +138,9 @@ export default function DashboardLayout({
                       </Button>
                   </SheetTrigger>
                   <SheetContent side="left" className="p-0 w-64">
+                       <SheetHeader className="sr-only">
+                          <SheetTitle>Menú Principal</SheetTitle>
+                       </SheetHeader>
                        <SidebarContent pathname={pathname} closeSheet={closeSheet} />
                   </SheetContent>
               </Sheet>
