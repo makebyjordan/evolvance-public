@@ -23,6 +23,8 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Checkbox } from '@/components/ui/checkbox';
+import { saveLandAdResponse } from '@/app/actions/land-ads-responses-actions';
+import { useToast } from '@/hooks/use-toast';
 
 // Helper component to safely render SVG
 function SvgRenderer({ svgString, className }: { svgString: string, className: string }) {
@@ -301,7 +303,36 @@ function FaqSection({ landAd }: { landAd: LandAd }) {
 }
 
 function OpenQuestionnaireSection({ landAd }: { landAd: LandAd }) {
+    const { toast } = useToast();
+    const [isSubmitting, setIsSubmitting] = useState(false);
     if (!landAd.openQuestionnaireEnabled || !landAd.openQuestionnaireItems || landAd.openQuestionnaireItems.length === 0) return null;
+
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        setIsSubmitting(true);
+        const formData = new FormData(event.currentTarget);
+        const responses = landAd.openQuestionnaireItems!.map((item, index) => ({
+            question: item.question,
+            answer: formData.get(`open-q-${index}`) as string || ''
+        }));
+
+        const result = await saveLandAdResponse(landAd.id, responses);
+
+        if (result.success) {
+            toast({
+                title: "¡Gracias!",
+                description: "Tus respuestas han sido enviadas con éxito.",
+            });
+            event.currentTarget.reset();
+        } else {
+            toast({
+                variant: "destructive",
+                title: "Error al enviar",
+                description: result.error || "No se pudieron guardar tus respuestas. Inténtalo de nuevo.",
+            });
+        }
+        setIsSubmitting(false);
+    };
 
     return (
         <section className="py-20 sm:py-32">
@@ -313,14 +344,21 @@ function OpenQuestionnaireSection({ landAd }: { landAd: LandAd }) {
                         </h2>
                     )}
                     <Card className="p-6">
-                        <CardContent className="pt-6 space-y-6">
-                            {landAd.openQuestionnaireItems.map((item, index) => (
-                                <div key={index} className="space-y-2">
-                                    <Label htmlFor={`open-q-${index}`} className="text-lg">{item.question}</Label>
-                                    <Textarea id={`open-q-${index}`} placeholder="Tu respuesta..." />
-                                </div>
-                            ))}
-                        </CardContent>
+                        <form onSubmit={handleSubmit}>
+                            <CardContent className="pt-6 space-y-6">
+                                {landAd.openQuestionnaireItems.map((item, index) => (
+                                    <div key={index} className="space-y-2">
+                                        <Label htmlFor={`open-q-${index}`} className="text-lg">{item.question}</Label>
+                                        <Textarea id={`open-q-${index}`} name={`open-q-${index}`} placeholder="Tu respuesta..." required />
+                                    </div>
+                                ))}
+                            </CardContent>
+                            <CardFooter>
+                                <Button type="submit" disabled={isSubmitting}>
+                                    {isSubmitting ? 'Enviando...' : 'Enviar Respuestas'}
+                                </Button>
+                            </CardFooter>
+                        </form>
                     </Card>
                 </FadeIn>
             </div>
