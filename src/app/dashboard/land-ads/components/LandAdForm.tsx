@@ -31,6 +31,8 @@ import { Switch } from "@/components/ui/switch";
 import { Separator } from "@/components/ui/separator";
 import { PlusCircle, Trash2 } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
+import { ImageGalleryDialog } from "@/components/image-gallery-dialog";
+
 
 const featureCardSchema = z.object({
   icon: z.string().optional(),
@@ -430,7 +432,16 @@ export function LandAdForm({ isOpen, setIsOpen, onFormSubmit, landAd }: LandAdFo
                   control={form.control}
                   name="heroImageUrl"
                   render={({ field }) => (
-                    <FormItem><FormLabel>URL de la Imagen de Fondo</FormLabel><FormControl><Input placeholder="https://ejemplo.com/imagen.jpg" {...field} /></FormControl><FormMessage /></FormItem>
+                    <FormItem>
+                        <FormLabel>URL de la Imagen de Fondo</FormLabel>
+                        <div className="flex gap-2">
+                           <FormControl>
+                                <Input placeholder="https://ejemplo.com/imagen.jpg" {...field} />
+                            </FormControl>
+                            <ImageGalleryDialog onSelectImage={(url) => field.onChange(url)} />
+                        </div>
+                        <FormMessage />
+                    </FormItem>
                   )}
                 />
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -651,7 +662,16 @@ export function LandAdForm({ isOpen, setIsOpen, onFormSubmit, landAd }: LandAdFo
                             </Button>
                             <FormField control={form.control} name={`mediaGridSectionCards.${index}.title`} render={({ field }) => (<FormItem><FormLabel>Título</FormLabel><FormControl><Input placeholder="Título de la tarjeta" {...field} /></FormControl><FormMessage /></FormItem>)} />
                             <FormField control={form.control} name={`mediaGridSectionCards.${index}.description`} render={({ field }) => (<FormItem><FormLabel>Descripción</FormLabel><FormControl><Textarea placeholder="Descripción de la tarjeta" {...field} /></FormControl><FormMessage /></FormItem>)} />
-                            <FormField control={form.control} name={`mediaGridSectionCards.${index}.imageUrl`} render={({ field }) => (<FormItem><FormLabel>URL de Imagen</FormLabel><FormControl><Input placeholder="https://ejemplo.com/imagen.jpg" {...field} /></FormControl><FormMessage /></FormItem>)} />
+                            <FormField control={form.control} name={`mediaGridSectionCards.${index}.imageUrl`} render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>URL de Imagen</FormLabel>
+                                    <div className="flex gap-2">
+                                        <FormControl><Input placeholder="https://ejemplo.com/imagen.jpg" {...field} /></FormControl>
+                                        <ImageGalleryDialog onSelectImage={(url) => field.onChange(url)} />
+                                    </div>
+                                    <FormMessage />
+                                </FormItem>
+                            )} />
                             <FormField control={form.control} name={`mediaGridSectionCards.${index}.videoUrl`} render={({ field }) => (<FormItem><FormLabel>URL de Video (YouTube, Vimeo, etc.)</FormLabel><FormControl><Input placeholder="https://youtube.com/embed/..." {...field} /></FormControl><FormMessage /></FormItem>)} />
                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                <FormField control={form.control} name={`mediaGridSectionCards.${index}.ctaText`} render={({ field }) => (<FormItem><FormLabel>Texto del Botón CTA</FormLabel><FormControl><Input placeholder="Ej: Ver Proyecto" {...field} /></FormControl><FormMessage /></FormItem>)} />
@@ -744,7 +764,16 @@ export function LandAdForm({ isOpen, setIsOpen, onFormSubmit, landAd }: LandAdFo
                 <div className="space-y-4 p-4 border rounded-md">
                     <FormField control={form.control} name="fullWidthMediaSectionTitle" render={({ field }) => (<FormItem><FormLabel>Título</FormLabel><FormControl><Input placeholder="Título de la sección" {...field} /></FormControl><FormMessage /></FormItem>)} />
                     <FormField control={form.control} name="fullWidthMediaSectionDescription" render={({ field }) => (<FormItem><FormLabel>Descripción</FormLabel><FormControl><Textarea placeholder="Descripción de la sección" {...field} /></FormControl><FormMessage /></FormItem>)} />
-                    <FormField control={form.control} name="fullWidthMediaSectionImageUrl" render={({ field }) => (<FormItem><FormLabel>URL de Imagen</FormLabel><FormControl><Input placeholder="https://ejemplo.com/imagen.jpg" {...field} /></FormControl><FormMessage /></FormItem>)} />
+                    <FormField control={form.control} name="fullWidthMediaSectionImageUrl" render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>URL de Imagen</FormLabel>
+                             <div className="flex gap-2">
+                                <FormControl><Input placeholder="https://ejemplo.com/imagen.jpg" {...field} /></FormControl>
+                                <ImageGalleryDialog onSelectImage={(url) => field.onChange(url)} />
+                            </div>
+                            <FormMessage />
+                        </FormItem>
+                    )} />
                     <FormField control={form.control} name="fullWidthMediaSectionVideoUrl" render={({ field }) => (<FormItem><FormLabel>URL de Video (MP4, WebM)</FormLabel><FormControl><Input placeholder="https://ejemplo.com/video.mp4" {...field} /></FormControl><FormMessage /></FormItem>)} />
                 </div>
             )}
