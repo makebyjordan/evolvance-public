@@ -1,9 +1,8 @@
-
 "use client";
 
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { Home, FileText, Briefcase, Settings, LogOut, Building, User, Handshake, ArrowDownCircle, ArrowUpCircle, Globe, GraduationCap, FileSignature, Presentation, ClipboardCheck, Megaphone, Users2 } from 'lucide-react';
+import { Home, FileText, Briefcase, LogOut, Building, User, Handshake, ArrowDownCircle, ArrowUpCircle, Globe, GraduationCap, FileSignature, Presentation, ClipboardCheck, Megaphone, Users2, CircleDollarSign, Receipt } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/contexts/AuthContext';
 import { auth } from '@/lib/firebase';
@@ -14,7 +13,7 @@ const navItems = [
   { href: '/dashboard', icon: Home, label: 'Resumen' },
   { href: '/dashboard/web', icon: Globe, label: 'Web' },
   { href: '/dashboard/follow-ups', icon: ClipboardCheck, label: 'Seguimientos' },
-  { href: '/dashboard/proposals', icon: FileText, label: 'Propuestas' },
+  { href: '/dashboard/proposals', icon: FileText, label: 'Propuestas HTML' },
   { href: '/dashboard/presentations', icon: Presentation, label: 'Presentaciones' },
   { href: '/dashboard/land-ads', icon: Megaphone, label: 'LandADS' },
   { href: '/dashboard/land-ads-responses', icon: Users2, label: 'Clientes ADS' },
@@ -23,14 +22,19 @@ const navItems = [
   { href: '/dashboard/contracts', icon: FileSignature, label: 'Contratos' },
   { href: '/dashboard/services', icon: Briefcase, label: 'Servicios' },
   { href: '/dashboard/training', icon: GraduationCap, label: 'Formación' },
-  { href: '/dashboard/invoices-in', icon: ArrowDownCircle, label: 'Facturas In' },
-  { href: '/dashboard/invoices-out', icon: ArrowUpCircle, label: 'Facturas Out' },
 ];
 
 const crmItems = [
     { href: '/dashboard/sandra', icon: User, label: 'Sandra' },
     { href: '/dashboard/julian', icon: User, label: 'Julian' },
     { href: '/dashboard/jordan', icon: User, label: 'Jordan' },
+];
+
+const financeItems = [
+    { href: '/dashboard/presupuestos', icon: CircleDollarSign, label: 'Presupuestos' },
+    { href: '/dashboard/facturas', icon: Receipt, label: 'Facturas' },
+    { href: '/dashboard/invoices-in', icon: ArrowDownCircle, label: 'Facturas In' },
+    { href: '/dashboard/invoices-out', icon: ArrowUpCircle, label: 'Facturas Out' },
 ];
 
 export default function DashboardLayout({
@@ -59,7 +63,8 @@ export default function DashboardLayout({
             <Image src="https://iili.io/K78fXyb.png" alt="Evol-vance Logo" width={288} height={288} />
           </Link>
         </div>
-        <nav className="flex-1 py-6 px-4 space-y-2 overflow-y-auto">
+        <nav className="flex-1 py-6 px-4 space-y-1 overflow-y-auto">
+          <p className="px-4 pt-2 pb-2 text-xs font-semibold text-muted-foreground/80 uppercase tracking-wider">General</p>
           {navItems.map((item) => (
             <Link
               key={item.label}
@@ -75,9 +80,26 @@ export default function DashboardLayout({
             </Link>
           ))}
             <div className="px-4 pt-4 pb-2">
-                <p className="text-xs font-semibold text-muted-foreground/80 uppercase">CRM</p>
+                <p className="text-xs font-semibold text-muted-foreground/80 uppercase tracking-wider">CRM</p>
             </div>
              {crmItems.map((item) => (
+            <Link
+              key={item.label}
+              href={item.href}
+              className={`flex items-center gap-3 rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
+                pathname.startsWith(item.href)
+                  ? 'bg-primary text-primary-foreground'
+                  : 'text-muted-foreground hover:bg-muted hover:text-foreground'
+              }`}
+            >
+              <item.icon className="h-5 w-5" />
+              <span>{item.label}</span>
+            </Link>
+          ))}
+           <div className="px-4 pt-4 pb-2">
+                <p className="text-xs font-semibold text-muted-foreground/80 uppercase tracking-wider">Finanzas</p>
+            </div>
+             {financeItems.map((item) => (
             <Link
               key={item.label}
               href={item.href}

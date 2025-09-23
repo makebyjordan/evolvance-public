@@ -5,7 +5,7 @@ import { db } from '@/lib/firebase';
 import { collection, doc, addDoc, updateDoc, deleteDoc, serverTimestamp } from 'firebase/firestore';
 import { revalidatePath } from 'next/cache';
 
-// Main Proposal Type
+// Main Proposal Type (For HTML Proposals)
 export interface Proposal {
   id: string;
   title: string;
