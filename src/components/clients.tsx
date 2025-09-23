@@ -19,7 +19,7 @@ export default function Clients() {
                     </p>
                     <div className="mt-8">
                         <Button asChild size="lg" className="font-bold">
-                            <Link href="/clients-login">Acceder al Portal</Link>
+                            <Link href="/client-portal">Acceder al Portal</Link>
                         </Button>
                     </div>
                 </div>
