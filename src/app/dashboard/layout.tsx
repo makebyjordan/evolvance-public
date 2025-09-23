@@ -3,7 +3,7 @@
 
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { Home, FileText, Briefcase, Settings, LogOut, Building, User, Handshake, ArrowDownCircle, ArrowUpCircle, Globe, GraduationCap, FileSignature, Presentation } from 'lucide-react';
+import { Home, FileText, Briefcase, Settings, LogOut, Building, User, Handshake, ArrowDownCircle, ArrowUpCircle, Globe, GraduationCap, FileSignature, Presentation, ClipboardCheck } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/contexts/AuthContext';
 import { auth } from '@/lib/firebase';
@@ -13,6 +13,7 @@ import Image from 'next/image';
 const navItems = [
   { href: '/dashboard', icon: Home, label: 'Resumen' },
   { href: '/dashboard/web', icon: Globe, label: 'Web' },
+  { href: '/dashboard/follow-ups', icon: ClipboardCheck, label: 'Seguimientos' },
   { href: '/dashboard/proposals', icon: FileText, label: 'Propuestas' },
   { href: '/dashboard/presentations', icon: Presentation, label: 'Presentaciones' },
   { href: '/dashboard/clients', icon: Building, label: 'Clientes' },
@@ -56,7 +57,7 @@ export default function DashboardLayout({
             <Image src="https://iili.io/K78fXyb.png" alt="Evol-vance Logo" width={288} height={288} />
           </Link>
         </div>
-        <nav className="flex-1 py-6 px-4 space-y-2">
+        <nav className="flex-1 py-6 px-4 space-y-2 overflow-y-auto">
           {navItems.map((item) => (
             <Link
               key={item.label}
