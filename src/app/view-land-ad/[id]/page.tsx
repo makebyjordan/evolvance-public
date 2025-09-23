@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, FormEvent } from 'react';
 import { useParams } from 'next/navigation';
 import { db } from '@/lib/firebase';
 import { doc, onSnapshot, DocumentData } from 'firebase/firestore';
@@ -14,7 +14,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { FadeIn } from '@/components/fade-in';
 import { ContactModal } from '@/components/contact-modal';
-import type { LandAd } from '@/app/actions/land-ads-actions';
+import type { LandAd, CheckboxQuestionItem } from '@/app/actions/land-ads-actions';
 import { InteractiveCard } from '@/components/interactive-card';
 import { Card, CardHeader, CardTitle, CardContent, CardFooter, CardDescription } from '@/components/ui/card';
 import ReactMarkdown from 'react-markdown';
@@ -304,36 +304,7 @@ function FaqSection({ landAd }: { landAd: LandAd }) {
 }
 
 function OpenQuestionnaireSection({ landAd }: { landAd: LandAd }) {
-    const { toast } = useToast();
-    const [isSubmitting, setIsSubmitting] = useState(false);
     if (!landAd.openQuestionnaireEnabled || !landAd.openQuestionnaireItems || landAd.openQuestionnaireItems.length === 0) return null;
-
-    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-        setIsSubmitting(true);
-        const formData = new FormData(event.currentTarget);
-        const responses = landAd.openQuestionnaireItems!.map((item, index) => ({
-            question: item.question,
-            answer: formData.get(`open-q-${index}`) as string || ''
-        }));
-
-        const result = await saveLandAdResponse(landAd.id, responses);
-
-        if (result.success) {
-            toast({
-                title: "¡Gracias!",
-                description: "Tus respuestas han sido enviadas con éxito.",
-            });
-            event.currentTarget.reset();
-        } else {
-            toast({
-                variant: "destructive",
-                title: "Error al enviar",
-                description: result.error || "No se pudieron guardar tus respuestas. Inténtalo de nuevo.",
-            });
-        }
-        setIsSubmitting(false);
-    };
 
     return (
         <section className="py-20 sm:py-32">
@@ -345,21 +316,14 @@ function OpenQuestionnaireSection({ landAd }: { landAd: LandAd }) {
                         </h2>
                     )}
                     <Card className="p-6">
-                        <form onSubmit={handleSubmit}>
-                            <CardContent className="pt-6 space-y-6">
-                                {landAd.openQuestionnaireItems.map((item, index) => (
-                                    <div key={index} className="space-y-2">
-                                        <Label htmlFor={`open-q-${index}`} className="text-lg">{item.question}</Label>
-                                        <Textarea id={`open-q-${index}`} name={`open-q-${index}`} placeholder="Tu respuesta..." required />
-                                    </div>
-                                ))}
-                            </CardContent>
-                            <CardFooter>
-                                <Button type="submit" disabled={isSubmitting}>
-                                    {isSubmitting ? 'Enviando...' : 'Enviar Respuestas'}
-                                </Button>
-                            </CardFooter>
-                        </form>
+                        <CardContent className="pt-6 space-y-6">
+                            {landAd.openQuestionnaireItems.map((item, index) => (
+                                <div key={index} className="space-y-2">
+                                    <Label htmlFor={`open-q-${index}`} className="text-lg">{item.question}</Label>
+                                    <Textarea id={`open-q-${index}`} name={`open-q-${index}`} placeholder="Tu respuesta..." required />
+                                </div>
+                            ))}
+                        </CardContent>
                     </Card>
                 </FadeIn>
             </div>
@@ -387,7 +351,7 @@ function CheckboxQuestionnaireSection({ landAd }: { landAd: LandAd }) {
                                     <div className="space-y-2 pl-2">
                                         {item.options.map((option, oIndex) => (
                                             <div key={oIndex} className="flex items-center space-x-2">
-                                                <Checkbox id={`check-q${qIndex}-o${oIndex}`} />
+                                                <Checkbox id={`check-q${qIndex}-o${oIndex}`} name={`check-q-${qIndex}`} value={option.label} />
                                                 <Label htmlFor={`check-q${qIndex}-o${oIndex}`} className="font-normal">
                                                     {option.label}
                                                 </Label>
@@ -405,52 +369,21 @@ function CheckboxQuestionnaireSection({ landAd }: { landAd: LandAd }) {
 }
 
 function ContactFormSection({ landAd }: { landAd: LandAd }) {
-    const { toast } = useToast();
-    const [isSubmitting, setIsSubmitting] = useState(false);
     if (!landAd.contactFormEnabled) return null;
-
-    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-        setIsSubmitting(true);
-        const formData = new FormData(event.currentTarget);
-        const responses: { question: string; answer: string }[] = [];
-
-        formData.forEach((value, key) => {
-            responses.push({ question: key, answer: value as string });
-        });
-
-        const result = await saveLandAdResponse(landAd.id, responses);
-
-        if (result.success) {
-            toast({
-                title: "¡Gracias!",
-                description: "Tus datos han sido enviados con éxito. Nos pondremos en contacto contigo pronto.",
-            });
-            event.currentTarget.reset();
-        } else {
-            toast({
-                variant: "destructive",
-                title: "Error al enviar",
-                description: result.error || "No se pudieron guardar tus datos. Inténtalo de nuevo.",
-            });
-        }
-        setIsSubmitting(false);
-    };
-
+    
     const formFields = [
-        { name: "Nombre", show: landAd.contactFormShowName },
+        { name: "Nombre", show: landAd.contactFormShowName, type: 'text' },
         { name: "Teléfono", show: landAd.contactFormShowPhone, type: 'tel' },
         { name: "Email", show: landAd.contactFormShowEmail, type: 'email' },
         { name: "Mensaje", show: landAd.contactFormShowTextMessage, type: 'textarea' },
-        { name: "Instagram", show: landAd.contactFormShowInstagram },
-        { name: "Facebook", show: landAd.contactFormShowFacebook },
-        { name: "LinkedIn", show: landAd.contactFormShowLinkedIn },
-        { name: "TikTok", show: landAd.contactFormShowTikTok },
+        { name: "Instagram", show: landAd.contactFormShowInstagram, type: 'text' },
+        { name: "Facebook", show: landAd.contactFormShowFacebook, type: 'text' },
+        { name: "LinkedIn", show: landAd.contactFormShowLinkedIn, type: 'text' },
+        { name: "TikTok", show: landAd.contactFormShowTikTok, type: 'text' },
     ];
 
     const visibleFields = formFields.filter(field => field.show);
     if (visibleFields.length === 0) return null;
-
 
     return (
         <section className="py-20 sm:py-32">
@@ -462,25 +395,18 @@ function ContactFormSection({ landAd }: { landAd: LandAd }) {
                         </h2>
                     )}
                     <Card className="p-6">
-                        <form onSubmit={handleSubmit}>
-                            <CardContent className="pt-6 space-y-6">
-                                {visibleFields.map((field) => (
-                                    <div key={field.name} className="space-y-2">
-                                        <Label htmlFor={field.name} className="text-lg">{field.name}</Label>
-                                        {field.type === 'textarea' ? (
-                                            <Textarea id={field.name} name={field.name} placeholder={`Tu ${field.name.toLowerCase()}...`} required />
-                                        ) : (
-                                            <Input id={field.name} name={field.name} type={field.type || 'text'} placeholder={`Tu ${field.name.toLowerCase()}...`} required />
-                                        )}
-                                    </div>
-                                ))}
-                            </CardContent>
-                            <CardFooter>
-                                <Button type="submit" disabled={isSubmitting}>
-                                    {isSubmitting ? 'Enviando...' : 'Enviar Datos'}
-                                </Button>
-                            </CardFooter>
-                        </form>
+                        <CardContent className="pt-6 space-y-6">
+                            {visibleFields.map((field) => (
+                                <div key={field.name} className="space-y-2">
+                                    <Label htmlFor={field.name} className="text-lg">{field.name}</Label>
+                                    {field.type === 'textarea' ? (
+                                        <Textarea id={field.name} name={field.name} placeholder={`Tu ${field.name.toLowerCase()}...`} required />
+                                    ) : (
+                                        <Input id={field.name} name={field.name} type={field.type || 'text'} placeholder={`Tu ${field.name.toLowerCase()}...`} required />
+                                    )}
+                                </div>
+                            ))}
+                        </CardContent>
                     </Card>
                 </FadeIn>
             </div>
@@ -488,14 +414,14 @@ function ContactFormSection({ landAd }: { landAd: LandAd }) {
     );
 }
 
-
-
 export default function ViewLandAdPage() {
   const params = useParams();
   const id = Array.isArray(params.id) ? params.id[0] : params.id;
   const [landAd, setLandAd] = useState<LandAd | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { toast } = useToast();
 
   useEffect(() => {
     if (!id) {
@@ -528,6 +454,66 @@ export default function ViewLandAdPage() {
 
     return () => unsubscribe();
   }, [id]);
+
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setIsSubmitting(true);
+    const form = event.currentTarget;
+    const formData = new FormData(form);
+    const responses: { question: string; answer: string }[] = [];
+
+    // Process open questions
+    landAd?.openQuestionnaireItems?.forEach((item, index) => {
+        const answer = formData.get(`open-q-${index}`) as string;
+        if (answer) {
+            responses.push({ question: item.question, answer });
+        }
+    });
+
+    // Process checkbox questions
+    landAd?.checkboxQuestionnaireItems?.forEach((item: CheckboxQuestionItem, qIndex: number) => {
+        const checkedOptions = formData.getAll(`check-q-${qIndex}`).join(', ');
+        if (checkedOptions) {
+            responses.push({ question: item.question, answer: checkedOptions });
+        }
+    });
+    
+    // Process contact form fields
+    const contactFields = ["Nombre", "Teléfono", "Email", "Mensaje", "Instagram", "Facebook", "LinkedIn", "TikTok"];
+    contactFields.forEach(field => {
+        const answer = formData.get(field) as string;
+        if (answer) {
+            responses.push({ question: field, answer });
+        }
+    });
+
+    if (responses.length === 0) {
+        toast({
+            variant: "destructive",
+            title: "Formulario vacío",
+            description: "Por favor, rellena al menos un campo antes de enviar.",
+        });
+        setIsSubmitting(false);
+        return;
+    }
+
+    const result = await saveLandAdResponse(landAd!.id, responses);
+
+    if (result.success) {
+        toast({
+            title: "¡Gracias!",
+            description: "Tus datos han sido enviados con éxito.",
+        });
+        form.reset();
+    } else {
+        toast({
+            variant: "destructive",
+            title: "Error al enviar",
+            description: result.error || "No se pudieron guardar tus datos. Inténtalo de nuevo.",
+        });
+    }
+    setIsSubmitting(false);
+  };
   
   if (loading) {
     return (
@@ -566,54 +552,70 @@ export default function ViewLandAdPage() {
     );
   }
   
+  const hasInteractiveContent = landAd.openQuestionnaireEnabled || landAd.checkboxQuestionnaireEnabled || landAd.contactFormEnabled;
+
   return (
     <div className="bg-background text-foreground">
         <Header />
         <main>
-            <HeroSection landAd={landAd} />
-            {landAd.htmlText && (
-                <section className="py-20 sm:py-32">
-                    <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-                        <article className="prose dark:prose-invert prose-lg max-w-4xl mx-auto">
-                            <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                                {landAd.htmlText}
-                            </ReactMarkdown>
-                        </article>
-                    </div>
-                </section>
-            )}
-            <FeatureSection landAd={landAd} />
-            <IconListSection landAd={landAd} />
-            <MediaGridSection landAd={landAd} />
-            <PricingHtmlSection landAd={landAd} />
-            <FullWidthMediaSection landAd={landAd} />
-            <FaqSection landAd={landAd} />
-            <OpenQuestionnaireSection landAd={landAd} />
-            <CheckboxQuestionnaireSection landAd={landAd} />
-            <ContactFormSection landAd={landAd} />
-             <section className="py-20 sm:py-32">
-                <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-                    <FadeIn>
-                    <div className="card-animated-border">
-                        <InteractiveCard className="card-gradient-hover bg-card border border-primary/30 rounded-lg p-8 md:p-12 text-center">
-                        <h2 className="text-3xl md:text-4xl font-extrabold text-foreground">
-                            ¿Listo para dar el Salto Cuántico?
-                        </h2>
-                        <p className="mt-4 max-w-2xl mx-auto text-lg text-muted-foreground">
-                            Agenda una Sesión Estratégica gratuita. Descubriremos juntos cómo la tecnología y la estrategia pueden catapultar tu negocio.
-                        </p>
-                        <div className="mt-8">
-                            <ContactModal>
-                            <Button size="lg" className="font-bold">
-                                Agendar Sesión Estratégica Hoy
-                            </Button>
-                            </ContactModal>
-                        </div>
-                        </InteractiveCard>
-                    </div>
-                    </FadeIn>
-                </div>
-            </section>
+          <form onSubmit={handleSubmit}>
+              <HeroSection landAd={landAd} />
+              {landAd.htmlText && (
+                  <section className="py-20 sm:py-32">
+                      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+                          <article className="prose dark:prose-invert prose-lg max-w-4xl mx-auto">
+                              <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                                  {landAd.htmlText}
+                              </ReactMarkdown>
+                          </article>
+                      </div>
+                  </section>
+              )}
+              <FeatureSection landAd={landAd} />
+              <IconListSection landAd={landAd} />
+              <MediaGridSection landAd={landAd} />
+              <PricingHtmlSection landAd={landAd} />
+              <FullWidthMediaSection landAd={landAd} />
+              <FaqSection landAd={landAd} />
+              
+              <OpenQuestionnaireSection landAd={landAd} />
+              <CheckboxQuestionnaireSection landAd={landAd} />
+              <ContactFormSection landAd={landAd} />
+
+              {hasInteractiveContent && (
+                  <section className="py-20 sm:py-32">
+                      <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                          <Button type="submit" size="lg" disabled={isSubmitting}>
+                              {isSubmitting ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" />Enviando...</> : 'Enviar Datos'}
+                          </Button>
+                      </div>
+                  </section>
+              )}
+
+               <section className="py-20 sm:py-32">
+                  <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+                      <FadeIn>
+                      <div className="card-animated-border">
+                          <InteractiveCard className="card-gradient-hover bg-card border border-primary/30 rounded-lg p-8 md:p-12 text-center">
+                          <h2 className="text-3xl md:text-4xl font-extrabold text-foreground">
+                              ¿Listo para dar el Salto Cuántico?
+                          </h2>
+                          <p className="mt-4 max-w-2xl mx-auto text-lg text-muted-foreground">
+                              Agenda una Sesión Estratégica gratuita. Descubriremos juntos cómo la tecnología y la estrategia pueden catapultar tu negocio.
+                          </p>
+                          <div className="mt-8">
+                              <ContactModal>
+                              <Button size="lg" className="font-bold">
+                                  Agendar Sesión Estratégica Hoy
+                              </Button>
+                              </ContactModal>
+                          </div>
+                          </InteractiveCard>
+                      </div>
+                      </FadeIn>
+                  </div>
+              </section>
+            </form>
         </main>
         <Footer />
     </div>
