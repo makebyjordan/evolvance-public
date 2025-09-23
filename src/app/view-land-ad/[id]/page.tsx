@@ -414,6 +414,44 @@ function ContactFormSection({ landAd }: { landAd: LandAd }) {
     );
 }
 
+function CtaSection({ landAd }: { landAd: LandAd }) {
+    if (!landAd.ctaSectionEnabled) return null;
+    
+    return (
+        <section className="py-20 sm:py-32">
+            <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+                <FadeIn>
+                <div className="card-animated-border">
+                    <InteractiveCard className="card-gradient-hover bg-card border border-primary/30 rounded-lg p-8 md:p-12 text-center">
+                    {landAd.ctaSectionTitle && (
+                        <h2 className="text-3xl md:text-4xl font-extrabold text-foreground">
+                            {landAd.ctaSectionTitle}
+                        </h2>
+                    )}
+                    {landAd.ctaSectionDescription && (
+                        <p className="mt-4 max-w-2xl mx-auto text-lg text-muted-foreground">
+                            {landAd.ctaSectionDescription}
+                        </p>
+                    )}
+                    <div className="mt-8">
+                        {landAd.ctaSectionButtonUrl ? (
+                            <Button asChild size="lg" className="font-bold">
+                                <Link href={landAd.ctaSectionButtonUrl} target="_blank">{landAd.ctaSectionButtonText || 'Saber más'}</Link>
+                            </Button>
+                        ) : landAd.ctaSectionButtonText ? (
+                             <ContactModal>
+                                <Button size="lg" className="font-bold">{landAd.ctaSectionButtonText}</Button>
+                            </ContactModal>
+                        ) : null}
+                    </div>
+                    </InteractiveCard>
+                </div>
+                </FadeIn>
+            </div>
+        </section>
+    )
+}
+
 export default function ViewLandAdPage() {
   const params = useParams();
   const id = Array.isArray(params.id) ? params.id[0] : params.id;
@@ -592,29 +630,7 @@ export default function ViewLandAdPage() {
                   </section>
               )}
 
-               <section className="py-20 sm:py-32">
-                  <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-                      <FadeIn>
-                      <div className="card-animated-border">
-                          <InteractiveCard className="card-gradient-hover bg-card border border-primary/30 rounded-lg p-8 md:p-12 text-center">
-                          <h2 className="text-3xl md:text-4xl font-extrabold text-foreground">
-                              ¿Listo para dar el Salto Cuántico?
-                          </h2>
-                          <p className="mt-4 max-w-2xl mx-auto text-lg text-muted-foreground">
-                              Agenda una Sesión Estratégica gratuita. Descubriremos juntos cómo la tecnología y la estrategia pueden catapultar tu negocio.
-                          </p>
-                          <div className="mt-8">
-                              <ContactModal>
-                              <Button size="lg" className="font-bold">
-                                  Agendar Sesión Estratégica Hoy
-                              </Button>
-                              </ContactModal>
-                          </div>
-                          </InteractiveCard>
-                      </div>
-                      </FadeIn>
-                  </div>
-              </section>
+               <CtaSection landAd={landAd} />
             </form>
         </main>
         <Footer />

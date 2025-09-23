@@ -125,6 +125,11 @@ const formSchema = z.object({
   contactFormShowFacebook: z.boolean().default(false),
   contactFormShowLinkedIn: z.boolean().default(false),
   contactFormShowTikTok: z.boolean().default(false),
+  ctaSectionEnabled: z.boolean().default(false),
+  ctaSectionTitle: z.string().optional(),
+  ctaSectionDescription: z.string().optional(),
+  ctaSectionButtonText: z.string().optional(),
+  ctaSectionButtonUrl: z.string().optional(),
 });
 
 type LandAdFormValues = z.infer<typeof formSchema>;
@@ -188,6 +193,11 @@ export function LandAdForm({ isOpen, setIsOpen, onFormSubmit, landAd }: LandAdFo
       contactFormShowFacebook: false,
       contactFormShowLinkedIn: false,
       contactFormShowTikTok: false,
+      ctaSectionEnabled: false,
+      ctaSectionTitle: "",
+      ctaSectionDescription: "",
+      ctaSectionButtonText: "",
+      ctaSectionButtonUrl: "",
     },
   });
   
@@ -201,6 +211,7 @@ export function LandAdForm({ isOpen, setIsOpen, onFormSubmit, landAd }: LandAdFo
   const openQuestionnaireEnabled = form.watch("openQuestionnaireEnabled");
   const checkboxQuestionnaireEnabled = form.watch("checkboxQuestionnaireEnabled");
   const contactFormEnabled = form.watch("contactFormEnabled");
+  const ctaSectionEnabled = form.watch("ctaSectionEnabled");
 
 
   const { fields: featureFields, append: appendFeature, remove: removeFeature } = useFieldArray({
@@ -287,6 +298,11 @@ export function LandAdForm({ isOpen, setIsOpen, onFormSubmit, landAd }: LandAdFo
         contactFormShowFacebook: landAd.contactFormShowFacebook ?? false,
         contactFormShowLinkedIn: landAd.contactFormShowLinkedIn ?? false,
         contactFormShowTikTok: landAd.contactFormShowTikTok ?? false,
+        ctaSectionEnabled: landAd.ctaSectionEnabled ?? false,
+        ctaSectionTitle: landAd.ctaSectionTitle ?? "",
+        ctaSectionDescription: landAd.ctaSectionDescription ?? "",
+        ctaSectionButtonText: landAd.ctaSectionButtonText ?? "",
+        ctaSectionButtonUrl: landAd.ctaSectionButtonUrl ?? "",
       });
     } else {
       form.reset();
@@ -987,6 +1003,64 @@ export function LandAdForm({ isOpen, setIsOpen, onFormSubmit, landAd }: LandAdFo
                         ))}
                     </div>
                 </div>
+            )}
+
+            <Separator />
+
+            <FormField
+                control={form.control}
+                name="ctaSectionEnabled"
+                render={({ field }) => (
+                    <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
+                    <div className="space-y-0.5">
+                        <FormLabel>Activar Sección CTA Final</FormLabel>
+                        <FormDescription>
+                        Añade una llamada a la acción final en la página.
+                        </FormDescription>
+                    </div>
+                    <FormControl>
+                        <Switch
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                        />
+                    </FormControl>
+                    </FormItem>
+                )}
+            />
+
+            {ctaSectionEnabled && (
+              <div className="space-y-4 p-4 border rounded-md">
+                <FormField
+                  control={form.control}
+                  name="ctaSectionTitle"
+                  render={({ field }) => (
+                    <FormItem><FormLabel>Título del CTA</FormLabel><FormControl><Input placeholder="¿Listo para empezar?" {...field} /></FormControl><FormMessage /></FormItem>
+                  )}
+                />
+                 <FormField
+                  control={form.control}
+                  name="ctaSectionDescription"
+                  render={({ field }) => (
+                    <FormItem><FormLabel>Descripción del CTA</FormLabel><FormControl><Textarea placeholder="Ponte en contacto con nosotros..." {...field} /></FormControl><FormMessage /></FormItem>
+                  )}
+                />
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <FormField
+                    control={form.control}
+                    name="ctaSectionButtonText"
+                    render={({ field }) => (
+                      <FormItem><FormLabel>Texto del Botón</FormLabel><FormControl><Input placeholder="Contactar Ahora" {...field} /></FormControl><FormMessage /></FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="ctaSectionButtonUrl"
+                    render={({ field }) => (
+                      <FormItem><FormLabel>URL del Botón (Opcional)</FormLabel><FormControl><Input placeholder="https://ejemplo.com/contacto" {...field} /></FormControl><FormMessage /></FormItem>
+                    )}
+                  />
+                </div>
+              </div>
             )}
 
             <DialogFooter>

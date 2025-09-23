@@ -80,6 +80,12 @@ export interface LandAd {
   contactFormShowFacebook?: boolean;
   contactFormShowLinkedIn?: boolean;
   contactFormShowTikTok?: boolean;
+  // Final CTA section
+  ctaSectionEnabled?: boolean;
+  ctaSectionTitle?: string;
+  ctaSectionDescription?: string;
+  ctaSectionButtonText?: string;
+  ctaSectionButtonUrl?: string;
 }
 
 // Type for creating/updating a LandAd
