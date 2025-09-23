@@ -31,6 +31,7 @@ import { Switch } from "@/components/ui/switch";
 import { Separator } from "@/components/ui/separator";
 import { PlusCircle, Trash2, Library } from "lucide-react";
 import { ImageGalleryDialog } from "@/components/image-gallery-dialog";
+import { VideoGalleryDialog } from "@/components/video-gallery-dialog";
 
 
 const featureCardSchema = z.object({
@@ -582,7 +583,16 @@ export function PresentationForm({ isOpen, setIsOpen, onFormSubmit, presentation
                                     <FormMessage />
                                 </FormItem>
                             )} />
-                            <FormField control={form.control} name={`mediaGridSectionCards.${index}.videoUrl`} render={({ field }) => (<FormItem><FormLabel>URL de Video (YouTube, Vimeo, etc.)</FormLabel><FormControl><Input placeholder="https://youtube.com/embed/..." {...field} /></FormControl><FormMessage /></FormItem>)} />
+                            <FormField control={form.control} name={`mediaGridSectionCards.${index}.videoUrl`} render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>URL de Video (YouTube, Vimeo, etc.)</FormLabel>
+                                     <div className="flex gap-2">
+                                        <FormControl><Input placeholder="https://youtube.com/embed/..." {...field} /></FormControl>
+                                        <VideoGalleryDialog onSelectVideo={(url) => field.onChange(url)} />
+                                    </div>
+                                    <FormMessage />
+                                </FormItem>
+                            )} />
                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                <FormField control={form.control} name={`mediaGridSectionCards.${index}.ctaText`} render={({ field }) => (<FormItem><FormLabel>Texto del Botón CTA</FormLabel><FormControl><Input placeholder="Ej: Ver Proyecto" {...field} /></FormControl><FormMessage /></FormItem>)} />
                                <FormField control={form.control} name={`mediaGridSectionCards.${index}.ctaUrl`} render={({ field }) => (<FormItem><FormLabel>URL del Botón CTA</FormLabel><FormControl><Input placeholder="https://ejemplo.com/proyecto" {...field} /></FormControl><FormMessage /></FormItem>)} />
@@ -684,7 +694,16 @@ export function PresentationForm({ isOpen, setIsOpen, onFormSubmit, presentation
                             <FormMessage />
                         </FormItem>
                     )} />
-                    <FormField control={form.control} name="fullWidthMediaSectionVideoUrl" render={({ field }) => (<FormItem><FormLabel>URL de Video (MP4, WebM)</FormLabel><FormControl><Input placeholder="https://ejemplo.com/video.mp4" {...field} /></FormControl><FormMessage /></FormItem>)} />
+                    <FormField control={form.control} name="fullWidthMediaSectionVideoUrl" render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>URL de Video (MP4, WebM)</FormLabel>
+                             <div className="flex gap-2">
+                                <FormControl><Input placeholder="https://ejemplo.com/video.mp4" {...field} /></FormControl>
+                                <VideoGalleryDialog onSelectVideo={(url) => field.onChange(url)} />
+                            </div>
+                            <FormMessage />
+                        </FormItem>
+                    )} />
                 </div>
             )}
 

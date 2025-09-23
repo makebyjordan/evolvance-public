@@ -32,6 +32,7 @@ import { Separator } from "@/components/ui/separator";
 import { PlusCircle, Trash2 } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { ImageGalleryDialog } from "@/components/image-gallery-dialog";
+import { VideoGalleryDialog } from "@/components/video-gallery-dialog";
 
 
 const featureCardSchema = z.object({
@@ -774,7 +775,16 @@ export function LandAdForm({ isOpen, setIsOpen, onFormSubmit, landAd }: LandAdFo
                             <FormMessage />
                         </FormItem>
                     )} />
-                    <FormField control={form.control} name="fullWidthMediaSectionVideoUrl" render={({ field }) => (<FormItem><FormLabel>URL de Video (MP4, WebM)</FormLabel><FormControl><Input placeholder="https://ejemplo.com/video.mp4" {...field} /></FormControl><FormMessage /></FormItem>)} />
+                    <FormField control={form.control} name="fullWidthMediaSectionVideoUrl" render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>URL de Video (MP4, WebM)</FormLabel>
+                             <div className="flex gap-2">
+                                <FormControl><Input placeholder="https://ejemplo.com/video.mp4" {...field} /></FormControl>
+                                <VideoGalleryDialog onSelectVideo={(url) => field.onChange(url)} />
+                            </div>
+                            <FormMessage />
+                        </FormItem>
+                    )} />
                 </div>
             )}
 
