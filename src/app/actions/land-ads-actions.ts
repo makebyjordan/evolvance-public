@@ -69,6 +69,17 @@ export interface LandAd {
   checkboxQuestionnaireEnabled?: boolean;
   checkboxQuestionnaireTitle?: string;
   checkboxQuestionnaireItems?: CheckboxQuestionItem[];
+  // New Contact Form section
+  contactFormEnabled?: boolean;
+  contactFormTitle?: string;
+  contactFormShowName?: boolean;
+  contactFormShowPhone?: boolean;
+  contactFormShowEmail?: boolean;
+  contactFormShowTextMessage?: boolean;
+  contactFormShowInstagram?: boolean;
+  contactFormShowFacebook?: boolean;
+  contactFormShowLinkedIn?: boolean;
+  contactFormShowTikTok?: boolean;
 }
 
 // Type for creating/updating a LandAd

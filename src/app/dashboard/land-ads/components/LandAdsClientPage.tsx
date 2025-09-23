@@ -95,6 +95,16 @@ export function LandAdsClientPage() {
             checkboxQuestionnaireEnabled: data.checkboxQuestionnaireEnabled,
             checkboxQuestionnaireTitle: data.checkboxQuestionnaireTitle,
             checkboxQuestionnaireItems: data.checkboxQuestionnaireItems,
+            contactFormEnabled: data.contactFormEnabled,
+            contactFormTitle: data.contactFormTitle,
+            contactFormShowName: data.contactFormShowName,
+            contactFormShowPhone: data.contactFormShowPhone,
+            contactFormShowEmail: data.contactFormShowEmail,
+            contactFormShowTextMessage: data.contactFormShowTextMessage,
+            contactFormShowInstagram: data.contactFormShowInstagram,
+            contactFormShowFacebook: data.contactFormShowFacebook,
+            contactFormShowLinkedIn: data.contactFormShowLinkedIn,
+            contactFormShowTikTok: data.contactFormShowTikTok,
           });
         });
         setLandAds(landAdsData);

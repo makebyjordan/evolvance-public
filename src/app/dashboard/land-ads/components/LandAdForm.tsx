@@ -30,6 +30,7 @@ import { useEffect } from "react";
 import { Switch } from "@/components/ui/switch";
 import { Separator } from "@/components/ui/separator";
 import { PlusCircle, Trash2 } from "lucide-react";
+import { Checkbox } from "@/components/ui/checkbox";
 
 const featureCardSchema = z.object({
   icon: z.string().optional(),
@@ -111,6 +112,16 @@ const formSchema = z.object({
   checkboxQuestionnaireEnabled: z.boolean().default(false),
   checkboxQuestionnaireTitle: z.string().optional(),
   checkboxQuestionnaireItems: z.array(checkboxQuestionItemSchema).optional(),
+  contactFormEnabled: z.boolean().default(false),
+  contactFormTitle: z.string().optional(),
+  contactFormShowName: z.boolean().default(false),
+  contactFormShowPhone: z.boolean().default(false),
+  contactFormShowEmail: z.boolean().default(false),
+  contactFormShowTextMessage: z.boolean().default(false),
+  contactFormShowInstagram: z.boolean().default(false),
+  contactFormShowFacebook: z.boolean().default(false),
+  contactFormShowLinkedIn: z.boolean().default(false),
+  contactFormShowTikTok: z.boolean().default(false),
 });
 
 type LandAdFormValues = z.infer<typeof formSchema>;
@@ -164,6 +175,16 @@ export function LandAdForm({ isOpen, setIsOpen, onFormSubmit, landAd }: LandAdFo
       checkboxQuestionnaireEnabled: false,
       checkboxQuestionnaireTitle: "",
       checkboxQuestionnaireItems: [],
+      contactFormEnabled: false,
+      contactFormTitle: "Contacta con nosotros",
+      contactFormShowName: true,
+      contactFormShowPhone: true,
+      contactFormShowEmail: true,
+      contactFormShowTextMessage: true,
+      contactFormShowInstagram: false,
+      contactFormShowFacebook: false,
+      contactFormShowLinkedIn: false,
+      contactFormShowTikTok: false,
     },
   });
   
@@ -176,6 +197,7 @@ export function LandAdForm({ isOpen, setIsOpen, onFormSubmit, landAd }: LandAdFo
   const faqSectionEnabled = form.watch("faqSectionEnabled");
   const openQuestionnaireEnabled = form.watch("openQuestionnaireEnabled");
   const checkboxQuestionnaireEnabled = form.watch("checkboxQuestionnaireEnabled");
+  const contactFormEnabled = form.watch("contactFormEnabled");
 
 
   const { fields: featureFields, append: appendFeature, remove: removeFeature } = useFieldArray({
@@ -252,6 +274,16 @@ export function LandAdForm({ isOpen, setIsOpen, onFormSubmit, landAd }: LandAdFo
         checkboxQuestionnaireEnabled: landAd.checkboxQuestionnaireEnabled || false,
         checkboxQuestionnaireTitle: landAd.checkboxQuestionnaireTitle || "",
         checkboxQuestionnaireItems: landAd.checkboxQuestionnaireItems || [],
+        contactFormEnabled: landAd.contactFormEnabled ?? false,
+        contactFormTitle: landAd.contactFormTitle ?? "Contacta con nosotros",
+        contactFormShowName: landAd.contactFormShowName ?? true,
+        contactFormShowPhone: landAd.contactFormShowPhone ?? true,
+        contactFormShowEmail: landAd.contactFormShowEmail ?? true,
+        contactFormShowTextMessage: landAd.contactFormShowTextMessage ?? true,
+        contactFormShowInstagram: landAd.contactFormShowInstagram ?? false,
+        contactFormShowFacebook: landAd.contactFormShowFacebook ?? false,
+        contactFormShowLinkedIn: landAd.contactFormShowLinkedIn ?? false,
+        contactFormShowTikTok: landAd.contactFormShowTikTok ?? false,
       });
     } else {
       form.reset();
@@ -289,6 +321,17 @@ export function LandAdForm({ isOpen, setIsOpen, onFormSubmit, landAd }: LandAdFo
     }
     setIsOpen(open);
   };
+
+  const contactFormFields = [
+    { id: "contactFormShowName", label: "Nombre" },
+    { id: "contactFormShowPhone", label: "Teléfono" },
+    { id: "contactFormShowEmail", label: "Email" },
+    { id: "contactFormShowTextMessage", label: "Mensaje de texto" },
+    { id: "contactFormShowInstagram", label: "Instagram" },
+    { id: "contactFormShowFacebook", label: "Facebook" },
+    { id: "contactFormShowLinkedIn", label: "LinkedIn" },
+    { id: "contactFormShowTikTok", label: "TikTok" },
+  ] as const;
 
   return (
     <Dialog open={isOpen} onOpenChange={handleOpenChange}>
@@ -848,6 +891,62 @@ export function LandAdForm({ isOpen, setIsOpen, onFormSubmit, landAd }: LandAdFo
                      <Button type="button" variant="outline" className="mt-2" onClick={() => appendCheckboxQuestion({ question: "", options: [{label: ""}] })}>
                         <PlusCircle className="mr-2 h-4 w-4" /> Añadir Pregunta de Selección
                     </Button>
+                </div>
+            )}
+            
+            <Separator />
+
+            <FormField
+                control={form.control}
+                name="contactFormEnabled"
+                render={({ field }) => (
+                    <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
+                    <div className="space-y-0.5">
+                        <FormLabel>Activar Formulario de Contacto</FormLabel>
+                        <FormDescription>
+                        Añade un formulario para que los usuarios dejen sus datos.
+                        </FormDescription>
+                    </div>
+                    <FormControl>
+                        <Switch
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                        />
+                    </FormControl>
+                    </FormItem>
+                )}
+            />
+
+            {contactFormEnabled && (
+                <div className="space-y-4 p-4 border rounded-md">
+                    <FormField control={form.control} name="contactFormTitle" render={({ field }) => (
+                        <FormItem><FormLabel>Título del Formulario</FormLabel><FormControl><Input placeholder="Título para el formulario" {...field} /></FormControl><FormMessage /></FormItem>
+                    )} />
+                     <h3 className="text-lg font-medium pt-4">Campos a mostrar</h3>
+                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        {contactFormFields.map((item) => (
+                           <FormField
+                                key={item.id}
+                                control={form.control}
+                                name={item.id}
+                                render={({ field }) => (
+                                <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
+                                    <FormControl>
+                                    <Checkbox
+                                        checked={field.value}
+                                        onCheckedChange={field.onChange}
+                                    />
+                                    </FormControl>
+                                    <div className="space-y-1 leading-none">
+                                    <FormLabel>
+                                        {item.label}
+                                    </FormLabel>
+                                    </div>
+                                </FormItem>
+                                )}
+                            />
+                        ))}
+                    </div>
                 </div>
             )}
 

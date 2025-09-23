@@ -22,6 +22,7 @@ import remarkGfm from 'remark-gfm';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
+import { Input } from '@/components/ui/input';
 import { Checkbox } from '@/components/ui/checkbox';
 import { saveLandAdResponse } from '@/app/actions/land-ads-responses-actions';
 import { useToast } from '@/hooks/use-toast';
@@ -403,6 +404,91 @@ function CheckboxQuestionnaireSection({ landAd }: { landAd: LandAd }) {
     );
 }
 
+function ContactFormSection({ landAd }: { landAd: LandAd }) {
+    const { toast } = useToast();
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    if (!landAd.contactFormEnabled) return null;
+
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        setIsSubmitting(true);
+        const formData = new FormData(event.currentTarget);
+        const responses: { question: string; answer: string }[] = [];
+
+        formData.forEach((value, key) => {
+            responses.push({ question: key, answer: value as string });
+        });
+
+        const result = await saveLandAdResponse(landAd.id, responses);
+
+        if (result.success) {
+            toast({
+                title: "¡Gracias!",
+                description: "Tus datos han sido enviados con éxito. Nos pondremos en contacto contigo pronto.",
+            });
+            event.currentTarget.reset();
+        } else {
+            toast({
+                variant: "destructive",
+                title: "Error al enviar",
+                description: result.error || "No se pudieron guardar tus datos. Inténtalo de nuevo.",
+            });
+        }
+        setIsSubmitting(false);
+    };
+
+    const formFields = [
+        { name: "Nombre", show: landAd.contactFormShowName },
+        { name: "Teléfono", show: landAd.contactFormShowPhone, type: 'tel' },
+        { name: "Email", show: landAd.contactFormShowEmail, type: 'email' },
+        { name: "Mensaje", show: landAd.contactFormShowTextMessage, type: 'textarea' },
+        { name: "Instagram", show: landAd.contactFormShowInstagram },
+        { name: "Facebook", show: landAd.contactFormShowFacebook },
+        { name: "LinkedIn", show: landAd.contactFormShowLinkedIn },
+        { name: "TikTok", show: landAd.contactFormShowTikTok },
+    ];
+
+    const visibleFields = formFields.filter(field => field.show);
+    if (visibleFields.length === 0) return null;
+
+
+    return (
+        <section className="py-20 sm:py-32">
+            <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-3xl">
+                <FadeIn>
+                    {landAd.contactFormTitle && (
+                        <h2 className="text-3xl md:text-4xl font-extrabold text-center text-foreground mb-12">
+                            {landAd.contactFormTitle}
+                        </h2>
+                    )}
+                    <Card className="p-6">
+                        <form onSubmit={handleSubmit}>
+                            <CardContent className="pt-6 space-y-6">
+                                {visibleFields.map((field) => (
+                                    <div key={field.name} className="space-y-2">
+                                        <Label htmlFor={field.name} className="text-lg">{field.name}</Label>
+                                        {field.type === 'textarea' ? (
+                                            <Textarea id={field.name} name={field.name} placeholder={`Tu ${field.name.toLowerCase()}...`} required />
+                                        ) : (
+                                            <Input id={field.name} name={field.name} type={field.type || 'text'} placeholder={`Tu ${field.name.toLowerCase()}...`} required />
+                                        )}
+                                    </div>
+                                ))}
+                            </CardContent>
+                            <CardFooter>
+                                <Button type="submit" disabled={isSubmitting}>
+                                    {isSubmitting ? 'Enviando...' : 'Enviar Datos'}
+                                </Button>
+                            </CardFooter>
+                        </form>
+                    </Card>
+                </FadeIn>
+            </div>
+        </section>
+    );
+}
+
+
 
 export default function ViewLandAdPage() {
   const params = useParams();
@@ -504,6 +590,7 @@ export default function ViewLandAdPage() {
             <FaqSection landAd={landAd} />
             <OpenQuestionnaireSection landAd={landAd} />
             <CheckboxQuestionnaireSection landAd={landAd} />
+            <ContactFormSection landAd={landAd} />
              <section className="py-20 sm:py-32">
                 <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                     <FadeIn>
