@@ -72,7 +72,7 @@ export default function PrintFacturaPage() {
     useEffect(() => {
         if (!loading && !error && factura) {
             // Automatically trigger print dialog once data is loaded
-            // window.print();
+            window.print();
         }
     }, [loading, error, factura]);
 

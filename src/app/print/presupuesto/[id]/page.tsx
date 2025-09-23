@@ -63,6 +63,13 @@ export default function PrintPresupuestoPage() {
         fetchData();
     }, [id]);
 
+    useEffect(() => {
+        if (!loading && !error && presupuesto) {
+            // Automatically trigger print dialog once data is loaded
+            window.print();
+        }
+    }, [loading, error, presupuesto]);
+
     if (loading) {
         return (
             <div className="flex items-center justify-center min-h-screen">
