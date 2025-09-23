@@ -36,6 +36,7 @@ import { deleteProtocol } from "@/app/actions/protocols-actions";
 import { db } from "@/lib/firebase";
 import { collection, onSnapshot, query, orderBy, Timestamp } from "firebase/firestore";
 import { Skeleton } from "@/components/ui/skeleton";
+import { ProtocolViewDialog } from "./ProtocolViewDialog";
 
 export function ProtocolsClientPage() {
   const [protocols, setProtocols] = useState<Protocol[]>([]);
@@ -43,6 +44,7 @@ export function ProtocolsClientPage() {
   const [error, setError] = useState<string | null>(null);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [isAlertOpen, setIsAlertOpen] = useState(false);
+  const [isViewOpen, setIsViewOpen] = useState(false);
   const [selectedProtocol, setSelectedProtocol] = useState<Protocol | null>(null);
   const { toast } = useToast();
 
@@ -87,11 +89,8 @@ export function ProtocolsClientPage() {
   };
   
   const handleViewClick = (protocol: Protocol) => {
-    // For now, we can just log it or maybe open a view-only dialog in the future.
-    console.log("Viewing protocol:", protocol);
     setSelectedProtocol(protocol);
-    // You could open a view-only version of the form here
-    // For simplicity, we just log it. A proper view page could be /view-protocol/[id]
+    setIsViewOpen(true);
   };
 
   const confirmDelete = async () => {
@@ -134,6 +133,8 @@ export function ProtocolsClientPage() {
 
       <ProtocolForm isOpen={isFormOpen} setIsOpen={setIsFormOpen} onFormSubmit={handleFormSubmit} protocol={selectedProtocol} />
       
+      <ProtocolViewDialog isOpen={isViewOpen} setIsOpen={setIsViewOpen} protocol={selectedProtocol} />
+
       <div className="border rounded-lg">
         <Table>
           <TableHeader><TableRow><TableHead>Título</TableHead><TableHead>Nº de Pasos</TableHead><TableHead>Fecha Creación</TableHead><TableHead className="text-right">Acciones</TableHead></TableRow></TableHeader>
@@ -148,6 +149,7 @@ export function ProtocolsClientPage() {
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild><Button variant="ghost" className="h-8 w-8 p-0"><span className="sr-only">Abrir menú</span><MoreHorizontal className="h-4 w-4" /></Button></DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
+                        <DropdownMenuItem onClick={() => handleViewClick(protocol)}><Eye className="mr-2 h-4 w-4" />Ver</DropdownMenuItem>
                         <DropdownMenuItem onClick={() => handleEditClick(protocol)}><Pencil className="mr-2 h-4 w-4" />Editar</DropdownMenuItem>
                         <DropdownMenuItem onClick={() => handleDeleteClick(protocol)} className="text-red-500"><Trash2 className="mr-2 h-4 w-4" />Eliminar</DropdownMenuItem>
                       </DropdownMenuContent>
