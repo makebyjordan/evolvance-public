@@ -89,6 +89,12 @@ export function LandAdsClientPage() {
             fullWidthMediaSectionVideoUrl: data.fullWidthMediaSectionVideoUrl,
             faqSectionEnabled: data.faqSectionEnabled,
             faqSectionItems: data.faqSectionItems,
+            openQuestionnaireEnabled: data.openQuestionnaireEnabled,
+            openQuestionnaireTitle: data.openQuestionnaireTitle,
+            openQuestionnaireItems: data.openQuestionnaireItems,
+            checkboxQuestionnaireEnabled: data.checkboxQuestionnaireEnabled,
+            checkboxQuestionnaireTitle: data.checkboxQuestionnaireTitle,
+            checkboxQuestionnaireItems: data.checkboxQuestionnaireItems,
           });
         });
         setLandAds(landAdsData);

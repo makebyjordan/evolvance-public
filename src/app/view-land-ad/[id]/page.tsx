@@ -20,6 +20,9 @@ import { Card, CardHeader, CardTitle, CardContent, CardFooter, CardDescription }
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import { Checkbox } from '@/components/ui/checkbox';
 
 // Helper component to safely render SVG
 function SvgRenderer({ svgString, className }: { svgString: string, className: string }) {
@@ -297,6 +300,71 @@ function FaqSection({ landAd }: { landAd: LandAd }) {
   );
 }
 
+function OpenQuestionnaireSection({ landAd }: { landAd: LandAd }) {
+    if (!landAd.openQuestionnaireEnabled || !landAd.openQuestionnaireItems || landAd.openQuestionnaireItems.length === 0) return null;
+
+    return (
+        <section className="py-20 sm:py-32">
+            <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-3xl">
+                <FadeIn>
+                    {landAd.openQuestionnaireTitle && (
+                        <h2 className="text-3xl md:text-4xl font-extrabold text-center text-foreground mb-12">
+                            {landAd.openQuestionnaireTitle}
+                        </h2>
+                    )}
+                    <Card className="p-6">
+                        <CardContent className="pt-6 space-y-6">
+                            {landAd.openQuestionnaireItems.map((item, index) => (
+                                <div key={index} className="space-y-2">
+                                    <Label htmlFor={`open-q-${index}`} className="text-lg">{item.question}</Label>
+                                    <Textarea id={`open-q-${index}`} placeholder="Tu respuesta..." />
+                                </div>
+                            ))}
+                        </CardContent>
+                    </Card>
+                </FadeIn>
+            </div>
+        </section>
+    );
+}
+
+function CheckboxQuestionnaireSection({ landAd }: { landAd: LandAd }) {
+    if (!landAd.checkboxQuestionnaireEnabled || !landAd.checkboxQuestionnaireItems || landAd.checkboxQuestionnaireItems.length === 0) return null;
+
+    return (
+        <section className="py-20 sm:py-32 bg-card/30">
+            <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-3xl">
+                <FadeIn>
+                    {landAd.checkboxQuestionnaireTitle && (
+                        <h2 className="text-3xl md:text-4xl font-extrabold text-center text-foreground mb-12">
+                            {landAd.checkboxQuestionnaireTitle}
+                        </h2>
+                    )}
+                    <Card className="p-6">
+                        <CardContent className="pt-6 space-y-8">
+                            {landAd.checkboxQuestionnaireItems.map((item, qIndex) => (
+                                <div key={qIndex} className="space-y-4">
+                                    <Label className="text-lg font-semibold">{item.question}</Label>
+                                    <div className="space-y-2 pl-2">
+                                        {item.options.map((option, oIndex) => (
+                                            <div key={oIndex} className="flex items-center space-x-2">
+                                                <Checkbox id={`check-q${qIndex}-o${oIndex}`} />
+                                                <Label htmlFor={`check-q${qIndex}-o${oIndex}`} className="font-normal">
+                                                    {option.label}
+                                                </Label>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            ))}
+                        </CardContent>
+                    </Card>
+                </FadeIn>
+            </div>
+        </section>
+    );
+}
+
 
 export default function ViewLandAdPage() {
   const params = useParams();
@@ -396,6 +464,8 @@ export default function ViewLandAdPage() {
             <PricingHtmlSection landAd={landAd} />
             <FullWidthMediaSection landAd={landAd} />
             <FaqSection landAd={landAd} />
+            <OpenQuestionnaireSection landAd={landAd} />
+            <CheckboxQuestionnaireSection landAd={landAd} />
              <section className="py-20 sm:py-32">
                 <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                     <FadeIn>

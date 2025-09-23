@@ -60,6 +60,21 @@ const faqItemSchema = z.object({
   answer: z.string().min(1, "La respuesta no puede estar vacía."),
 });
 
+// Schemas for new questionnaires
+const openQuestionItemSchema = z.object({
+  question: z.string().min(1, "La pregunta no puede estar vacía."),
+});
+
+const checkboxOptionSchema = z.object({
+  label: z.string().min(1, "La opción no puede estar vacía."),
+});
+
+const checkboxQuestionItemSchema = z.object({
+  question: z.string().min(1, "La pregunta no puede estar vacía."),
+  options: z.array(checkboxOptionSchema).min(1, "Debe haber al menos una opción."),
+});
+
+
 const formSchema = z.object({
   title: z.string().min(2, { message: "El título es requerido." }),
   code: z.string().min(2, { message: "El código es requerido." }),
@@ -90,6 +105,12 @@ const formSchema = z.object({
   fullWidthMediaSectionVideoUrl: z.string().optional(),
   faqSectionEnabled: z.boolean().default(false),
   faqSectionItems: z.array(faqItemSchema).optional(),
+  openQuestionnaireEnabled: z.boolean().default(false),
+  openQuestionnaireTitle: z.string().optional(),
+  openQuestionnaireItems: z.array(openQuestionItemSchema).optional(),
+  checkboxQuestionnaireEnabled: z.boolean().default(false),
+  checkboxQuestionnaireTitle: z.string().optional(),
+  checkboxQuestionnaireItems: z.array(checkboxQuestionItemSchema).optional(),
 });
 
 type LandAdFormValues = z.infer<typeof formSchema>;
@@ -137,6 +158,12 @@ export function LandAdForm({ isOpen, setIsOpen, onFormSubmit, landAd }: LandAdFo
       fullWidthMediaSectionVideoUrl: "",
       faqSectionEnabled: false,
       faqSectionItems: [],
+      openQuestionnaireEnabled: false,
+      openQuestionnaireTitle: "",
+      openQuestionnaireItems: [],
+      checkboxQuestionnaireEnabled: false,
+      checkboxQuestionnaireTitle: "",
+      checkboxQuestionnaireItems: [],
     },
   });
   
@@ -147,6 +174,9 @@ export function LandAdForm({ isOpen, setIsOpen, onFormSubmit, landAd }: LandAdFo
   const pricingSectionEnabled = form.watch("pricingSectionEnabled");
   const fullWidthMediaSectionEnabled = form.watch("fullWidthMediaSectionEnabled");
   const faqSectionEnabled = form.watch("faqSectionEnabled");
+  const openQuestionnaireEnabled = form.watch("openQuestionnaireEnabled");
+  const checkboxQuestionnaireEnabled = form.watch("checkboxQuestionnaireEnabled");
+
 
   const { fields: featureFields, append: appendFeature, remove: removeFeature } = useFieldArray({
     control: form.control,
@@ -172,6 +202,17 @@ export function LandAdForm({ isOpen, setIsOpen, onFormSubmit, landAd }: LandAdFo
     control: form.control,
     name: "faqSectionItems",
   });
+  
+  const { fields: openQuestionFields, append: appendOpenQuestion, remove: removeOpenQuestion } = useFieldArray({
+    control: form.control,
+    name: "openQuestionnaireItems",
+  });
+  
+  const { fields: checkboxQuestionFields, append: appendCheckboxQuestion, remove: removeCheckboxQuestion } = useFieldArray({
+    control: form.control,
+    name: "checkboxQuestionnaireItems",
+  });
+
 
   useEffect(() => {
     if (isEditing && landAd) {
@@ -205,6 +246,12 @@ export function LandAdForm({ isOpen, setIsOpen, onFormSubmit, landAd }: LandAdFo
         fullWidthMediaSectionVideoUrl: landAd.fullWidthMediaSectionVideoUrl || "",
         faqSectionEnabled: landAd.faqSectionEnabled || false,
         faqSectionItems: landAd.faqSectionItems || [],
+        openQuestionnaireEnabled: landAd.openQuestionnaireEnabled || false,
+        openQuestionnaireTitle: landAd.openQuestionnaireTitle || "",
+        openQuestionnaireItems: landAd.openQuestionnaireItems || [],
+        checkboxQuestionnaireEnabled: landAd.checkboxQuestionnaireEnabled || false,
+        checkboxQuestionnaireTitle: landAd.checkboxQuestionnaireTitle || "",
+        checkboxQuestionnaireItems: landAd.checkboxQuestionnaireItems || [],
       });
     } else {
       form.reset();
@@ -720,6 +767,89 @@ export function LandAdForm({ isOpen, setIsOpen, onFormSubmit, landAd }: LandAdFo
                 </Button>
               </div>
             )}
+            
+            <Separator />
+
+            <FormField
+                control={form.control}
+                name="openQuestionnaireEnabled"
+                render={({ field }) => (
+                    <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
+                    <div className="space-y-0.5">
+                        <FormLabel>Activar Cuestionario Abierto</FormLabel>
+                        <FormDescription>
+                        Añade una sección de preguntas con respuestas de texto libre.
+                        </FormDescription>
+                    </div>
+                    <FormControl>
+                        <Switch
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                        />
+                    </FormControl>
+                    </FormItem>
+                )}
+            />
+
+            {openQuestionnaireEnabled && (
+                <div className="space-y-4 p-4 border rounded-md">
+                    <FormField control={form.control} name="openQuestionnaireTitle" render={({ field }) => (
+                        <FormItem><FormLabel>Título del Cuestionario</FormLabel><FormControl><Input placeholder="Título para la sección de preguntas" {...field} /></FormControl><FormMessage /></FormItem>
+                    )} />
+                    <h3 className="text-lg font-medium pt-4">Preguntas</h3>
+                    {openQuestionFields.map((field, index) => (
+                        <div key={field.id} className="p-4 border rounded-lg relative space-y-4 mb-4">
+                            <Button type="button" variant="destructive" size="icon" className="absolute -top-3 -right-3 h-7 w-7" onClick={() => removeOpenQuestion(index)}>
+                                <Trash2 className="h-4 w-4" />
+                            </Button>
+                            <FormField control={form.control} name={`openQuestionnaireItems.${index}.question`} render={({ field }) => (
+                                <FormItem><FormLabel>Pregunta {index + 1}</FormLabel><FormControl><Input placeholder="Escribe la pregunta" {...field} /></FormControl><FormMessage /></FormItem>
+                            )} />
+                        </div>
+                    ))}
+                    <Button type="button" variant="outline" className="mt-2" onClick={() => appendOpenQuestion({ question: "" })}>
+                        <PlusCircle className="mr-2 h-4 w-4" /> Añadir Pregunta Abierta
+                    </Button>
+                </div>
+            )}
+            
+            <Separator />
+            
+            <FormField
+                control={form.control}
+                name="checkboxQuestionnaireEnabled"
+                render={({ field }) => (
+                    <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
+                    <div className="space-y-0.5">
+                        <FormLabel>Activar Cuestionario de Selección</FormLabel>
+                        <FormDescription>
+                        Añade preguntas con opciones de tipo checkbox.
+                        </FormDescription>
+                    </div>
+                    <FormControl>
+                        <Switch
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                        />
+                    </FormControl>
+                    </FormItem>
+                )}
+            />
+            
+            {checkboxQuestionnaireEnabled && (
+                <div className="space-y-4 p-4 border rounded-md">
+                     <FormField control={form.control} name="checkboxQuestionnaireTitle" render={({ field }) => (
+                        <FormItem><FormLabel>Título del Cuestionario</FormLabel><FormControl><Input placeholder="Título para la sección de checkboxes" {...field} /></FormControl><FormMessage /></FormItem>
+                    )} />
+                    <h3 className="text-lg font-medium pt-4">Preguntas de Selección</h3>
+                    {checkboxQuestionFields.map((field, index) => (
+                         <CheckboxQuestionField key={field.id} form={form} questionIndex={index} removeQuestion={removeCheckboxQuestion} />
+                    ))}
+                     <Button type="button" variant="outline" className="mt-2" onClick={() => appendCheckboxQuestion({ question: "", options: [{label: ""}] })}>
+                        <PlusCircle className="mr-2 h-4 w-4" /> Añadir Pregunta de Selección
+                    </Button>
+                </div>
+            )}
 
             <DialogFooter>
               <Button type="button" variant="outline" onClick={() => handleOpenChange(false)}>
@@ -734,4 +864,40 @@ export function LandAdForm({ isOpen, setIsOpen, onFormSubmit, landAd }: LandAdFo
       </DialogContent>
     </Dialog>
   );
+}
+
+// Helper component to manage nested field array for checkbox options
+function CheckboxQuestionField({ form, questionIndex, removeQuestion }: { form: any, questionIndex: number, removeQuestion: (index: number) => void }) {
+    const { fields, append, remove } = useFieldArray({
+        control: form.control,
+        name: `checkboxQuestionnaireItems.${questionIndex}.options`
+    });
+
+    return (
+        <div className="p-4 border rounded-lg relative space-y-4 mb-4">
+            <Button type="button" variant="destructive" size="icon" className="absolute -top-3 -right-3 h-7 w-7" onClick={() => removeQuestion(questionIndex)}>
+                <Trash2 className="h-4 w-4" />
+            </Button>
+            <FormField control={form.control} name={`checkboxQuestionnaireItems.${questionIndex}.question`} render={({ field }: any) => (
+                <FormItem><FormLabel>Pregunta {questionIndex + 1}</FormLabel><FormControl><Input placeholder="Escribe la pregunta" {...field} /></FormControl><FormMessage /></FormItem>
+            )} />
+            
+            <div className="pl-4 space-y-2">
+                 <FormLabel>Opciones</FormLabel>
+                {fields.map((optionField, optionIndex) => (
+                     <div key={optionField.id} className="flex items-center gap-2">
+                        <FormField control={form.control} name={`checkboxQuestionnaireItems.${questionIndex}.options.${optionIndex}.label`} render={({ field }: any) => (
+                            <FormItem className="flex-grow"><FormControl><Input placeholder={`Opción ${optionIndex + 1}`} {...field} /></FormControl><FormMessage /></FormItem>
+                        )} />
+                        <Button type="button" variant="ghost" size="icon" className="shrink-0" onClick={() => remove(optionIndex)}>
+                            <Trash2 className="h-4 w-4 text-destructive" />
+                        </Button>
+                    </div>
+                ))}
+                <Button type="button" variant="ghost" size="sm" onClick={() => append({ label: "" })}>
+                    <PlusCircle className="mr-2 h-4 w-4" /> Añadir Opción
+                </Button>
+            </div>
+        </div>
+    );
 }

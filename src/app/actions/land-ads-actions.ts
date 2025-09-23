@@ -7,6 +7,20 @@ import { revalidatePath } from 'next/cache';
 import type { FeatureCard, IconListItem, MediaGridCard, PricingCard, FaqItem } from './presentations-actions';
 
 
+// New interfaces for questionnaires
+export interface OpenQuestionItem {
+  question: string;
+}
+
+export interface CheckboxOption {
+  label: string;
+}
+
+export interface CheckboxQuestionItem {
+  question: string;
+  options: CheckboxOption[];
+}
+
 // Main LandAd Type - Copied from Presentation
 export interface LandAd {
   id: string;
@@ -48,6 +62,13 @@ export interface LandAd {
   // FAQ Section
   faqSectionEnabled?: boolean;
   faqSectionItems?: FaqItem[];
+  // New Questionnaire Sections
+  openQuestionnaireEnabled?: boolean;
+  openQuestionnaireTitle?: string;
+  openQuestionnaireItems?: OpenQuestionItem[];
+  checkboxQuestionnaireEnabled?: boolean;
+  checkboxQuestionnaireTitle?: string;
+  checkboxQuestionnaireItems?: CheckboxQuestionItem[];
 }
 
 // Type for creating/updating a LandAd
