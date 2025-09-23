@@ -2,7 +2,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { PlusCircle, MoreHorizontal, FileText, Trash2, Pencil, AlertTriangle, FileUp } from "lucide-react";
+import { PlusCircle, MoreHorizontal, FileText, Trash2, Pencil, AlertTriangle, FileUp, Printer } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -95,6 +95,10 @@ export function PresupuestosClientPage() {
     setIsCreateFacturaOpen(true);
   };
 
+  const handlePrintClick = (presupuesto: Presupuesto) => {
+    window.open(`/print/presupuesto/${presupuesto.id}`, '_blank');
+  };
+
   const confirmDelete = async () => {
     if (!selectedPresupuesto) return;
     const result = await deletePresupuesto(selectedPresupuesto.id);
@@ -154,6 +158,7 @@ export function PresupuestosClientPage() {
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild><Button variant="ghost" className="h-8 w-8 p-0"><span className="sr-only">Abrir menú</span><MoreHorizontal className="h-4 w-4" /></Button></DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
+                        <DropdownMenuItem onClick={() => handlePrintClick(presupuesto)}><Printer className="mr-2 h-4 w-4" />Imprimir</DropdownMenuItem>
                         <DropdownMenuItem onClick={() => handleCreateFacturaClick(presupuesto)}><FileUp className="mr-2 h-4 w-4" />Crear Factura</DropdownMenuItem>
                         <DropdownMenuItem onClick={() => handleEditClick(presupuesto)}><Pencil className="mr-2 h-4 w-4" />Editar</DropdownMenuItem>
                         <DropdownMenuItem onClick={() => handleDeleteClick(presupuesto)} className="text-red-500"><Trash2 className="mr-2 h-4 w-4" />Eliminar</DropdownMenuItem>

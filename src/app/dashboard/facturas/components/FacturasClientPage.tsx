@@ -2,7 +2,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { PlusCircle, MoreHorizontal, FileText, Trash2, Pencil, AlertTriangle } from "lucide-react";
+import { PlusCircle, MoreHorizontal, FileText, Trash2, Pencil, AlertTriangle, Printer } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -88,6 +88,10 @@ export function FacturasClientPage() {
     setSelectedFactura(factura);
     setIsFormOpen(true);
   };
+  
+  const handlePrintClick = (factura: Factura) => {
+    window.open(`/print/factura/${factura.id}`, '_blank');
+  };
 
   const confirmDelete = async () => {
     if (!selectedFactura) return;
@@ -157,6 +161,7 @@ export function FacturasClientPage() {
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild><Button variant="ghost" className="h-8 w-8 p-0"><span className="sr-only">Abrir menú</span><MoreHorizontal className="h-4 w-4" /></Button></DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
+                         <DropdownMenuItem onClick={() => handlePrintClick(factura)}><Printer className="mr-2 h-4 w-4" />Imprimir</DropdownMenuItem>
                         <DropdownMenuItem onClick={() => handleEditClick(factura)}><Pencil className="mr-2 h-4 w-4" />Editar</DropdownMenuItem>
                         <DropdownMenuItem onClick={() => handleDeleteClick(factura)} className="text-red-500"><Trash2 className="mr-2 h-4 w-4" />Eliminar</DropdownMenuItem>
                       </DropdownMenuContent>
