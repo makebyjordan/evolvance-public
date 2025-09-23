@@ -1,9 +1,9 @@
 
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { db } from "@/lib/firebase";
-import { collection, onSnapshot, query, orderBy, Timestamp } from "firebase/firestore";
+import { collection, onSnapshot, query, orderBy, Timestamp, getDocs } from "firebase/firestore";
 import { Card, CardDescription, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -11,70 +11,100 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertTriangle, Database, Users2 } from "lucide-react";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Badge } from "@/components/ui/badge";
+import type { LandAd } from "@/app/actions/land-ads-actions";
 
 export interface LandAdResponse {
   id: string;
   landAdId: string;
-  landAdTitle?: string;
+  landAdTitle?: string; // This will be populated from the landAdsMap
   responses: { question: string; answer: string }[];
   createdAt: any;
 }
 
 export default function LandAdResponsesPage() {
   const [responses, setResponses] = useState<LandAdResponse[]>([]);
+  const [landAdsMap, setLandAdsMap] = useState<Map<string, string>>(new Map());
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const q = query(collection(db, "landAdResponses"), orderBy("createdAt", "desc"));
-    
-    const unsubscribe = onSnapshot(q, (querySnapshot) => {
-      const responsesData: LandAdResponse[] = [];
-      const landAdPromises: Promise<void>[] = [];
-
-      querySnapshot.forEach((doc) => {
-        const data = doc.data();
-        const responseItem: LandAdResponse = {
-          id: doc.id,
-          landAdId: data.landAdId,
-          responses: data.responses,
-          createdAt: (data.createdAt as Timestamp).toDate().toISOString(),
-        };
-
-        // Fetch landAd title
-        const landAdRef = doc(db, "landAds", data.landAdId);
-        const promise = onSnapshot(landAdRef, (landAdSnap) => {
-            if (landAdSnap.exists()) {
-                responseItem.landAdTitle = landAdSnap.data().title || 'Sin Título';
-            } else {
-                responseItem.landAdTitle = 'LandAD Eliminado';
-            }
+    const fetchLandAdsAndResponses = async () => {
+      try {
+        // 1. Fetch all LandADs once to create a map of ID -> Title
+        const landAdsQuery = query(collection(db, "landAds"));
+        const landAdsSnapshot = await getDocs(landAdsQuery);
+        const adsMap = new Map<string, string>();
+        landAdsSnapshot.forEach((doc) => {
+          adsMap.set(doc.id, doc.data().title || 'Sin Título');
         });
-        // Note: This onSnapshot inside a loop is not ideal for performance but works for this case.
-        // A better approach for larger scale would be to fetch all landADs once.
-        
-        responsesData.push(responseItem);
-      });
+        setLandAdsMap(adsMap);
 
-      setResponses(responsesData);
-      setLoading(false);
+        // 2. Set up the real-time listener for responses
+        const responsesQuery = query(collection(db, "landAdResponses"), orderBy("createdAt", "desc"));
+        const unsubscribe = onSnapshot(responsesQuery, (querySnapshot) => {
+          const responsesData: LandAdResponse[] = [];
+          querySnapshot.forEach((doc) => {
+            const data = doc.data();
+            responsesData.push({
+              id: doc.id,
+              landAdId: data.landAdId,
+              responses: data.responses,
+              createdAt: (data.createdAt as Timestamp)?.toDate().toISOString() || new Date().toISOString(),
+            });
+          });
+          setResponses(responsesData);
+          setLoading(false);
+        }, (err) => {
+            console.error("Error fetching LandAd responses in real-time: ", err);
+            setError("No se pudieron cargar las respuestas en tiempo real.");
+            setLoading(false);
+        });
 
-    }, (err) => {
-      console.error("Error fetching LandAd responses in real-time: ", err);
-      setError("No se pudieron cargar las respuestas.");
-      setLoading(false);
-    });
+        return unsubscribe;
 
-    return () => unsubscribe();
+      } catch (err) {
+        console.error("Error fetching initial data: ", err);
+        setError("No se pudieron cargar los datos iniciales.");
+        setLoading(false);
+      }
+    };
+
+    const unsubscribePromise = fetchLandAdsAndResponses();
+
+    return () => {
+      unsubscribePromise.then(unsubscribe => unsubscribe && unsubscribe());
+    };
   }, []);
+  
+  const getLandAdTitle = (landAdId: string) => {
+    return landAdsMap.get(landAdId) || 'LandAD Eliminado o Desconocido';
+  };
+
 
   if (loading) {
     return (
       <div className="space-y-4">
-        <Skeleton className="h-24 w-full" />
-        <Skeleton className="h-12 w-full" />
-        <Skeleton className="h-10 w-full" />
-        <Skeleton className="h-10 w-full" />
+        <Card className="mb-8">
+            <CardHeader>
+                 <div className="flex items-center gap-4">
+                    <Users2 className="w-8 h-8 text-primary" />
+                    <div>
+                        <CardTitle className="text-2xl font-headline">Clientes de LandADS</CardTitle>
+                        <CardDescription>
+                            <Skeleton className="h-4 w-96" />
+                        </CardDescription>
+                    </div>
+                </div>
+            </CardHeader>
+        </Card>
+        <Card>
+            <CardContent className="pt-6">
+                <Skeleton className="h-12 w-full" />
+                <Skeleton className="h-10 w-full mt-2" />
+                <Skeleton className="h-10 w-full mt-2" />
+                 <Skeleton className="h-10 w-full mt-2" />
+            </CardContent>
+        </Card>
       </div>
     );
   }
@@ -124,7 +154,7 @@ export default function LandAdResponsesPage() {
                             <TableRow key={response.id}>
                                 <TableCell>{new Date(response.createdAt).toLocaleString()}</TableCell>
                                 <TableCell>
-                                    <Badge variant="outline">{response.landAdTitle || "Cargando..."}</Badge>
+                                    <Badge variant="outline">{getLandAdTitle(response.landAdId)}</Badge>
                                 </TableCell>
                                 <TableCell>
                                      <Accordion type="single" collapsible className="w-full">
