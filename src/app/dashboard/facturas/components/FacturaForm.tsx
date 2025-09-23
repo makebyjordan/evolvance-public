@@ -79,7 +79,7 @@ export function FacturaForm({ isOpen, setIsOpen, onFormSubmit, factura }: Factur
   });
   
   const items = form.watch("items");
-  const total = items?.reduce((sum, item) => sum + (item.price || 0), 0) || 0;
+  const total = Array.isArray(items) ? items.reduce((sum, item) => sum + (parseFloat(String(item.price)) || 0), 0) : 0;
 
 
   useEffect(() => {
