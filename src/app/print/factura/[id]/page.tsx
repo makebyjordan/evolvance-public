@@ -72,7 +72,7 @@ export default function PrintFacturaPage() {
     useEffect(() => {
         if (!loading && !error && factura) {
             // Automatically trigger print dialog once data is loaded
-            window.print();
+            setTimeout(() => window.print(), 500);
         }
     }, [loading, error, factura]);
 
@@ -108,6 +108,12 @@ export default function PrintFacturaPage() {
     };
 
     const formatCurrency = (amount: number) => new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'EUR' }).format(amount);
+    
+    const total = factura.total;
+    const vatRate = 0.21;
+    const taxableBase = total / (1 + vatRate);
+    const vatAmount = total - taxableBase;
+
 
     return (
        <div className="bg-white text-black p-8 md:p-12 font-sans max-w-4xl mx-auto my-12 shadow-lg rounded-lg print:shadow-none print:my-0 print:rounded-none">
@@ -156,10 +162,18 @@ export default function PrintFacturaPage() {
             </section>
 
             <section className="flex justify-end mt-8">
-                <div className="w-full md:w-1/2">
+                <div className="w-full md:w-1/2 space-y-2">
+                    <div className="flex justify-between items-center p-2">
+                        <span className="text-md">Base Imponible</span>
+                        <span className="text-md font-semibold">{formatCurrency(taxableBase)}</span>
+                    </div>
+                    <div className="flex justify-between items-center p-2">
+                        <span className="text-md">IVA (21%)</span>
+                        <span className="text-md font-semibold">{formatCurrency(vatAmount)}</span>
+                    </div>
                     <div className="flex justify-between items-center bg-gray-200 p-4 rounded-lg">
                         <span className="text-xl font-bold">TOTAL</span>
-                        <span className="text-xl font-bold">{formatCurrency(factura.total)}</span>
+                        <span className="text-xl font-bold">{formatCurrency(total)}</span>
                     </div>
                 </div>
             </section>
