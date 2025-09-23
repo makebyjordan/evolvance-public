@@ -3,13 +3,14 @@
 
 import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
-import { getDoc, doc } from 'firebase/firestore';
+import { getDoc, doc, Timestamp } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { type Presupuesto } from '@/app/actions/presupuestos-actions';
 import { type CompanyInfo, getCompanyInfo } from '@/app/actions/company-actions';
-import { AlertTriangle, Loader2 } from 'lucide-react';
+import { AlertTriangle, Loader2, Printer } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import Image from 'next/image';
+import { Button } from '@/components/ui/button';
 
 export default function PrintPresupuestoPage() {
     const params = useParams();
@@ -35,7 +36,16 @@ export default function PrintPresupuestoPage() {
                 ]);
 
                 if (presupuestoSnap.exists()) {
-                    setPresupuesto({ id: presupuestoSnap.id, ...presupuestoSnap.data() } as Presupuesto);
+                    const data = presupuestoSnap.data();
+                    const convertTimestamp = (ts: any) => {
+                        if (ts instanceof Timestamp) return ts.toDate();
+                        return new Date(ts);
+                    };
+                    setPresupuesto({ 
+                        id: presupuestoSnap.id, 
+                        ...data,
+                        date: convertTimestamp(data.date),
+                    } as Presupuesto);
                 } else {
                     setError("Presupuesto no encontrado.");
                 }
@@ -74,10 +84,24 @@ export default function PrintPresupuestoPage() {
         return <div className="flex items-center justify-center min-h-screen">No se encontraron datos.</div>;
     }
 
+    const formatDate = (date: any) => {
+        try {
+            const d = new Date(date);
+            if (isNaN(d.getTime())) return "Fecha inválida";
+            return d.toLocaleDateString('es-ES');
+        } catch {
+            return "Fecha inválida";
+        }
+    };
+
     const formatCurrency = (amount: number) => new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'EUR' }).format(amount);
 
     return (
-       <div className="bg-white text-black p-8 md:p-12 font-sans max-w-4xl mx-auto my-12 shadow-lg rounded-lg">
+       <div className="bg-white text-black p-8 md:p-12 font-sans max-w-4xl mx-auto my-12 shadow-lg rounded-lg print:shadow-none print:my-0 print:rounded-none">
+            <Button onClick={() => window.print()} className="absolute top-4 right-4 print:hidden">
+                <Printer className="mr-2 h-4 w-4"/>
+                Imprimir o Guardar como PDF
+            </Button>
             <header className="flex justify-between items-start mb-12 border-b pb-8">
                 <div>
                     {companyInfo.logoUrl && <Image src={companyInfo.logoUrl} alt="Logo" width={150} height={150} className="mb-4"/>}
@@ -88,7 +112,7 @@ export default function PrintPresupuestoPage() {
                 <div className="text-right">
                     <h2 className="text-3xl font-bold uppercase text-gray-700">Presupuesto</h2>
                     <p className="text-sm">Nº: <span className="font-semibold">{presupuesto.presupuestoNumber}</span></p>
-                    <p className="text-sm">Fecha: <span className="font-semibold">{new Date(presupuesto.date).toLocaleDateString()}</span></p>
+                    <p className="text-sm">Fecha: <span className="font-semibold">{formatDate(presupuesto.date)}</span></p>
                 </div>
             </header>
 
