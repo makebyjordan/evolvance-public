@@ -3,7 +3,7 @@
 
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { Home, FileText, Briefcase, LogOut, Building, User, Handshake, ArrowDownCircle, ArrowUpCircle, Globe, GraduationCap, FileSignature, Presentation, ClipboardCheck, Megaphone, Users2, CircleDollarSign, Receipt, Building2, Image as ImageIcon } from 'lucide-react';
+import { Home, FileText, Briefcase, LogOut, Building, User, Handshake, ArrowDownCircle, ArrowUpCircle, Globe, GraduationCap, FileSignature, Presentation, ClipboardCheck, Megaphone, Users2, CircleDollarSign, Receipt, Building2, Image as ImageIcon, ClipboardList } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/contexts/AuthContext';
 import { auth } from '@/lib/firebase';
@@ -25,6 +25,7 @@ const navItems = [
   { href: '/dashboard/contracts', icon: FileSignature, label: 'Contratos' },
   { href: '/dashboard/services', icon: Briefcase, label: 'Servicios' },
   { href: '/dashboard/training', icon: GraduationCap, label: 'Formación' },
+  { href: '/dashboard/protocolos', icon: ClipboardList, label: 'Protocolos' },
 ];
 
 const crmItems = [
