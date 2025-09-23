@@ -1,17 +1,21 @@
 
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect } from "react";
 import { db } from "@/lib/firebase";
 import { collection, onSnapshot, query, orderBy, Timestamp, getDocs } from "firebase/firestore";
 import { Card, CardDescription, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { AlertTriangle, Database, Users2 } from "lucide-react";
+import { AlertTriangle, Database, Users2, MoreHorizontal, Trash2 } from "lucide-react";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Badge } from "@/components/ui/badge";
-import type { LandAd } from "@/app/actions/land-ads-actions";
+import { Button } from "@/components/ui/button";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
+import { useToast } from "@/hooks/use-toast";
+import { deleteLandAdResponse } from "@/app/actions/land-ads-responses-actions";
 
 export interface LandAdResponse {
   id: string;
@@ -26,6 +30,9 @@ export default function LandAdResponsesPage() {
   const [landAdsMap, setLandAdsMap] = useState<Map<string, string>>(new Map());
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [isAlertOpen, setIsAlertOpen] = useState(false);
+  const [selectedResponse, setSelectedResponse] = useState<LandAdResponse | null>(null);
+  const { toast } = useToast();
 
   useEffect(() => {
     const fetchLandAdsAndResponses = async () => {
@@ -80,6 +87,31 @@ export default function LandAdResponsesPage() {
     return landAdsMap.get(landAdId) || 'LandAD Eliminado o Desconocido';
   };
 
+  const handleDeleteClick = (response: LandAdResponse) => {
+    setSelectedResponse(response);
+    setIsAlertOpen(true);
+  };
+
+  const confirmDelete = async () => {
+    if (!selectedResponse) return;
+
+    const result = await deleteLandAdResponse(selectedResponse.id);
+
+    if (result.success) {
+      toast({
+        title: "Respuesta Eliminada",
+        description: "La respuesta del usuario ha sido eliminada con éxito.",
+      });
+    } else {
+      toast({
+        variant: "destructive",
+        title: "Error al Eliminar",
+        description: result.error || "No se pudo eliminar la respuesta.",
+      });
+    }
+    setIsAlertOpen(false);
+    setSelectedResponse(null);
+  };
 
   if (loading) {
     return (
@@ -146,6 +178,7 @@ export default function LandAdResponsesPage() {
                             <TableHead>Fecha</TableHead>
                             <TableHead>LandAD</TableHead>
                             <TableHead>Respuestas</TableHead>
+                            <TableHead className="text-right">Acciones</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -172,11 +205,27 @@ export default function LandAdResponsesPage() {
                                         </AccordionItem>
                                     </Accordion>
                                 </TableCell>
+                                <TableCell className="text-right">
+                                    <DropdownMenu>
+                                      <DropdownMenuTrigger asChild>
+                                        <Button variant="ghost" className="h-8 w-8 p-0">
+                                          <span className="sr-only">Abrir menú</span>
+                                          <MoreHorizontal className="h-4 w-4" />
+                                        </Button>
+                                      </DropdownMenuTrigger>
+                                      <DropdownMenuContent align="end">
+                                        <DropdownMenuItem onClick={() => handleDeleteClick(response)} className="text-red-500">
+                                          <Trash2 className="mr-2 h-4 w-4" />
+                                          Eliminar
+                                        </DropdownMenuItem>
+                                      </DropdownMenuContent>
+                                    </DropdownMenu>
+                                </TableCell>
                             </TableRow>
                         ))
                         ) : (
                         <TableRow>
-                            <TableCell colSpan={3} className="h-24 text-center">
+                            <TableCell colSpan={4} className="h-24 text-center">
                                 <Database className="mx-auto h-12 w-12 text-gray-400" />
                                 <h3 className="mt-2 text-sm font-medium text-gray-900 dark:text-gray-200">No hay respuestas todavía</h3>
                                 <p className="mt-1 text-sm text-gray-500">Cuando un usuario envíe datos desde un LandAD, aparecerán aquí.</p>
@@ -188,6 +237,22 @@ export default function LandAdResponsesPage() {
             </div>
         </CardContent>
       </Card>
+       <AlertDialog open={isAlertOpen} onOpenChange={setIsAlertOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>¿Estás seguro?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Esta acción no se puede deshacer. Esto eliminará permanentemente la respuesta.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+            <AlertDialogAction onClick={confirmDelete} className="bg-destructive hover:bg-destructive/90">
+              Eliminar
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }
