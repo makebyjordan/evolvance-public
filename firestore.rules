@@ -1,128 +1,63 @@
+
 rules_version = '2';
 
 service cloud.firestore {
   match /databases/{database}/documents {
-  
-    // Reglas para la colección 'clients'
-    match /clients/{clientId} {
-      allow read, write: if request.auth != null;
+
+    // Helper function to check ownership
+    function isOwner(userId) {
+      return request.auth.uid == userId;
+    }
+
+    // --- Users Collection ---
+    // Anyone can create a user profile (for sign up)
+    // Only the owner can read or update their own profile
+    // Deletion is not allowed
+    match /users/{userId} {
+      allow create: if request.auth != null;
+      allow read, update: if isOwner(userId);
+      allow delete: if false;
     }
     
-    // Reglas para la colección 'collaborators'
-    match /collaborators/{collaboratorId} {
-      // El dashboard puede leer y escribir
-      allow read, write: if request.auth != null;
-      // La página pública de firma solo puede leer y actualizar el html/estado
-      allow get, update: if request.auth == null 
-                         && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['contractHtml', 'contractStatus', 'updatedAt']);
-    }
-    
-    // Reglas para la colección 'contracts' (plantillas)
-    match /contracts/{contractId} {
-      allow read, write: if request.auth != null;
-    }
-
-    // Reglas para la colección 'followUps'
-    match /followUps/{followUpId} {
-      allow read, write: if request.auth != null;
-    }
-    
-    // Reglas para la colección 'proposals'
-    match /proposals/{proposalId} {
-      allow read, write: if request.auth != null;
-    }
-
-    // Reglas para la colección 'presentations'
-    match /presentations/{presentationId} {
-      allow read, write: if request.auth != null;
-    }
-
-    // Reglas para la colección 'services'
-    match /services/{serviceId} {
-      // Logged-in users can manage services
-      allow read, write: if request.auth != null;
-    }
-
-    // Reglas para la colección 'htmls' (documentos html personales)
-    match /htmls/{htmlId} {
-      // Logged-in users can manage their own htmls
-      allow read, write: if request.auth != null;
-    }
-    
-    // Reglas para la colección 'objectives' (objetivos personales)
-    match /objectives/{objectiveId} {
-      // Logged-in users can manage objectives
-      allow read, write: if request.auth != null;
-    }
-
-    // Reglas para las colecciones de finanzas
-    match /presupuestos/{presupuestoId} {
-      allow read, write: if request.auth != null;
-    }
-    match /facturas/{facturaId} {
-      allow read, write: if request.auth != null;
-    }
-
-    // Reglas para los datos de la empresa
-    match /company/info {
-       allow read: if true; // Permitir lectura a todos (para PDFs, etc.)
-       allow write: if request.auth != null; // Solo autenticados pueden escribir
-    }
-
-     // Reglas para el contenido de la web
-    match /webContent/{section} {
-       allow read: if true; // Lectura pública
-       allow write: if request.auth != null; // Escritura para admins
-    }
-
-     // Reglas para las facturas IN/OUT
-    match /invoicesIn/{invoiceId} {
-      allow read, write: if request.auth != null;
-    }
-    match /invoicesOut/{invoiceId} {
-      allow read, write: if request.auth != null;
-    }
-
-    // Reglas para la galería de imágenes
-    match /images/{imageId} {
-      allow read, write: if request.auth != null;
-    }
-    
-    // Reglas para la galería de videos
-    match /videos/{videoId} {
-      allow read, write: if request.auth != null;
-    }
-    
-    // Reglas para formación
-    match /trainingSubsections/{subsectionId} {
-        allow read, write: if request.auth != null;
-    }
-    match /trainingItems/{itemId} {
-        allow read, write: if request.auth != null;
-    }
-
-    // Reglas para protocolos
-    match /protocols/{protocolId} {
-        allow read, write: if request.auth != null;
-    }
-    
-    // Reglas para LandADS
-    match /landAds/{landAdId} {
-       allow read, write: if request.auth != null;
-    }
-
-     // Reglas para respuestas de LandADS
-    match /landAdResponses/{responseId} {
-       allow read: if request.auth != null; // Solo los admins pueden leer las respuestas
-       allow create: if true; // Cualquiera puede crear una respuesta (enviar formulario)
-       allow update, delete: if request.auth != null; // Solo admins pueden modificar/borrar
-    }
-    
-    // Reglas para el registro horario
+    // --- User Status Collection (for Horario) ---
+    // User can only read all statuses
+    // User can only create/update their own status document
     match /userStatus/{userId} {
-      allow read, write: if request.auth != null;
+        allow read: if request.auth != null;
+        // Map user ID strings to specific email addresses
+        allow write: if request.auth != null && 
+                     ((userId == 'sandra' && request.auth.token.email == 'sandra@evol-vance.es') ||
+                      (userId == 'julian' && request.auth.token.email == 'julian@evol-vance.com') ||
+                      (userId == 'jordan' && request.auth.token.email == 'jordangarciajara@gmail.com'));
     }
-    match /workSessions/{sessionId} {
+
+    // --- Public Collections (Proposals, Presentations, LandAD Responses) ---
+    // Allow read access for public-facing pages
+    // Write access is restricted to server-side actions (or authenticated users in dashboard)
+    match /proposals/{proposalId} {
+      allow read: if true;
+      allow write: if request.auth != null; 
+    }
+
+    match /presentations/{presentationId} {
+      allow read: if true;
+      allow write: if request.auth != null; 
+    }
+    
+    match /landAdResponses/{responseId} {
+        allow create: if true; // Anyone can submit a response
+        allow read, update, delete: if request.auth != null; // Only admins from dashboard
+    }
+    
+     match /landAds/{landAdId} {
+      allow read: if true;
+      allow write: if request.auth != null; 
+    }
+
+    // --- General Dashboard Collections ---
+    // All authenticated users can read, create, update, and delete from these collections.
+    // This allows dashboard users to manage the app's content.
+    match /{collection}/{document=**} {
       allow read, write: if request.auth != null;
     }
   }
