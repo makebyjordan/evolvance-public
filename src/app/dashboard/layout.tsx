@@ -3,7 +3,7 @@
 
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { Home, FileText, Briefcase, LogOut, Building, User, Handshake, ArrowDownCircle, ArrowUpCircle, Globe, GraduationCap, FileSignature, Presentation, ClipboardCheck, Megaphone, Users2, CircleDollarSign, Receipt, Building2, Image as ImageIcon, ClipboardList, Video, Menu } from 'lucide-react';
+import { Home, FileText, Briefcase, LogOut, Building, User, Handshake, ArrowDownCircle, ArrowUpCircle, Globe, GraduationCap, FileSignature, Presentation, ClipboardCheck, Megaphone, Users2, CircleDollarSign, Receipt, Building2, Image as ImageIcon, ClipboardList, Video, Menu, Calendar } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/contexts/AuthContext';
 import { auth } from '@/lib/firebase';
@@ -31,6 +31,10 @@ const navItems = [
   { href: '/dashboard/protocolos', icon: ClipboardList, label: 'Protocolos' },
 ];
 
+const scheduleItems = [
+    { href: '#', icon: Calendar, label: 'Horario' },
+];
+
 const crmItems = [
     { href: '/dashboard/sandra', icon: User, label: 'Sandra' },
     { href: '/dashboard/julian', icon: User, label: 'Julian' },
@@ -50,7 +54,7 @@ function NavLink({ href, icon: Icon, label, onClick, pathname }: { href: string,
             href={href}
             onClick={onClick}
             className={`flex items-center gap-3 rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
-                pathname.startsWith(href)
+                pathname.startsWith(href) && href !== '#'
                 ? 'bg-primary text-primary-foreground'
                 : 'text-muted-foreground hover:bg-muted hover:text-foreground'
             }`}
@@ -84,6 +88,10 @@ function SidebarContent({pathname, closeSheet}: {pathname: string, closeSheet: (
             <nav className="flex-1 py-6 px-4 space-y-1 overflow-y-auto">
               <p className="px-4 pt-2 pb-2 text-xs font-semibold text-muted-foreground/80 uppercase tracking-wider">General</p>
               {navItems.map((item) => <NavLink key={item.label} {...item} onClick={closeSheet} pathname={pathname} />)}
+                <div className="px-4 pt-4 pb-2">
+                    <p className="text-xs font-semibold text-muted-foreground/80 uppercase tracking-wider">Planificación</p>
+                </div>
+                 {scheduleItems.map((item) => <NavLink key={item.label} {...item} onClick={closeSheet} pathname={pathname} />)}
                 <div className="px-4 pt-4 pb-2">
                     <p className="text-xs font-semibold text-muted-foreground/80 uppercase tracking-wider">CRM</p>
                 </div>
