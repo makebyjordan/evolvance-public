@@ -2,7 +2,7 @@
 'use server';
 
 import { db } from '@/lib/firebase';
-import { collection, doc, addDoc, updateDoc, serverTimestamp, query, where, getDocs, Timestamp } from 'firebase/firestore';
+import { collection, doc, addDoc, setDoc, updateDoc, serverTimestamp, query, where, getDocs, Timestamp, getDoc } from 'firebase/firestore';
 import { revalidatePath } from 'next/cache';
 
 export type User = 'sandra' | 'julian' | 'jordan';
@@ -44,12 +44,12 @@ export async function startWorkSession(userId: User): Promise<ActionResult<strin
       duration: 0,
     });
 
-    // Update user status
-    await updateDoc(getStatusRef(userId), {
+    // Update user status using setDoc with merge to create if it doesn't exist
+    await setDoc(getStatusRef(userId), {
       isWorking: true,
       currentSessionId: sessionRef.id,
       lastSeen: serverTimestamp(),
-    });
+    }, { merge: true });
 
     revalidatePath('/dashboard/horario');
     return { success: true, data: sessionRef.id };
