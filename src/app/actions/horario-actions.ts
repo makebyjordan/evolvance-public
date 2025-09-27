@@ -72,11 +72,13 @@ export async function endWorkSession(userId: User, sessionId: string): Promise<A
     }
     
     const sessionData = sessionSnap.data();
-    const startTime = (sessionData.startTime as Timestamp).toDate();
+    
+    // Fallback to current time if startTime is not yet available on the server
+    const startTime = sessionData.startTime ? (sessionData.startTime as Timestamp).toDate() : new Date();
     const endTime = new Date();
     
-    // Calculate duration in minutes
-    const duration = Math.round((endTime.getTime() - startTime.getTime()) / (1000 * 60));
+    // Calculate duration in minutes, ensuring it's not negative
+    const duration = Math.max(0, Math.round((endTime.getTime() - startTime.getTime()) / (1000 * 60)));
 
     // Update session document
     await updateDoc(sessionRef, {
@@ -96,11 +98,15 @@ export async function endWorkSession(userId: User, sessionId: string): Promise<A
   } catch (error: any) {
     console.error("Error ending work session:", error);
      // If something fails, try to reset the user's status to avoid getting stuck
-    await updateDoc(getStatusRef(userId), {
-      isWorking: false,
-      currentSessionId: null,
-    }).catch(resetError => console.error("Failed to reset user status:", resetError));
+    try {
+        await updateDoc(getStatusRef(userId), {
+            isWorking: false,
+            currentSessionId: null,
+        });
+    } catch (resetError) {
+        console.error("Failed to reset user status after error:", resetError);
+    }
     
-    return { success: false, error: "No se pudo finalizar la sesión de trabajo." };
+    return { success: false, error: "No se pudo finalizar la sesión de trabajo. " + error.message };
   }
 }
