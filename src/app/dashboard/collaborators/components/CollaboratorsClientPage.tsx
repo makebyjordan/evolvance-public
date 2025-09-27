@@ -2,7 +2,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { PlusCircle, MoreHorizontal, FileText, Trash2, Pencil, AlertTriangle, FileSignature, FileCog, Upload, File, FileSymlink, Eye } from "lucide-react";
+import { PlusCircle, MoreHorizontal, FileText, Trash2, Pencil, AlertTriangle, FileSignature, FileCog, Upload, File, FileSymlink, Eye, Share2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -16,6 +16,7 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import {
@@ -114,6 +115,15 @@ export function CollaboratorsClientPage() {
 
   const handleViewPdfClick = (pdfUrl: string) => {
     window.open(pdfUrl, '_blank');
+  };
+  
+  const handleShareClick = (collaboratorId: string) => {
+    const url = `${window.location.origin}/sign-contract/${collaboratorId}`;
+    navigator.clipboard.writeText(url);
+    toast({
+      title: "Enlace Copiado",
+      description: "El enlace para la firma se ha copiado al portapapeles.",
+    });
   };
 
   const confirmDelete = async () => {
@@ -231,12 +241,17 @@ export function CollaboratorsClientPage() {
                       <DropdownMenuContent align="end">
                          <DropdownMenuItem onClick={() => handleViewClick(collaborator.id)}>
                             <Eye className="mr-2 h-4 w-4" />
-                            Ver
+                            Previsualizar Contrato
                          </DropdownMenuItem>
                          <DropdownMenuItem onClick={() => handleContractClick(collaborator.id)}>
                           <FileSignature className="mr-2 h-4 w-4" />
-                          Gestionar Contrato HTML
+                          Gestionar/Editar Contrato
                         </DropdownMenuItem>
+                         <DropdownMenuItem onClick={() => handleShareClick(collaborator.id)}>
+                          <Share2 className="mr-2 h-4 w-4" />
+                          Compartir enlace de firma
+                        </DropdownMenuItem>
+                        <DropdownMenuSeparator />
                         <DropdownMenuItem onClick={() => handleUploadClick(collaborator)}>
                             <Upload className="mr-2 h-4 w-4" />
                             Subir Contrato PDF
@@ -247,9 +262,10 @@ export function CollaboratorsClientPage() {
                                 Ver Contrato PDF
                             </DropdownMenuItem>
                         )}
+                        <DropdownMenuSeparator />
                         <DropdownMenuItem onClick={() => handleEditClick(collaborator)}>
                           <Pencil className="mr-2 h-4 w-4" />
-                          Editar
+                          Editar Datos Colaborador
                         </DropdownMenuItem>
                         <DropdownMenuItem onClick={() => handleDeleteClick(collaborator)} className="text-red-500">
                           <Trash2 className="mr-2 h-4 w-4" />
