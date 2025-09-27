@@ -2,7 +2,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { PlusCircle, MoreHorizontal, FileText, Trash2, Pencil, AlertTriangle, FileSignature, FileCog, Upload, File, FileSymlink } from "lucide-react";
+import { PlusCircle, MoreHorizontal, FileText, Trash2, Pencil, AlertTriangle, FileSignature, FileCog, Upload, File, FileSymlink, Eye } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -101,6 +101,10 @@ export function CollaboratorsClientPage() {
   
   const handleContractClick = (collaboratorId: string) => {
     router.push(`/dashboard/contracts/${collaboratorId}`);
+  };
+
+  const handleViewClick = (collaboratorId: string) => {
+    window.open(`/dashboard/contracts/${collaboratorId}`, '_blank');
   };
 
   const handleUploadClick = (collaborator: Collaborator) => {
@@ -225,6 +229,10 @@ export function CollaboratorsClientPage() {
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
+                         <DropdownMenuItem onClick={() => handleViewClick(collaborator.id)}>
+                            <Eye className="mr-2 h-4 w-4" />
+                            Ver
+                         </DropdownMenuItem>
                          <DropdownMenuItem onClick={() => handleContractClick(collaborator.id)}>
                           <FileSignature className="mr-2 h-4 w-4" />
                           Gestionar Contrato HTML
