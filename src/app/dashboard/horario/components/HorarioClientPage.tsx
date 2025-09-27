@@ -6,14 +6,17 @@ import type { User, UserStatus } from "@/app/actions/horario-actions";
 import { setUserStatus } from "@/app/actions/horario-actions";
 import { db } from "@/lib/firebase";
 import { onSnapshot, doc } from "firebase/firestore";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
-import { AlertTriangle, UserCheck, UserX } from "lucide-react";
+import { AlertTriangle, UserCheck, UserX, Pencil } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useAuth } from "@/contexts/AuthContext";
+import { Button } from "@/components/ui/button";
+import { UserDisplayForm } from "./UserDisplayForm";
+import Image from "next/image";
 
 const USERS_CONFIG: Record<User, { email: string }> = {
     sandra: { email: 'sandra@evol-vance.es' },
@@ -23,11 +26,20 @@ const USERS_CONFIG: Record<User, { email: string }> = {
 
 const USERS: User[] = ['sandra', 'julian', 'jordan'];
 
+// Helper component to safely render SVG
+function SvgRenderer({ svgString, className }: { svgString: string, className?: string }) {
+    if (!svgString || typeof svgString !== 'string') return null;
+    const modifiedSvgString = svgString.replace('<svg', `<svg class="${className || ''}"`);
+    return <div dangerouslySetInnerHTML={{ __html: modifiedSvgString }} />;
+}
+
 export function HorarioClientPage() {
     const { user: currentUser } = useAuth();
     const [statuses, setStatuses] = useState<Record<User, UserStatus>>({} as Record<User, UserStatus>);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const [isFormOpen, setIsFormOpen] = useState(false);
+    const [selectedUser, setSelectedUser] = useState<User | null>(null);
     const { toast } = useToast();
 
     const loggedInUser = USERS.find(u => USERS_CONFIG[u].email === currentUser?.email);
@@ -39,7 +51,6 @@ export function HorarioClientPage() {
                     if (docSnap.exists()) {
                         setStatuses(prev => ({ ...prev, [user]: docSnap.data() as UserStatus }));
                     } else {
-                         // Set a default status if the document doesn't exist
                         setStatuses(prev => ({ ...prev, [user]: { isWorking: false } }));
                     }
                 },
@@ -66,6 +77,11 @@ export function HorarioClientPage() {
             });
         }
     };
+
+    const handleEditClick = (user: User) => {
+        setSelectedUser(user);
+        setIsFormOpen(true);
+    };
     
      if (loading) {
         return (
@@ -82,44 +98,68 @@ export function HorarioClientPage() {
     }
 
     return (
-        <div className="grid md:grid-cols-1 lg:grid-cols-3 gap-8">
-            {USERS.map(user => {
-                const userStatus = statuses[user] || { isWorking: false };
-                const canToggle = loggedInUser === user;
+        <>
+            <UserDisplayForm
+                isOpen={isFormOpen}
+                setIsOpen={setIsFormOpen}
+                user={selectedUser}
+                initialData={selectedUser ? statuses[selectedUser] : null}
+            />
+            <div className="grid md:grid-cols-1 lg:grid-cols-3 gap-8">
+                {USERS.map(user => {
+                    const userStatus = statuses[user] || { isWorking: false };
+                    const canToggle = loggedInUser === user;
 
-                return (
-                    <Card key={user} className="flex flex-col">
-                        <CardHeader>
-                            <CardTitle className="capitalize font-headline text-2xl">{user}</CardTitle>
-                            <CardDescription>
-                                Estado de actividad del usuario
-                            </CardDescription>
-                        </CardHeader>
-                        <CardContent className="flex-grow flex flex-col justify-center items-center space-y-6">
-                            <div className={`p-6 rounded-full ${userStatus.isWorking ? 'bg-green-500/20' : 'bg-red-500/20'}`}>
-                               {userStatus.isWorking ? <UserCheck className="w-16 h-16 text-green-500" /> : <UserX className="w-16 h-16 text-red-500" />}
-                            </div>
+                    return (
+                        <Card key={user} className="flex flex-col">
+                            <CardHeader>
+                                <CardTitle className="capitalize font-headline text-2xl">{user}</CardTitle>
+                                <CardDescription>
+                                    Estado de actividad del usuario
+                                </CardDescription>
+                            </CardHeader>
+                            <CardContent className="flex-grow flex flex-col justify-center items-center space-y-6">
+                                <div className="relative w-32 h-32">
+                                    {userStatus.imageUrl ? (
+                                        <Image src={userStatus.imageUrl} alt={user} fill className="rounded-full object-cover border-4 border-card-foreground/10" />
+                                    ) : userStatus.iconSvg ? (
+                                        <div className={`p-6 rounded-full ${userStatus.isWorking ? 'bg-green-500/20' : 'bg-red-500/20'}`}>
+                                            <SvgRenderer svgString={userStatus.iconSvg} className="w-16 h-16 text-foreground"/>
+                                        </div>
+                                    ) : (
+                                        <div className={`p-6 rounded-full ${userStatus.isWorking ? 'bg-green-500/20' : 'bg-red-500/20'}`}>
+                                        {userStatus.isWorking ? <UserCheck className="w-16 h-16 text-green-500" /> : <UserX className="w-16 h-16 text-red-500" />}
+                                        </div>
+                                    )}
+                                </div>
 
-                            <div className="flex items-center justify-between space-x-2 rounded-lg border p-4 w-full">
-                                <Label htmlFor={`working-switch-${user}`} className="flex flex-col space-y-1">
-                                    <span className="font-medium">Estado</span>
-                                    <span className={`text-xs ${userStatus?.isWorking ? 'text-green-500' : 'text-red-500'}`}>
-                                        {userStatus?.isWorking ? 'Activo' : 'Inactivo'}
-                                    </span>
-                                </Label>
-                                <Switch 
-                                    id={`working-switch-${user}`}
-                                    checked={userStatus?.isWorking || false}
-                                    onCheckedChange={() => handleToggle(user, userStatus?.isWorking)}
-                                    disabled={!canToggle}
-                                    aria-readonly={!canToggle}
-                                />
-                            </div>
-                            {!canToggle && <p className="text-xs text-center text-muted-foreground pt-2">Inicia sesión como {user} para cambiar este estado.</p>}
-                        </CardContent>
-                    </Card>
-                );
-            })}
-        </div>
+                                <div className="flex items-center justify-between space-x-2 rounded-lg border p-4 w-full">
+                                    <Label htmlFor={`working-switch-${user}`} className="flex flex-col space-y-1">
+                                        <span className="font-medium">Estado</span>
+                                        <span className={`text-xs ${userStatus?.isWorking ? 'text-green-500' : 'text-red-500'}`}>
+                                            {userStatus?.isWorking ? 'Activo' : 'Inactivo'}
+                                        </span>
+                                    </Label>
+                                    <Switch 
+                                        id={`working-switch-${user}`}
+                                        checked={userStatus?.isWorking || false}
+                                        onCheckedChange={() => handleToggle(user, userStatus?.isWorking)}
+                                        disabled={!canToggle}
+                                        aria-readonly={!canToggle}
+                                    />
+                                </div>
+                                {!canToggle && <p className="text-xs text-center text-muted-foreground pt-2">Inicia sesión como {user} para cambiar este estado.</p>}
+                            </CardContent>
+                             <CardFooter>
+                                <Button variant="outline" className="w-full" onClick={() => handleEditClick(user)}>
+                                    <Pencil className="mr-2 h-4 w-4" />
+                                    Editar Apariencia
+                                </Button>
+                            </CardFooter>
+                        </Card>
+                    );
+                })}
+            </div>
+        </>
     );
 }
