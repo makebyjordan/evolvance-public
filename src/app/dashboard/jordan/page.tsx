@@ -1,17 +1,20 @@
 
 import { Card, CardDescription, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { FileCode } from "lucide-react";
+import { FileCode, Target } from "lucide-react";
 import { HtmlsClientPage } from "./components/HtmlsClientPage";
+import { ObjectivesClientPage } from "../components/objectives/ObjectivesClientPage";
+
 
 export const dynamic = 'force-dynamic';
 
 export default function JordanPage() {
   return (
     <Tabs defaultValue="overview" className="w-full">
-      <TabsList className="grid w-full grid-cols-2 max-w-md">
+      <TabsList className="grid w-full grid-cols-3 max-w-md">
         <TabsTrigger value="overview">Resumen</TabsTrigger>
         <TabsTrigger value="htmls">HTMLs</TabsTrigger>
+        <TabsTrigger value="objectives">Objetivos</TabsTrigger>
       </TabsList>
       <TabsContent value="overview">
         <Card className="mt-4">
@@ -41,6 +44,24 @@ export default function JordanPage() {
             </CardHeader>
             <CardContent>
                 <HtmlsClientPage owner="jordan" />
+            </CardContent>
+        </Card>
+      </TabsContent>
+       <TabsContent value="objectives">
+        <Card className="mt-4">
+           <CardHeader>
+                <div className="flex items-center gap-4">
+                    <Target className="w-8 h-8 text-primary" />
+                    <div>
+                        <CardTitle className="text-2xl font-headline">Gestión de Objetivos</CardTitle>
+                        <CardDescription>
+                            Define y sigue el progreso de los objetivos para Jordan.
+                        </CardDescription>
+                    </div>
+                </div>
+            </CardHeader>
+            <CardContent>
+                <ObjectivesClientPage owner="jordan" />
             </CardContent>
         </Card>
       </TabsContent>
