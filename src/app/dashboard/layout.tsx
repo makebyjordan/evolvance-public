@@ -32,7 +32,7 @@ const navItems = [
 ];
 
 const scheduleItems = [
-    { href: '#', icon: Calendar, label: 'Horario' },
+    { href: '/dashboard/horario', icon: Calendar, label: 'Horario' },
 ];
 
 const crmItems = [
