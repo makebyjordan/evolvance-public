@@ -42,7 +42,7 @@ export default function Showcase() {
     <section id="showcase" className="py-20 md:py-32 w-full">
         <FadeIn>
             <div className="text-center">
-                <h2 className="text-3xl md:text-4xl font-extrabold text-foreground">Mis Creaciones</h2>
+                <h2 className="text-3xl md:text-4xl font-extrabold text-foreground">Casos de EXITO!</h2>
                 <p className="mt-4 max-w-2xl mx-auto text-lg text-muted-foreground">
                 Una selección de proyectos en los que he puesto mi corazón y mi alma.
                 </p>
