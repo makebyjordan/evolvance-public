@@ -44,7 +44,7 @@ export default function Showcase() {
             <div className="text-center">
                 <h2 className="text-3xl md:text-4xl font-extrabold text-foreground">Casos de EXITO!</h2>
                 <p className="mt-4 max-w-2xl mx-auto text-lg text-muted-foreground">
-                Una selección de proyectos en los que he puesto mi corazón y mi alma.
+                Aquí puedes ver las últimas creaciones para nuestros clientes.
                 </p>
             </div>
         </FadeIn>
