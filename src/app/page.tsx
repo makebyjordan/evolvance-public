@@ -5,6 +5,7 @@ import MarketingAI from '@/components/marketing-ai';
 import Services from '@/components/services';
 import Timeline from '@/components/timeline';
 import Philosophy from '@/components/philosophy';
+import Showcase from '@/components/showcase';
 import Team from '@/components/team';
 import Clients from '@/components/clients';
 import Faq from '@/components/faq';
@@ -36,18 +37,22 @@ export default function Home() {
         </div>
         <div className="relative isolate">
             <SectionSeparator position="top" align="right" />
+            <Showcase />
+        </div>
+        <div className="relative isolate">
+            <SectionSeparator position="top" align="left" />
             <Team />
         </div>
          <div className="relative isolate">
-            <SectionSeparator position="top" align="left" />
+            <SectionSeparator position="top" align="right" />
             <Faq />
         </div>
          <div className="relative isolate">
-            <SectionSeparator position="top" align="right" />
+            <SectionSeparator position="top" align="left" />
             <Clients />
         </div>
          <div className="relative isolate">
-            <SectionSeparator position="top" align="left" />
+            <SectionSeparator position="top" align="right" />
             <Cta />
         </div>
       </main>
