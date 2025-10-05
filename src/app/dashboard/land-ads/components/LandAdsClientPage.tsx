@@ -2,7 +2,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { PlusCircle, MoreHorizontal, FileText, Trash2, Pencil, Eye, AlertTriangle, FileCopy } from "lucide-react";
+import { PlusCircle, MoreHorizontal, FileText, Trash2, Pencil, Eye, AlertTriangle, Copy } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -256,7 +256,7 @@ export function LandAdsClientPage() {
                           Ver
                         </DropdownMenuItem>
                         <DropdownMenuItem onClick={() => handleDuplicateClick(landAd.id)}>
-                          <FileCopy className="mr-2 h-4 w-4" />
+                          <Copy className="mr-2 h-4 w-4" />
                           Duplicar
                         </DropdownMenuItem>
                         <DropdownMenuItem onClick={() => handleEditClick(landAd)}>
