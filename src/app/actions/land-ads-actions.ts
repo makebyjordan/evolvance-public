@@ -2,7 +2,7 @@
 'use server';
 
 import { db } from '@/lib/firebase';
-import { collection, doc, addDoc, updateDoc, deleteDoc, serverTimestamp } from 'firebase/firestore';
+import { collection, doc, addDoc, updateDoc, deleteDoc, serverTimestamp, getDoc } from 'firebase/firestore';
 import { revalidatePath } from 'next/cache';
 import type { FeatureCard, IconListItem, MediaGridCard, PricingCard, FaqItem } from './presentations-actions';
 
@@ -150,5 +150,37 @@ export async function deleteLandAd(id: string): Promise<ActionResult<null>> {
   } catch (error: any) {
     console.error('Error deleting LandAd:', error);
     return { success: false, error: 'No se pudo eliminar el LandAD. ' + error.message };
+  }
+}
+
+/**
+ * Duplicates a LandAd by its ID.
+ */
+export async function duplicateLandAd(id: string): Promise<ActionResult<string>> {
+  try {
+    const docRef = doc(db, 'landAds', id);
+    const docSnap = await getDoc(docRef);
+
+    if (!docSnap.exists()) {
+      return { success: false, error: 'El LandAD original no existe.' };
+    }
+
+    const originalData = docSnap.data();
+    const { id: _, createdAt, updatedAt, ...copyData } = originalData;
+
+    const newDocRef = await addDoc(landAdsCollectionRef, {
+      ...copyData,
+      title: `Copia de ${originalData.title}`,
+      code: `${originalData.code}-COPY-${Date.now()}`,
+      createdAt: serverTimestamp(),
+      updatedAt: serverTimestamp(),
+    });
+
+    revalidatePath('/dashboard/land-ads');
+    return { success: true, data: newDocRef.id };
+
+  } catch (error: any) {
+    console.error('Error duplicating LandAd:', error);
+    return { success: false, error: 'No se pudo duplicar el LandAD. ' + error.message };
   }
 }

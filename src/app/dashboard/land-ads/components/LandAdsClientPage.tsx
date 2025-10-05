@@ -2,7 +2,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { PlusCircle, MoreHorizontal, FileText, Trash2, Pencil, Eye, AlertTriangle } from "lucide-react";
+import { PlusCircle, MoreHorizontal, FileText, Trash2, Pencil, Eye, AlertTriangle, FileCopy } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -32,7 +32,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { useToast } from "@/hooks/use-toast";
 import { LandAdForm } from "./LandAdForm";
 import type { LandAd } from "@/app/actions/land-ads-actions";
-import { deleteLandAd } from "@/app/actions/land-ads-actions";
+import { deleteLandAd, duplicateLandAd } from "@/app/actions/land-ads-actions";
 import { useRouter } from "next/navigation";
 import { db } from "@/lib/firebase";
 import { collection, onSnapshot, query, orderBy, Timestamp } from "firebase/firestore";
@@ -138,6 +138,22 @@ export function LandAdsClientPage() {
     window.open(`/view-land-ad/${landAd.id}`, '_blank');
   };
 
+  const handleDuplicateClick = async (id: string) => {
+    const result = await duplicateLandAd(id);
+    if (result.success) {
+      toast({
+        title: "LandAD Duplicado",
+        description: "Se ha creado una copia del LandAD.",
+      });
+    } else {
+      toast({
+        variant: "destructive",
+        title: "Error al Duplicar",
+        description: result.error || "No se pudo duplicar el LandAD.",
+      });
+    }
+  };
+
   const confirmDelete = async () => {
     if (!selectedLandAd) return;
 
@@ -238,6 +254,10 @@ export function LandAdsClientPage() {
                         <DropdownMenuItem onClick={() => handleViewClick(landAd)}>
                           <Eye className="mr-2 h-4 w-4" />
                           Ver
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => handleDuplicateClick(landAd.id)}>
+                          <FileCopy className="mr-2 h-4 w-4" />
+                          Duplicar
                         </DropdownMenuItem>
                         <DropdownMenuItem onClick={() => handleEditClick(landAd)}>
                           <Pencil className="mr-2 h-4 w-4" />
