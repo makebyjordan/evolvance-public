@@ -78,6 +78,7 @@ export default function Header() {
       isDropdown: true,
       items: [
         { href: '/dashboard', label: 'Dashboard' },
+        { href: '/office', label: 'Oficina' },
       ]
     }
   ];
