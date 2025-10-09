@@ -1,8 +1,7 @@
-
 "use client";
 
 import Link from 'next/link';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import { Home, LogOut, Menu, AppWindow } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/contexts/AuthContext';
@@ -11,10 +10,9 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import Image from 'next/image';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { useState, useEffect } from 'react';
-import { collection, onSnapshot, query, orderBy, Timestamp } from "firebase/firestore";
+import { collection, onSnapshot, query, orderBy } from "firebase/firestore";
 import type { OfficeSection } from '@/app/actions/office-sections-actions';
 import * as LucideIcons from 'lucide-react';
-
 
 type IconName = keyof typeof LucideIcons;
 
@@ -23,7 +21,6 @@ function DynamicIcon({ name, ...props }: { name: IconName } & React.ComponentPro
   if (!Icon) return <AppWindow {...props} />; // Fallback icon
   return <Icon {...props} />;
 }
-
 
 function NavLink({ href, icon: Icon, label, onClick, pathname }: { href: string, icon: React.ElementType, label: string, onClick: () => void, pathname: string }) {
     const isActive = pathname === href;
@@ -44,8 +41,7 @@ function NavLink({ href, icon: Icon, label, onClick, pathname }: { href: string,
 }
 
 function SidebarContent({pathname, closeSheet}: {pathname: string, closeSheet: () => void}) {
-    const router = useRouter();
-    const { user } = useAuth();
+    const { user, setOfficeCode } = useAuth();
     const [navItems, setNavItems] = useState<OfficeSection[]>([]);
     
     useEffect(() => {
@@ -57,9 +53,8 @@ function SidebarContent({pathname, closeSheet}: {pathname: string, closeSheet: (
         return () => unsubscribe();
     }, []);
 
-    const handleLogout = async () => {
-        await auth.signOut();
-        router.push('/office/login');
+    const handleLogout = () => {
+        setOfficeCode(null);
     };
 
     const getInitials = (email: string | null | undefined) => {
@@ -84,19 +79,18 @@ function SidebarContent({pathname, closeSheet}: {pathname: string, closeSheet: (
                     <AvatarFallback>{getInitials(user?.email)}</AvatarFallback>
                 </Avatar>
                 <div className="flex flex-col">
-                    <span className="text-sm font-medium">{user?.displayName || user?.email}</span>
+                    <span className="text-sm font-medium">{user?.displayName || 'Equipo'}</span>
                     <span className="text-xs text-muted-foreground">Miembro del equipo</span>
                 </div>
                 </div>
               <Button variant="ghost" className="w-full justify-start gap-3" onClick={handleLogout}>
                 <LogOut className="h-5 w-5" />
-                <span>Cerrar Sesión</span>
+                <span>Salir de Oficina</span>
               </Button>
             </div>
         </div>
     )
 }
-
 
 export default function OfficeDashboardLayout({
   children,
@@ -106,18 +100,10 @@ export default function OfficeDashboardLayout({
   const pathname = usePathname();
   const [isSheetOpen, setIsSheetOpen] = useState(false);
   const closeSheet = () => setIsSheetOpen(false);
-  const { user } = useAuth();
-  const router = useRouter();
-
-  const isAuthPage = pathname === '/office/login' || pathname === '/office/register';
-
-  if (isAuthPage) {
+  const { officeCode } = useAuth();
+  
+  if (!officeCode) {
     return <>{children}</>;
-  }
-
-  // If not authenticated, the AuthProvider will redirect. We can show a loader here.
-  if (!user) {
-    return <div className="flex h-screen items-center justify-center">Cargando...</div>
   }
 
   return (

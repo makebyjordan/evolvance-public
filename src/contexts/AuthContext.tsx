@@ -10,17 +10,40 @@ import { Skeleton } from '@/components/ui/skeleton';
 interface AuthContextType {
   user: User | null;
   loading: boolean;
+  officeCode: string | null;
+  setOfficeCode: (code: string | null) => void;
 }
 
-const AuthContext = createContext<AuthContextType>({ user: null, loading: true });
+const AuthContext = createContext<AuthContextType>({ 
+  user: null, 
+  loading: true,
+  officeCode: null,
+  setOfficeCode: () => {} 
+});
 
-const protectedRoutes = ['/dashboard', '/office'];
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const [officeCode, setOfficeCodeState] = useState<string | null>(null);
   const router = useRouter();
   const pathname = usePathname();
+  
+  useEffect(() => {
+    const storedCode = sessionStorage.getItem('office-code');
+    if (storedCode) {
+      setOfficeCodeState(storedCode);
+    }
+  }, []);
+
+  const setOfficeCode = (code: string | null) => {
+    setOfficeCodeState(code);
+    if (code) {
+      sessionStorage.setItem('office-code', code);
+    } else {
+      sessionStorage.removeItem('office-code');
+    }
+  };
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -35,17 +58,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     if (loading) return;
 
     const isDashboardRoute = pathname.startsWith('/dashboard');
-    const isOfficeRoute = pathname.startsWith('/office');
 
-    if (!user && (isDashboardRoute || isOfficeRoute)) {
-      if (isDashboardRoute) {
+    if (isDashboardRoute && !user) {
         router.push('/login');
-      } else if (isOfficeRoute) {
-        router.push('/office/login');
-      }
     }
   }, [user, loading, router, pathname]);
-
 
   if (loading) {
      return (
@@ -59,17 +76,16 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     );
   }
 
-  const isProtectedRoute = protectedRoutes.some(route => pathname.startsWith(route));
-  if (isProtectedRoute && !user) {
+  const isDashboardRoute = pathname.startsWith('/dashboard');
+  if (isDashboardRoute && !user) {
     return null; // Don't render protected content while redirecting
   }
 
   return (
-    <AuthContext.Provider value={{ user, loading }}>
+    <AuthContext.Provider value={{ user, loading, officeCode, setOfficeCode }}>
       {children}
     </AuthContext.Provider>
   );
 };
 
 export const useAuth = () => useContext(AuthContext);
-

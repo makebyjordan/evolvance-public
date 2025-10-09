@@ -1,51 +1,73 @@
-
 "use client";
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { useAuth } from "@/contexts/AuthContext";
+import { useState } from 'react';
+import { useAuth } from '@/contexts/AuthContext';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { AlertTriangle, KeyRound } from 'lucide-react';
 
-export default function OfficePage() {
-  const { user } = useAuth();
- 
+export default function OfficeAccessPage() {
+  const { officeCode, setOfficeCode } = useAuth();
+  const [inputCode, setInputCode] = useState('');
+  const [error, setError] = useState('');
+
+  const handleCodeSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (inputCode === 'evolteam') {
+      setOfficeCode(inputCode);
+      setError('');
+    } else {
+      setError('El código de acceso no es correcto.');
+    }
+  };
+
+  // If code is correct, AuthProvider will show the dashboard via layout.tsx
+  // This component will only render the access form if the code is not set.
+  if (officeCode) {
+    return null; 
+  }
+
   return (
-    <div>
-      <h1 className="text-3xl font-headline font-bold text-foreground mb-2">
-        ¡Bienvenido a la oficina, {user?.displayName || 'miembro del equipo'}!
-      </h1>
-      <p className="text-muted-foreground mb-8">
-        Este es tu panel de control interno.
-      </p>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-         <div className="card-animated-border">
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-lg">Resumen</CardTitle>
-              <CardDescription>Actividad reciente</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p className="text-muted-foreground">Más estadísticas y datos aparecerán aquí a medida que construyamos esta sección.</p>
-            </CardContent>
-          </Card>
-         </div>
-         <div className="card-animated-border">
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-lg">Próximos Pasos</CardTitle>
-                <CardDescription>¿Qué quieres hacer ahora?</CardDescription>
-              </CardHeader>
-              <CardContent>
-                 <p className="text-muted-foreground">Podemos añadir nuevas secciones como "Tareas", "Proyectos Internos" o "Documentación".</p>
-              </CardContent>
-            </Card>
-         </div>
-      </div>
+    <div className="flex items-center justify-center min-h-screen bg-background">
+      <Card className="mx-auto max-w-sm w-full">
+        <CardHeader className="text-center">
+          <KeyRound className="mx-auto h-12 w-12 text-primary mb-4" />
+          <CardTitle className="text-2xl font-headline text-primary">Acceso a Oficina</CardTitle>
+          <CardDescription>
+            Introduce el código de acceso para continuar.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={handleCodeSubmit} className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="office-code">Código de Acceso</Label>
+              <Input
+                id="office-code"
+                type="password"
+                placeholder="********"
+                value={inputCode}
+                onChange={(e) => setInputCode(e.target.value)}
+                required
+              />
+            </div>
+            {error && (
+                <Alert variant="destructive" className="mt-4">
+                    <AlertTriangle className="h-4 w-4" />
+                    <AlertTitle>Error</AlertTitle>
+                    <AlertDescription>
+                        {error}
+                    </AlertDescription>
+                </Alert>
+            )}
+            <Button type="submit" className="w-full">
+              Entrar
+            </Button>
+          </form>
+        </CardContent>
+      </Card>
     </div>
   );
 }
