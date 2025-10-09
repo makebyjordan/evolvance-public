@@ -1,3 +1,4 @@
+
 "use client";
 
 import Link from 'next/link';
@@ -70,7 +71,13 @@ function SidebarContent({pathname, closeSheet}: {pathname: string, closeSheet: (
             </div>
             <nav className="flex-1 py-6 px-4 space-y-1 overflow-y-auto">
                <NavLink href="/office" icon={Home} label="Resumen" onClick={closeSheet} pathname={pathname} />
-               {navItems.map((item) => <NavLink key={item.id} href={item.path} icon={(props) => <DynamicIcon name={item.icon as IconName} {...props} />} label={item.title} onClick={closeSheet} pathname={pathname} />)}
+               {navItems.map((item) => (
+                  item.type === 'title' ? (
+                     <p key={item.id} className="px-4 pt-4 pb-2 text-xs font-semibold text-muted-foreground/80 uppercase tracking-wider">{item.title}</p>
+                  ) : (
+                     <NavLink key={item.id} href={item.path || '#'} icon={(props) => <DynamicIcon name={(item.icon || 'AppWindow') as IconName} {...props} />} label={item.title} onClick={closeSheet} pathname={pathname} />
+                  )
+               ))}
             </nav>
             <div className="p-4 border-t border-border/20">
                <div className="flex items-center gap-3 mb-4">

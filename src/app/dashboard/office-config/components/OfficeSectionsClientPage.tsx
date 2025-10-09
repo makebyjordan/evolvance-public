@@ -2,7 +2,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { PlusCircle, MoreHorizontal, FileText, Trash2, Pencil, AlertTriangle, Settings, AppWindow } from "lucide-react";
+import { PlusCircle, MoreHorizontal, FileText, Trash2, Pencil, AlertTriangle, Settings, AppWindow, Heading1 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -37,6 +37,7 @@ import { db } from "@/lib/firebase";
 import { collection, onSnapshot, query, orderBy, Timestamp } from "firebase/firestore";
 import { Skeleton } from "@/components/ui/skeleton";
 import * as LucideIcons from 'lucide-react';
+import { Badge } from "@/components/ui/badge";
 
 type IconName = keyof typeof LucideIcons;
 
@@ -57,7 +58,7 @@ export function OfficeSectionsClientPage() {
   const { toast } = useToast();
 
   useEffect(() => {
-    const q = query(collection(db, "officeSections"), orderBy("createdAt", "desc"));
+    const q = query(collection(db, "officeSections"), orderBy("createdAt", "asc"));
     const unsubscribe = onSnapshot(q, 
       (querySnapshot) => {
         const sectionsData: OfficeSection[] = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as OfficeSection));
@@ -95,14 +96,14 @@ export function OfficeSectionsClientPage() {
 
     if (result.success) {
       toast({
-        title: "Sección Eliminada",
-        description: "La sección ha sido eliminada con éxito.",
+        title: "Elemento Eliminado",
+        description: "El elemento del menú ha sido eliminado con éxito.",
       });
     } else {
       toast({
         variant: "destructive",
         title: "Error al Eliminar",
-        description: result.error || "No se pudo eliminar la sección.",
+        description: result.error || "No se pudo eliminar el elemento.",
       });
     }
     setIsAlertOpen(false);
@@ -131,7 +132,7 @@ export function OfficeSectionsClientPage() {
     <>
       <div className="flex justify-end mb-4">
         <Button onClick={() => { setSelectedSection(null); setIsFormOpen(true); }}>
-          <PlusCircle className="mr-2 h-4 w-4" />Crear Sección
+          <PlusCircle className="mr-2 h-4 w-4" />Crear Elemento
         </Button>
       </div>
 
@@ -139,14 +140,27 @@ export function OfficeSectionsClientPage() {
       
       <div className="border rounded-lg">
         <Table>
-          <TableHeader><TableRow><TableHead>Icono</TableHead><TableHead>Título</TableHead><TableHead>Ruta</TableHead><TableHead className="text-right">Acciones</TableHead></TableRow></TableHeader>
+          <TableHeader><TableRow><TableHead>Título</TableHead><TableHead>Tipo</TableHead><TableHead>Ruta/Icono</TableHead><TableHead className="text-right">Acciones</TableHead></TableRow></TableHeader>
           <TableBody>
             {sections.length > 0 ? (
               sections.map((section) => (
                 <TableRow key={section.id}>
-                  <TableCell className="w-16"><DynamicIcon name={section.icon as IconName} /></TableCell>
                   <TableCell className="font-medium">{section.title}</TableCell>
-                  <TableCell>{section.path}</TableCell>
+                   <TableCell>
+                    <Badge variant={section.type === 'title' ? 'secondary' : 'outline'}>
+                        {section.type === 'title' ? 'Título' : 'Enlace'}
+                    </Badge>
+                  </TableCell>
+                  <TableCell>
+                    {section.type === 'link' ? (
+                        <div className="flex items-center gap-2 text-muted-foreground">
+                            <DynamicIcon name={(section.icon || 'AppWindow') as IconName} />
+                            <span>{section.path}</span>
+                        </div>
+                    ) : (
+                        <span className="text-muted-foreground">-</span>
+                    )}
+                  </TableCell>
                   <TableCell className="text-right">
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild><Button variant="ghost" className="h-8 w-8 p-0"><span className="sr-only">Abrir menú</span><MoreHorizontal className="h-4 w-4" /></Button></DropdownMenuTrigger>
@@ -159,7 +173,7 @@ export function OfficeSectionsClientPage() {
                 </TableRow>
               ))
             ) : (
-              <TableRow><TableCell colSpan={4} className="h-24 text-center"><Settings className="mx-auto h-12 w-12 text-gray-400" /><h3 className="mt-2 text-sm font-medium">No hay secciones</h3><p className="mt-1 text-sm text-gray-500">Empieza por crear una nueva sección para el dashboard de oficina.</p></TableCell></TableRow>
+              <TableRow><TableCell colSpan={4} className="h-24 text-center"><Settings className="mx-auto h-12 w-12 text-gray-400" /><h3 className="mt-2 text-sm font-medium">No hay elementos</h3><p className="mt-1 text-sm text-gray-500">Empieza por crear un nuevo elemento para el menú de oficina.</p></TableCell></TableRow>
             )}
           </TableBody>
         </Table>
@@ -167,7 +181,7 @@ export function OfficeSectionsClientPage() {
 
       <AlertDialog open={isAlertOpen} onOpenChange={setIsAlertOpen}>
         <AlertDialogContent>
-          <AlertDialogHeader><AlertDialogTitle>¿Estás seguro?</AlertDialogTitle><AlertDialogDescription>Esta acción no se puede deshacer. Esto eliminará permanentemente la sección.</AlertDialogDescription></AlertDialogHeader>
+          <AlertDialogHeader><AlertDialogTitle>¿Estás seguro?</AlertDialogTitle><AlertDialogDescription>Esta acción no se puede deshacer. Esto eliminará permanentemente el elemento del menú.</AlertDialogDescription></AlertDialogHeader>
           <AlertDialogFooter><AlertDialogCancel>Cancelar</AlertDialogCancel><AlertDialogAction onClick={confirmDelete} className="bg-destructive hover:bg-destructive/90">Eliminar</AlertDialogAction></AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>

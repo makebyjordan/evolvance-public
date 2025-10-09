@@ -9,8 +9,9 @@ import { revalidatePath } from 'next/cache';
 export interface OfficeSection {
   id: string;
   title: string;
-  path: string;
-  icon: string;
+  type: 'link' | 'title';
+  path?: string;
+  icon?: string;
   createdAt: any;
   updatedAt: any;
 }
