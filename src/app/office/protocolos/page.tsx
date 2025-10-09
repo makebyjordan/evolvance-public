@@ -1,6 +1,6 @@
 
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { ProtocolsClientPage } from "@/app/dashboard/protocolos/components/ProtocolsClientPage";
+import { OfficeProtocolsClientPage } from "./components/OfficeProtocolsClientPage";
 import { ClipboardList } from "lucide-react";
 
 export const dynamic = 'force-dynamic';
@@ -21,7 +21,7 @@ export default function OfficeProtocolsPage() {
                 </div>
             </CardHeader>
         </Card>
-        <ProtocolsClientPage />
+        <OfficeProtocolsClientPage />
     </div>
   );
 }
