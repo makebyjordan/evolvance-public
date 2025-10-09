@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from 'react';
@@ -7,7 +8,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { AlertTriangle, KeyRound } from 'lucide-react';
+import { AlertTriangle, KeyRound, ArrowLeft } from 'lucide-react';
+import Link from 'next/link';
 
 export default function OfficeAccessPage() {
   const { officeCode, setOfficeCode } = useAuth();
@@ -32,8 +34,14 @@ export default function OfficeAccessPage() {
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-background">
-      <Card className="mx-auto max-w-sm w-full">
-        <CardHeader className="text-center">
+      <Card className="mx-auto max-w-sm w-full relative">
+         <Link href="/" passHref>
+           <Button variant="ghost" size="icon" className="absolute top-4 left-4">
+              <ArrowLeft className="h-5 w-5" />
+              <span className="sr-only">Volver a la web</span>
+            </Button>
+        </Link>
+        <CardHeader className="text-center pt-16">
           <KeyRound className="mx-auto h-12 w-12 text-primary mb-4" />
           <CardTitle className="text-2xl font-headline text-primary">Acceso a Oficina</CardTitle>
           <CardDescription>
