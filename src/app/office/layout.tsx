@@ -109,6 +109,12 @@ export default function OfficeDashboardLayout({
   const { user } = useAuth();
   const router = useRouter();
 
+  const isAuthPage = pathname === '/office/login' || pathname === '/office/register';
+
+  if (isAuthPage) {
+    return <>{children}</>;
+  }
+
   // If not authenticated, the AuthProvider will redirect. We can show a loader here.
   if (!user) {
     return <div className="flex h-screen items-center justify-center">Cargando...</div>
