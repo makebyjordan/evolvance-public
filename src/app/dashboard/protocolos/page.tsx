@@ -1,6 +1,6 @@
 
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { ProtocolsClientPage } from "./components/ProtocolsClientPage";
+import { ProtocolsClientPage } from "@/app/dashboard/components/protocols/ProtocolsClientPage";
 import { ClipboardList } from "lucide-react";
 
 export const dynamic = 'force-dynamic';
