@@ -39,7 +39,7 @@ const formSchema = z.object({
     }
     return true;
 }, {
-    message: "La ruta y el icono son requeridos para un enlace.",
+    message: "La ruta y el icono son requeridos para una sección.",
     path: ['path'],
 }).refine(data => {
     if (data.type === 'link') {
@@ -47,7 +47,7 @@ const formSchema = z.object({
     }
     return true;
 }, {
-    message: "El icono es requerido para un enlace.",
+    message: "El icono es requerido para una sección.",
     path: ['icon'],
 });
 
@@ -133,7 +133,7 @@ export function OfficeSectionForm({ isOpen, setIsOpen, onFormSubmit, section }: 
         <DialogHeader>
           <DialogTitle className="font-headline text-primary">{isEditing ? 'Editar Elemento' : 'Nuevo Elemento del Menú'}</DialogTitle>
           <DialogDescription>
-            Crea un enlace o un título para agrupar secciones en el menú de oficina.
+            Crea una sección o un título para agrupar secciones en el menú de oficina.
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
@@ -154,7 +154,7 @@ export function OfficeSectionForm({ isOpen, setIsOpen, onFormSubmit, section }: 
                             <FormControl>
                             <RadioGroupItem value="link" />
                             </FormControl>
-                            <FormLabel className="font-normal">Enlace</FormLabel>
+                            <FormLabel className="font-normal">Sección</FormLabel>
                         </FormItem>
                         <FormItem className="flex items-center space-x-2 space-y-0">
                             <FormControl>

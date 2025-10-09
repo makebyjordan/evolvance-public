@@ -148,7 +148,7 @@ export function OfficeSectionsClientPage() {
                   <TableCell className="font-medium">{section.title}</TableCell>
                    <TableCell>
                     <Badge variant={section.type === 'title' ? 'secondary' : 'outline'}>
-                        {section.type === 'title' ? 'Título' : 'Enlace'}
+                        {section.type === 'title' ? 'Título' : 'Sección'}
                     </Badge>
                   </TableCell>
                   <TableCell>
