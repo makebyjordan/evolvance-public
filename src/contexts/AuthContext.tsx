@@ -14,7 +14,7 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType>({ user: null, loading: true });
 
-const protectedRoutes = ['/dashboard'];
+const protectedRoutes = ['/dashboard', '/office'];
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
@@ -34,10 +34,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     if (loading) return;
 
-    const isProtectedRoute = protectedRoutes.some(route => pathname.startsWith(route));
+    const isDashboardRoute = pathname.startsWith('/dashboard');
+    const isOfficeRoute = pathname.startsWith('/office');
 
-    if (!user && isProtectedRoute) {
-      router.push('/login');
+    if (!user && (isDashboardRoute || isOfficeRoute)) {
+      if (isDashboardRoute) {
+        router.push('/login');
+      } else if (isOfficeRoute) {
+        router.push('/office/login');
+      }
     }
   }, [user, loading, router, pathname]);
 
@@ -67,3 +72,4 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 };
 
 export const useAuth = () => useContext(AuthContext);
+
