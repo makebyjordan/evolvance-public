@@ -1,8 +1,9 @@
+
 "use client";
 
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { Home, FileText, Briefcase, LogOut, Building, User, Handshake, ArrowDownCircle, ArrowUpCircle, Globe, GraduationCap, FileSignature, Presentation, ClipboardCheck, Megaphone, Users2, CircleDollarSign, Receipt, Building2, Image as ImageIcon, ClipboardList, Video, Menu, Calendar, Sparkles, LayoutGrid } from 'lucide-react';
+import { Home, FileText, Briefcase, LogOut, Building, User, Handshake, ArrowDownCircle, ArrowUpCircle, Globe, GraduationCap, FileSignature, Presentation, ClipboardCheck, Megaphone, Users2, CircleDollarSign, Receipt, Building2, Image as ImageIcon, ClipboardList, Video, Menu, Calendar, Sparkles, LayoutGrid, Settings } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/contexts/AuthContext';
 import { auth } from '@/lib/firebase';
@@ -15,6 +16,7 @@ const navItems = [
   { href: '/dashboard', icon: Home, label: 'Resumen' },
   { href: '/dashboard/web', icon: Globe, label: 'Web' },
   { href: '/dashboard/empresa', icon: Building2, label: 'Empresa' },
+  { href: '/dashboard/office-config', icon: Settings, label: 'Configuración Oficina'},
   { href: '/dashboard/imagenes', icon: ImageIcon, label: 'Imágenes' },
   { href: '/dashboard/videos', icon: Video, label: 'Videos' },
   { href: '/dashboard/portfolio', icon: LayoutGrid, label: 'Portfolio' },

@@ -3,18 +3,27 @@
 
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { Home, LogOut, Menu } from 'lucide-react';
+import { Home, LogOut, Menu, AppWindow } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/contexts/AuthContext';
-import { auth } from '@/lib/firebase';
+import { auth, db } from '@/lib/firebase';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import Image from 'next/image';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { collection, onSnapshot, query, orderBy, Timestamp } from "firebase/firestore";
+import type { OfficeSection } from '@/app/actions/office-sections-actions';
+import * as LucideIcons from 'lucide-react';
 
-const navItems = [
-  { href: '/office', icon: Home, label: 'Resumen' },
-];
+
+type IconName = keyof typeof LucideIcons;
+
+function DynamicIcon({ name, ...props }: { name: IconName } & React.ComponentProps<"svg">) {
+  const Icon = LucideIcons[name] as React.ElementType;
+  if (!Icon) return <AppWindow {...props} />; // Fallback icon
+  return <Icon {...props} />;
+}
+
 
 function NavLink({ href, icon: Icon, label, onClick, pathname }: { href: string, icon: React.ElementType, label: string, onClick: () => void, pathname: string }) {
     const isActive = pathname === href;
@@ -37,7 +46,17 @@ function NavLink({ href, icon: Icon, label, onClick, pathname }: { href: string,
 function SidebarContent({pathname, closeSheet}: {pathname: string, closeSheet: () => void}) {
     const router = useRouter();
     const { user } = useAuth();
+    const [navItems, setNavItems] = useState<OfficeSection[]>([]);
     
+    useEffect(() => {
+        const q = query(collection(db, "officeSections"), orderBy("createdAt", "asc"));
+        const unsubscribe = onSnapshot(q, (querySnapshot) => {
+            const sections = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as OfficeSection));
+            setNavItems(sections);
+        });
+        return () => unsubscribe();
+    }, []);
+
     const handleLogout = async () => {
         await auth.signOut();
         router.push('/office/login');
@@ -55,7 +74,8 @@ function SidebarContent({pathname, closeSheet}: {pathname: string, closeSheet: (
                 </Link>
             </div>
             <nav className="flex-1 py-6 px-4 space-y-1 overflow-y-auto">
-              {navItems.map((item) => <NavLink key={item.label} {...item} onClick={closeSheet} pathname={pathname} />)}
+               <NavLink href="/office" icon={Home} label="Resumen" onClick={closeSheet} pathname={pathname} />
+               {navItems.map((item) => <NavLink key={item.id} href={item.path} icon={(props) => <DynamicIcon name={item.icon as IconName} {...props} />} label={item.title} onClick={closeSheet} pathname={pathname} />)}
             </nav>
             <div className="p-4 border-t border-border/20">
                <div className="flex items-center gap-3 mb-4">
