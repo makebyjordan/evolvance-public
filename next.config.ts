@@ -1,8 +1,7 @@
-
-import type {NextConfig} from 'next';
+import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  /* Tus otras opciones de config */
   typescript: {
     ignoreBuildErrors: true,
   },
@@ -28,8 +27,25 @@ const nextConfig: NextConfig = {
       {
         protocol: 'https',
         hostname: 'iili.io',
-      }
+      },
     ],
+  },
+  // --- Bloque de reescritura para el nuevo subdominio ---
+  async rewrites() {
+    return {
+      beforeFiles: [
+        {
+          source: '/:path*',
+          has: [
+            {
+              type: 'host',
+              value: 'ofertas.evolvance.es', // <-- ¡Importante! Usamos el nuevo subdominio .es
+            },
+          ],
+          destination: '/view-html/n2JQomEcEEmuQ5NY1Rwp',
+        },
+      ],
+    };
   },
 };
 
