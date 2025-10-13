@@ -1,5 +1,18 @@
 {
   "projects": {
     "default": "evol-vance-landing2"
-  }
+  },
+  "targets": {
+    "evol-vance-landing2": {
+      "hosting": {
+        "ofertas": [
+          "ofertasevol"
+        ],
+        "web": [
+          "evol-vance-landing2"
+        ]
+      }
+    }
+  },
+  "etags": {}
 }
