@@ -3,7 +3,7 @@
 
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { Home, FileText, Briefcase, LogOut, Building, User, Handshake, ArrowDownCircle, ArrowUpCircle, Globe, GraduationCap, FileSignature, Presentation, ClipboardCheck, Megaphone, Users2, CircleDollarSign, Receipt, Building2, Image as ImageIcon, ClipboardList, Video, Menu, Calendar, Sparkles, LayoutGrid, Settings } from 'lucide-react';
+import { Home, FileText, Briefcase, LogOut, Building, User, Handshake, ArrowDownCircle, ArrowUpCircle, Globe, GraduationCap, FileSignature, Presentation, ClipboardCheck, Megaphone, Users2, CircleDollarSign, Receipt, Building2, Image as ImageIcon, ClipboardList, Video, Menu, Calendar, Sparkles, LayoutGrid, Settings, Flame, Wrench } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/contexts/AuthContext';
 import { auth } from '@/lib/firebase';
@@ -31,6 +31,11 @@ const navItems = [
   { href: '/dashboard/services', icon: Briefcase, label: 'Servicios' },
   { href: '/dashboard/training', icon: GraduationCap, label: 'Formación' },
   { href: '/dashboard/protocolos', icon: ClipboardList, label: 'Protocolos' },
+];
+
+const developmentItems = [
+    { href: '/dashboard/firebase', icon: Flame, label: 'Firebase' },
+    { href: '/dashboard/herramientas', icon: Wrench, label: 'Herramientas' },
 ];
 
 const scheduleItems = [
@@ -91,6 +96,10 @@ function SidebarContent({pathname, closeSheet}: {pathname: string, closeSheet: (
             <nav className="flex-1 py-6 px-4 space-y-1 overflow-y-auto">
               <p className="px-4 pt-2 pb-2 text-xs font-semibold text-muted-foreground/80 uppercase tracking-wider">General</p>
               {navItems.map((item) => <NavLink key={item.label} {...item} onClick={closeSheet} pathname={pathname} />)}
+                <div className="px-4 pt-4 pb-2">
+                    <p className="text-xs font-semibold text-muted-foreground/80 uppercase tracking-wider">Desarrollo</p>
+                </div>
+                 {developmentItems.map((item) => <NavLink key={item.label} {...item} onClick={closeSheet} pathname={pathname} />)}
                 <div className="px-4 pt-4 pb-2">
                     <p className="text-xs font-semibold text-muted-foreground/80 uppercase tracking-wider">Planificación</p>
                 </div>

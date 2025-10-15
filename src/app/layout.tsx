@@ -12,7 +12,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: 'Evol-vance',
+  title: 'Evolvance',
   description: 'Diseñamos el Futuro de tu Crecimiento.',
   // 3. Añadir la información del favicon aquí
   icons: {
