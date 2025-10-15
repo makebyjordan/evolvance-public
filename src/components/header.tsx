@@ -126,11 +126,11 @@ export default function Header() {
           </nav>
           
           <div className="hidden md:flex items-center gap-2">
-             <Button variant="outline" asChild>
+             <Button variant="outline" asChild size="xs">
                 <Link href="/client-portal">Portal Clientes</Link>
              </Button>
              <ContactModal>
-                <Button>
+                <Button size="xs">
                     Agendar Reunión
                 </Button>
             </ContactModal>
