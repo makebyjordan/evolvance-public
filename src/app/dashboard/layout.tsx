@@ -36,6 +36,7 @@ const navItems = [
 const developmentItems = [
     { href: '/dashboard/firebase', icon: Flame, label: 'Firebase' },
     { href: '/dashboard/herramientas', icon: Wrench, label: 'Herramientas' },
+    { href: '/dashboard/ias', icon: Sparkles, label: 'IAs' },
 ];
 
 const scheduleItems = [
