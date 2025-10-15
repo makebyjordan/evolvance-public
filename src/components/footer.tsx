@@ -44,7 +44,7 @@ export default function Footer() {
           
           <div className="md:col-span-4 lg:col-span-5 flex flex-col items-center md:items-start text-center md:text-left">
             <Link href="/" className="flex items-center gap-2 mb-4 text-foreground">
-              <Image src="https://iili.io/K78fXyb.png" alt="Evol-vance Logo" width={288} height={288} />
+              <Image src="https://iili.io/KkYGiil.png" alt="Evol-vance Logo" width={288} height={288} />
               
             </Link>
             <p className="text-muted-foreground text-sm max-w-xs">
@@ -89,7 +89,7 @@ export default function Footer() {
         </div>
         
         <div className="mt-12 pt-8 border-t border-border/20 text-center text-sm text-muted-foreground">
-          © {year} Evol-vance. Todos los derechos reservados.
+          © {year} Evolvance.es - Todos los derechos reservados.
         </div>
       </div>
     </footer>

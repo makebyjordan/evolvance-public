@@ -2,7 +2,7 @@
 "use client";
 
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { Home, LogOut, Menu, AppWindow } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/contexts/AuthContext';
@@ -66,7 +66,7 @@ function SidebarContent({pathname, closeSheet}: {pathname: string, closeSheet: (
         <div className="flex h-full flex-col">
              <div className="h-20 flex items-center px-6 border-b border-border/20">
                 <Link href="/" className="flex items-center gap-2" onClick={closeSheet}>
-                    <Image src="https://iili.io/K78fXyb.png" alt="Evol-vance Logo" width={150} height={40} />
+                    <Image src="https://iili.io/KkYGiil.png" alt="Evol-vance Logo" width={150} height={40} />
                 </Link>
             </div>
             <nav className="flex-1 py-6 px-4 space-y-1 overflow-y-auto">
@@ -135,7 +135,7 @@ export default function OfficeDashboardLayout({
                   </SheetContent>
               </Sheet>
               <Link href="/office">
-                  <Image src="https://iili.io/K78fXyb.png" alt="Evol-vance Logo" width={100} height={26} />
+                  <Image src="https://iili.io/KkYGiil.png" alt="Evol-vance Logo" width={100} height={26} />
               </Link>
           </header>
           <main className="flex-1 overflow-y-auto">

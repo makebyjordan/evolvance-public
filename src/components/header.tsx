@@ -93,8 +93,8 @@ export default function Header() {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
           <Link href="/" className="flex items-center gap-2 text-foreground">
-             <Image src="https://iili.io/K78fXyb.png" alt="Evol-vance Logo" width={288} height={288} className="hidden md:block" />
-             <Image src="https://iili.io/K78cJ2a.png" alt="Evol-vance Logo" width={96} height={96} className="block md:hidden" />
+             <Image src="https://iili.io/KkYGiil.png" alt="Evol-vance Logo" width={288} height={288} className="hidden md:block" />
+             <Image src="https://iili.io/KkYGiil.png" alt="Evol-vance Logo" width={96} height={96} className="block md:hidden" />
           </Link>
 
           {/* Desktop Navigation */}
@@ -149,7 +149,7 @@ export default function Header() {
                 <SheetHeader>
                    <SheetTitle>
                      <Link href="/" className="flex items-center gap-2 text-foreground" onClick={() => setIsMobileMenuOpen(false)}>
-                        <Image src="https://iili.io/K78fXyb.png" alt="Evol-vance Logo" width={288} height={288} />
+                        <Image src="https://iili.io/KkYGiil.png" alt="Evol-vance Logo" width={288} height={288} />
                     </Link>
                   </SheetTitle>
                 </SheetHeader>

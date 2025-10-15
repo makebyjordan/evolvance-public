@@ -37,7 +37,7 @@ export function CompanyInfoForm({ initialContent }: CompanyInfoFormProps) {
       email: 'contacto@evol-vance.es',
       web: 'https://evol-vance.com',
       address: 'Calle Ficticia 123, 28080 Madrid, España',
-      logoUrl: 'https://iili.io/K78fXyb.png',
+      logoUrl: 'https://iili.io/KkYGiil.png',
     },
   });
 

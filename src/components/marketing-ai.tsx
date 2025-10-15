@@ -20,7 +20,7 @@ export default function MarketingAI() {
                     <span className="text-primary">IA</span> y Campañas de Marketing (Ads)
                 </h2>
                 <p className="mt-4 text-lg text-muted-foreground">
-                    En Evol-vance integramos IA y publicidad digital para crear campañas más inteligentes y rentables. Utilizamos análisis predictivo, segmentación avanzada y automatización de anuncios en Google, Meta, LinkedIn y otras plataformas.
+                    En Evolvance integramos IA y publicidad digital para crear campañas más inteligentes y rentables. Utilizamos análisis predictivo, segmentación avanzada y automatización de anuncios en Google, Meta, LinkedIn y otras plataformas.
                 </p>
                 <p className="mt-4 text-lg text-muted-foreground">
                     Nuestro enfoque combina <span className="font-bold text-foreground">creatividad + algoritmos</span> para optimizar presupuestos, aumentar conversiones y garantizar un ROI superior.

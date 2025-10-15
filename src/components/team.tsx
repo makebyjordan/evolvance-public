@@ -41,7 +41,7 @@ export default function Team() {
             Nuestro Equipo
           </h2>
           <p className="mt-4 max-w-2xl mx-auto text-center text-lg text-muted-foreground">
-            Conoce a las mentes creativas y estratégicas que impulsan la innovación en Evol-vance.
+            Conoce a las mentes creativas y estratégicas que impulsan la innovación en Evolvance.
           </p>
         </FadeIn>
         <div className="mt-16 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8">
