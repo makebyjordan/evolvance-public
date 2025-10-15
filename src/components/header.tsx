@@ -102,7 +102,7 @@ export default function Header() {
             {navLinks.map((link) => (
               link.isDropdown ? (
                 <DropdownMenu key={link.label}>
-                  <DropdownMenuTrigger className="flex items-center gap-1 text-sm font-medium text-muted-foreground hover:text-primary transition-colors outline-none">
+                  <DropdownMenuTrigger className="flex items-center gap-1 text-xs font-medium text-muted-foreground hover:text-primary transition-colors outline-none">
                     {link.label} <ChevronDown className="h-4 w-4" />
                   </DropdownMenuTrigger>
                   <DropdownMenuContent>
@@ -117,7 +117,7 @@ export default function Header() {
                 <Link
                   key={link.label}
                   href={link.href!}
-                  className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
+                  className="text-xs font-medium text-muted-foreground hover:text-primary transition-colors"
                 >
                   {link.label}
                 </Link>
