@@ -37,7 +37,7 @@ const formSchema = z.object({
   price: z.coerce.number().min(0, "El precio debe ser positivo."),
   paymentDay: z.coerce.number().min(1, "El día debe ser entre 1 y 31.").max(31, "El día debe ser entre 1 y 31."),
   type: z.string().min(1, "El tipo es requerido."),
-  featured: z.boolean().default(false),
+  featured: z.string().optional(),
 });
 
 type IaFormValues = z.infer<typeof formSchema>;
@@ -64,7 +64,7 @@ export function IaForm({ isOpen, setIsOpen, onFormSubmit, iaModel, existingTypes
       price: 0,
       paymentDay: 1,
       type: "General",
-      featured: false,
+      featured: "",
     },
   });
 
@@ -89,7 +89,7 @@ export function IaForm({ isOpen, setIsOpen, onFormSubmit, iaModel, existingTypes
         price: 0,
         paymentDay: 1,
         type: "General",
-        featured: false,
+        featured: "",
       });
     }
   }, [isEditing, iaModel, form]);
@@ -99,6 +99,7 @@ export function IaForm({ isOpen, setIsOpen, onFormSubmit, iaModel, existingTypes
     const iaData = {
       ...values,
       description: values.description || "",
+      featured: values.featured || "",
       id: isEditing ? iaModel!.id : undefined,
     };
     
@@ -168,17 +169,13 @@ export function IaForm({ isOpen, setIsOpen, onFormSubmit, iaModel, existingTypes
                 control={form.control}
                 name="featured"
                 render={({ field }) => (
-                    <FormItem className="flex flex-row items-center space-x-3 space-y-0 rounded-md border p-4">
-                        <FormControl>
-                            <Checkbox checked={field.value} onCheckedChange={field.onChange} />
-                        </FormControl>
-                         <div className="space-y-1 leading-none">
-                            <FormLabel>Destacado</FormLabel>
-                            <FormDescription>
-                                Marca esta opción si quieres destacar esta IA.
-                            </FormDescription>
-                        </div>
-                    </FormItem>
+                  <FormItem>
+                    <FormLabel>Destacado</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Añade un texto destacado (opcional)" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
                 )}
             />
 

@@ -15,7 +15,7 @@ export interface AIModel {
   price: number;
   paymentDay: number;
   type: string;
-  featured: boolean;
+  featured: string;
   createdAt: any;
   updatedAt: any;
 }

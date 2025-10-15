@@ -151,6 +151,7 @@ export function IasClientPage() {
               <TableHead>Tipo</TableHead>
               <TableHead>Precio/Mes</TableHead>
               <TableHead>Día Pago</TableHead>
+              <TableHead>Destacado</TableHead>
               <TableHead>URL</TableHead>
               <TableHead className="text-right">Acciones</TableHead>
             </TableRow>
@@ -159,10 +160,11 @@ export function IasClientPage() {
             {ias.length > 0 ? (
               ias.map((ia) => (
                 <TableRow key={ia.id}>
-                  <TableCell className="font-medium flex items-center gap-2">{ia.title} {ia.featured && <Star className="h-4 w-4 text-yellow-500" />}</TableCell>
+                  <TableCell className="font-medium">{ia.title}</TableCell>
                   <TableCell><Badge variant="outline">{ia.type}</Badge></TableCell>
                   <TableCell>{formatCurrency(ia.price)}</TableCell>
                   <TableCell>{ia.paymentDay}</TableCell>
+                  <TableCell className="text-muted-foreground">{ia.featured}</TableCell>
                    <TableCell>
                     <a href={ia.url} target="_blank" rel="noopener noreferrer" className="flex items-center text-primary hover:underline">
                       <ExternalLink className="mr-1 h-4 w-4" /> Visitar
@@ -181,7 +183,7 @@ export function IasClientPage() {
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={6} className="h-24 text-center">
+                <TableCell colSpan={7} className="h-24 text-center">
                   <FileText className="mx-auto h-12 w-12 text-gray-400" />
                   <h3 className="mt-2 text-sm font-medium">No hay IAs</h3>
                   <p className="mt-1 text-sm text-gray-500">Empieza por crear una nueva IA.</p>
