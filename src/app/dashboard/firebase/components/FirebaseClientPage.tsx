@@ -132,6 +132,7 @@ export function FirebaseClientPage() {
           <TableHeader>
             <TableRow>
               <TableHead>Título</TableHead>
+              <TableHead>Cuenta</TableHead>
               <TableHead>Tipo</TableHead>
               <TableHead>Estado</TableHead>
               <TableHead>Fecha Entrega</TableHead>
@@ -144,6 +145,7 @@ export function FirebaseClientPage() {
               projects.map((project) => (
                 <TableRow key={project.id}>
                   <TableCell className="font-medium">{project.title}</TableCell>
+                  <TableCell>{project.account}</TableCell>
                   <TableCell><Badge variant="secondary">{project.type}</Badge></TableCell>
                   <TableCell><Badge variant="outline">{project.status}</Badge></TableCell>
                   <TableCell>{project.deliveryDate ? new Date(project.deliveryDate).toLocaleDateString() : '-'}</TableCell>
@@ -165,7 +167,7 @@ export function FirebaseClientPage() {
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={6} className="h-24 text-center">
+                <TableCell colSpan={7} className="h-24 text-center">
                   <FileText className="mx-auto h-12 w-12 text-gray-400" />
                   <h3 className="mt-2 text-sm font-medium">No hay proyectos</h3>
                   <p className="mt-1 text-sm text-gray-500">Empieza por crear un nuevo proyecto.</p>
