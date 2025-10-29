@@ -64,3 +64,4 @@ export async function saveCompanyInfo(data: CompanyInfo): Promise<ActionResult<n
     return { success: false, error: `La información de la empresa no se pudo guardar. ` + error.message };
   }
 }
+

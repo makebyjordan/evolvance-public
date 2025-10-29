@@ -1,0 +1,11 @@
+{
+    "hosting": {
+      "redirects": [
+        {
+          "source": "/**",
+          "destination": "https://evolvance.es/:splat",
+          "type": 301
+        }
+      ]
+    }
+  }
