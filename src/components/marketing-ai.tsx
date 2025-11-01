@@ -31,17 +31,16 @@ export default async function MarketingAI() {
     valueProposition: 'Nuestro enfoque combina creatividad + algoritmos para optimizar presupuestos, aumentar conversiones y garantizar un ROI superior.',
     ctaButtonText: 'Agenda reunión para estudiar tu caso',
     featureCards: [
-      { title: 'Segmentación Avanzada', icon: '' },
-      { title: 'Análisis Predictivo', icon: '' },
-      { title: 'Automatización de Anuncios', icon: '' },
-      { title: 'Optimización de Campañas', icon: '' },
+      { title: 'Segmentación Avanzada', icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-target"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>` },
+      { title: 'Análisis Predictivo', icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-brain-circuit"><path d="M12 2a5.3 5.3 0 0 1 3.5 9.1c.4.5.8 1.1 1.2 1.9a5.5 5.5 0 0 1-2.6 7.4c-1.7.8-3.6.8-5.3 0a5.5 5.5 0 0 1-2.6-7.4c.4-.8.8-1.4 1.2-1.9A5.3 5.3 0 0 1 12 2Z"/><path d="M12 12m-3 0a3 3 0 1 0 6 0 3 3 0 1 0-6 0Z"/><path d="M12 2v2"/><path d="m6.4 4.5-.9 1.3"/><path d="m17.6 4.5.9 1.3"/><path d="M21.1 10.5h-2.2"/><path d="M4.9 10.5H2.8"/><path d="m19.6 17.5-.9-1.3"/><path d="m4.4 17.5.9-1.3"/><path d="M12 20v2"/><path d="M8 14.5a2.5 2.5 0 0 0-2.5-2.5h-1a2.5 2.5 0 0 1 0-5h1A2.5 2.5 0 0 0 8 9.5"/><path d="M16 14.5a2.5 2.5 0 0 1 2.5-2.5h1a2.5 2.5 0 0 0 0-5h-1a2.5 2.5 0 0 1-2.5-2.5"/></svg>` },
+      { title: 'Automatización de Anuncios', icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-bot"><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v-2a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v2"/><path d="M12 13h2"/></svg>` },
+      { title: 'Optimización de Campañas', icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-megaphone"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg>` },
     ]
   };
 
   const { title, description, valueProposition, ctaButtonText, featureCards } = content || defaultContent;
 
   return (
-    // 👇 AQUÍ ESTÁ EL CAMBIO. Se ha añadido la máscara de CSS.
     <section 
       id="marketing-ai" 
       className="py-20 sm:py-32 [-webkit-mask-image:linear-gradient(to_bottom,transparent_0%,black_5%)] [mask-image:linear-gradient(to_bottom,transparent_0%,black_5%)]"
@@ -51,7 +50,14 @@ export default async function MarketingAI() {
           <FadeIn>
             <div className="text-left">
                 <h2 className="text-3xl md:text-4xl font-extrabold text-foreground">
-                    <span className="text-primary">IA</span> y Campañas de Marketing (Ads)
+                    {title.includes('y Campañas') ? (
+                      <>
+                        <span className="text-primary">{title.split(' y Campañas')[0]}</span>
+                        {' y Campañas' + title.split(' y Campañas')[1]}
+                      </>
+                    ) : (
+                      title
+                    )}
                 </h2>
                 <p className="mt-4 text-lg text-muted-foreground">
                     {description}
