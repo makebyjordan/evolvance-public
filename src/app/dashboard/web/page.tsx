@@ -1,8 +1,7 @@
 
-
 import { Card, CardDescription, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { FileText, Globe, HelpCircle, Milestone, ShieldCheck, FileType, Settings, ExternalLink, Orbit } from "lucide-react";
+import { FileText, Globe, HelpCircle, Milestone, ShieldCheck, FileType, Settings, ExternalLink, Orbit, HandCoins } from "lucide-react";
 import { ServicesEditor } from "./components/ServicesEditor";
 import { TimelineEditor } from "./components/TimelineEditor";
 import { PhilosophyEditor } from "./components/PhilosophyEditor";
@@ -12,9 +11,10 @@ import { SiteConfigEditor } from "./components/SiteConfigEditor";
 import { Button } from "@/components/ui/button";
 import Link from 'next/link';
 
-import { getWebContent, type ServicesContent, type TimelineContent, type PhilosophyContent, type FaqContent, type PageContent, type SiteConfigContent, type ServicePagesConfig } from "@/app/actions/web-content-actions";
+import { getWebContent, type ServicesContent, type TimelineContent, type PhilosophyContent, type FaqContent, type PageContent, type SiteConfigContent, type ServicePagesConfig, type OfferContent } from "@/app/actions/web-content-actions";
 import { Separator } from "@/components/ui/separator";
 import { ServicePagesEditor } from "./components/ServicePagesEditor";
+import { OfferEditor } from "./components/OfferEditor";
 
 export const dynamic = 'force-dynamic';
 
@@ -28,6 +28,7 @@ export default async function WebPage() {
   const privacyContent = await getWebContent<PageContent>('privacy');
   const siteConfigContent = await getWebContent<SiteConfigContent>('siteConfig');
   const servicePagesConfig = await getWebContent<ServicePagesConfig>('servicePagesConfig');
+  const offerContent = await getWebContent<OfferContent>('offer');
 
   const defaultServicePageTitles: ServicePagesConfig = {
     iaPageTitle: 'Inteligencia Artificial y Automatizaciones',
@@ -53,8 +54,9 @@ export default async function WebPage() {
       </Card>
 
       <Tabs defaultValue="services" className="w-full">
-        <TabsList className="grid w-full grid-cols-2 sm:grid-cols-3 lg:grid-cols-7 max-w-6xl">
+        <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 max-w-6xl">
           <TabsTrigger value="config"><Settings className="w-4 h-4 mr-2"/>General</TabsTrigger>
+          <TabsTrigger value="offer"><HandCoins className="w-4 h-4 mr-2"/>Oferta</TabsTrigger>
           <TabsTrigger value="services"><Orbit className="w-4 h-4 mr-2"/>Servicios Home</TabsTrigger>
           <TabsTrigger value="timeline"><Milestone className="w-4 h-4 mr-2"/>Trayectoria</TabsTrigger>
           <TabsTrigger value="philosophy"><ShieldCheck className="w-4 h-4 mr-2"/>Filosofía</TabsTrigger>
@@ -64,6 +66,9 @@ export default async function WebPage() {
 
         <TabsContent value="config">
           <SiteConfigEditor initialContent={siteConfigContent} />
+        </TabsContent>
+         <TabsContent value="offer">
+          <OfferEditor initialContent={offerContent} />
         </TabsContent>
         <TabsContent value="services">
           <ServicesEditor initialContent={servicesContent} />

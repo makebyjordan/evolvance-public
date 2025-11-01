@@ -1,4 +1,3 @@
-
 'use server';
 
 import { db } from '@/lib/firebase';
@@ -77,9 +76,23 @@ export interface ServicePagesConfig {
     updatedAt?: string;
 }
 
+export interface OfferFeatureCard {
+  icon: string;
+  title: string;
+}
 
-export type WebContentSection = 'services' | 'timeline' | 'philosophy' | 'faq' | 'terms' | 'privacy' | 'siteConfig' | 'servicePagesConfig';
-export type WebContentData = ServicesContent | TimelineContent | PhilosophyContent | FaqContent | PageContent | SiteConfigContent | ServicePagesConfig;
+export interface OfferContent {
+  title: string;
+  description: string;
+  valueProposition: string;
+  ctaButtonText: string;
+  featureCards: OfferFeatureCard[];
+  updatedAt?: string;
+}
+
+
+export type WebContentSection = 'services' | 'timeline' | 'philosophy' | 'faq' | 'terms' | 'privacy' | 'siteConfig' | 'servicePagesConfig' | 'offer';
+export type WebContentData = ServicesContent | TimelineContent | PhilosophyContent | FaqContent | PageContent | SiteConfigContent | ServicePagesConfig | OfferContent;
 
 
 // Return type for our server actions
