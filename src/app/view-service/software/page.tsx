@@ -71,10 +71,9 @@ export default function SoftwarePage() {
             <FadeIn>
                 <div className="mb-12 text-center">
                     <h2 className="text-3xl md:text-4xl font-bold text-center mb-4">Nuestros Servicios Especializados</h2>
-                    <p className="max-w-3xl mx-auto text-muted-foreground mb-8">Ofrecemos soluciones integrales en desarrollo de software y ciberseguridad, diseñadas para impulsar y proteger tu negocio en el entorno digital.</p>
-                     <TabsList className="grid w-full grid-cols-2 max-w-md mx-auto">
+                    <p className="max-w-3xl mx-auto text-muted-foreground mb-8">Ofrecemos soluciones integrales en desarrollo de software, diseñadas para impulsar tu negocio en el entorno digital.</p>
+                     <TabsList className="grid w-full grid-cols-1 max-w-xs mx-auto">
                         <TabsTrigger value="programacion">Programación a Medida</TabsTrigger>
-                        <TabsTrigger value="ciberseguridad">Ciberseguridad</TabsTrigger>
                     </TabsList>
                 </div>
             </FadeIn>
@@ -114,36 +113,6 @@ export default function SoftwarePage() {
                 </FadeIn>
             </TabsContent>
             
-            <TabsContent value="ciberseguridad" className="space-y-16">
-                 <FadeIn>
-                    <section className="text-center">
-                        <h3 className="text-3xl font-bold text-foreground mb-4">Protección Integral para tu Ecosistema Digital</h3>
-                        <p className="max-w-3xl mx-auto text-muted-foreground text-lg">
-                           En la era digital, las amenazas evolucionan constantemente. Un solo ciberataque puede comprometer tus datos, dañar tu reputación y paralizar tus operaciones. Nuestro enfoque de ciberseguridad va más allá de la simple defensa; creamos una estrategia proactiva y en capas para proteger tus activos más valiosos, permitiéndote innovar y crecer con total tranquilidad.
-                        </p>
-                    </section>
-                 </FadeIn>
-                 <FadeIn delay={0.2}>
-                    <section>
-                        <h3 className="text-3xl font-bold text-center text-foreground mb-10">Nuestra Filosofía de Seguridad 360°</h3>
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
-                           <Card className="p-6"><div className="bg-primary/10 text-primary rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4"><Shield className="w-8 h-8"/></div><CardTitle className="font-bold text-xl mb-2">Prevención Proactiva</CardTitle><p className="text-muted-foreground">Identificamos y neutralizamos amenazas antes de que impacten, implementando controles robustos y auditorías constantes.</p></Card>
-                           <Card className="p-6"><div className="bg-primary/10 text-primary rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4"><Eye className="w-8 h-8"/></div><CardTitle className="font-bold text-xl mb-2">Detección y Monitoreo</CardTitle><p className="text-muted-foreground">Vigilamos tu infraestructura 24/7 con herramientas avanzadas para detectar cualquier actividad anómala en tiempo real.</p></Card>
-                           <Card className="p-6"><div className="bg-primary/10 text-primary rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4"><LifeBuoy className="w-8 h-8"/></div><CardTitle className="font-bold text-xl mb-2">Respuesta y Recuperación</CardTitle><p className="text-muted-foreground">En caso de incidente, actuamos rápidamente para contener la amenaza, minimizar el daño y restaurar la normalidad.</p></Card>
-                        </div>
-                    </section>
-                </FadeIn>
-                 <FadeIn delay={0.4}>
-                     <section>
-                        <h3 className="text-3xl font-bold text-center text-foreground mb-10">Nuestros Servicios de Ciberseguridad</h3>
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                            <div className="card-animated-border"><Card className="p-8 h-full"><CardTitle className="text-xl font-bold mb-2 text-primary">Pruebas de Penetración y Análisis de Vulnerabilidades</CardTitle><p className="text-muted-foreground mb-4">Actuamos como un hacker ético para encontrar y reportar las debilidades en tus sistemas antes de que lo haga un atacante.</p><h4 className="font-semibold text-foreground mt-6 mb-2">¿Qué problema resuelve?</h4><p className="text-muted-foreground">Te da una visión clara de tu postura de seguridad, permitiéndote solucionar vulnerabilidades críticas antes de un ataque.</p><h4 className="font-semibold text-foreground mt-6 mb-2">¿Cómo lo hacemos?</h4><p className="text-muted-foreground">Simulamos un ataque controlado y te entregamos un informe detallado con las vulnerabilidades y recomendaciones para solucionarlas.</p></Card></div>
-                            <div className="card-animated-border"><Card className="p-8 h-full"><CardTitle className="text-xl font-bold mb-2 text-primary">Servicios de Seguridad Gestionada (MSS)</CardTitle><p className="text-muted-foreground mb-4">Monitoreamos tus sistemas 24/7 para detectar actividades sospechosas en tiempo real y responder a las amenazas de inmediato.</p><h4 className="font-semibold text-foreground mt-6 mb-2">¿Qué problema resuelve?</h4><p className="text-muted-foreground">Minimiza el riesgo de un ciberataque al detectarlo en sus primeras etapas, reduciendo el tiempo de respuesta y el impacto.</p><h4 className="font-semibold text-foreground mt-6 mb-2">¿Cómo lo hacemos?</h4><p className="text-muted-foreground">Implementamos una plataforma de monitoreo avanzada y nuestro equipo de expertos actúa ante cualquier alerta para mitigar la amenaza.</p></Card></div>
-                            <div className="card-animated-border"><Card className="p-8 h-full"><CardTitle className="text-xl font-bold mb-2 text-primary">Formación en Concienciación de Seguridad</CardTitle><p className="text-muted-foreground mb-4">Capacitamos a tu equipo para que reconozca y evite tácticas como el phishing, convirtiéndolos en tu primera línea de defensa.</p><h4 className="font-semibold text-foreground mt-6 mb-2">¿Qué problema resuelve?</h4><p className="text-muted-foreground">Reduce drásticamente el riesgo de incidentes causados por errores humanos, que son la causa de la mayoría de brechas de seguridad.</p><h4 className="font-semibold text-foreground mt-6 mb-2">¿Cómo lo hacemos?</h4><p className="text-muted-foreground">Realizamos formaciones prácticas y simulaciones de ataques controlados, y medimos la evolución de la concienciación.</p></Card></div>
-                        </div>
-                    </section>
-                </FadeIn>
-            </TabsContent>
         </Tabs>
       </main>
 
