@@ -47,7 +47,7 @@ export default function Footer() {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
           
-          <div className="md:col-span-3 flex flex-col items-center md:items-start text-center md:text-left">
+          <div className="md:col-span-4 flex flex-col items-center md:items-start text-center md:text-left">
             <Link href="/" className="flex items-center gap-2 mb-4 text-foreground">
               <Image src="https://iili.io/KkYGiil.png" alt="Evol-vance Logo" width={150} height={40} />
             </Link>
@@ -64,36 +64,25 @@ export default function Footer() {
               </div>
           </div>
 
-          <div className="md:col-span-5">
-            <h3 className="font-headline font-semibold text-foreground mb-4 text-center md:text-left">Nuestra Ubicación</h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-               <div className="aspect-video relative rounded-lg overflow-hidden">
-                    <iframe
-                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3169.576832629765!2d-6.009366624141662!3d37.42236907206452!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd126e1c27204f1f%3A0x3b64ea360ac9b33a!2sEvolvance!5e0!3m2!1ses!2ses!4v1700671373516!5m2!1ses!2ses"
-                        width="100%"
-                        height="100%"
-                        style={{ border: 0 }}
-                        allowFullScreen={false}
-                        loading="lazy"
-                        referrerPolicy="no-referrer-when-downgrade"
-                        title="Mapa de ubicación de Evolvance"
-                    ></iframe>
-                </div>
-                 <div className="aspect-video relative rounded-lg overflow-hidden">
-                   <Image src="https://iili.io/K7yWjjt.jpg" alt="Torres Torneo, Sevilla" fill className="object-cover" />
-                </div>
+          <div className="md:col-span-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+            <div className="text-center sm:text-left">
+               <h3 className="font-headline font-semibold text-foreground mb-4">Navegación</h3>
+                <ul className="space-y-2">
+                 {navLinks.map((link) => (
+                    <li key={link.label}>
+                        <Link href={link.href} className="text-muted-foreground hover:text-primary transition-colors text-sm">{link.label}</Link>
+                    </li>
+                 ))}
+              </ul>
             </div>
-          </div>
-
-          <div className="md:col-span-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-1 gap-8">
-            <div className="text-center sm:text-left md:text-right">
+            <div className="text-center sm:text-left">
               <h3 className="font-headline font-semibold text-foreground mb-4">Contacto</h3>
                 <div className="text-sm text-muted-foreground space-y-2">
-                    <p className="flex items-center justify-center sm:justify-start md:justify-end gap-2"><MapPin className="w-4 h-4 text-primary shrink-0"/> C. Astronomía, 1, Torre 2, P. 8, 41015 Sevilla</p>
-                    {companyInfo?.phone && <p className="flex items-center justify-center sm:justify-start md:justify-end gap-2"><Phone className="w-4 h-4 text-primary shrink-0"/> {companyInfo.phone}</p>}
+                    <p className="flex items-center justify-center sm:justify-start gap-2"><MapPin className="w-4 h-4 text-primary shrink-0"/> C. Astronomía, 1, Torre 2, P. 8, 41015 Sevilla</p>
+                    {companyInfo?.phone && <p className="flex items-center justify-center sm:justify-start gap-2"><Phone className="w-4 h-4 text-primary shrink-0"/> {companyInfo.phone}</p>}
                 </div>
             </div>
-            <div className="text-center sm:text-left md:text-right">
+            <div className="text-center sm:text-left">
               <h3 className="font-headline font-semibold text-foreground mb-4">Legal</h3>
               <ul className="space-y-2">
                 <li><Link href="/terms" className="text-muted-foreground hover:text-primary transition-colors text-sm">Términos y Condiciones</Link></li>
