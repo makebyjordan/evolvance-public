@@ -12,6 +12,7 @@ import Faq from '@/components/faq';
 import Cta from '@/components/cta';
 import { SectionSeparator } from '@/components/section-separator';
 import Footer from '@/components/footer';
+import Location from '@/components/location';
 
 export default function Home() {
   return (
@@ -54,6 +55,10 @@ export default function Home() {
          <div className="relative isolate">
             <SectionSeparator position="top" align="right" />
             <Cta />
+        </div>
+         <div className="relative isolate">
+            <SectionSeparator position="top" align="left" />
+            <Location />
         </div>
       </main>
       <Footer />
