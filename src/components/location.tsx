@@ -1,8 +1,23 @@
 
+"use client";
+
 import { FadeIn } from './fade-in';
 import { Card } from './ui/card';
+import { useEffect, useState } from 'react';
 
 export default function Location() {
+  const [apiKey, setApiKey] = useState('');
+
+  useEffect(() => {
+    // El API key se lee desde las variables de entorno del cliente
+    const key = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || '';
+    setApiKey(key);
+  }, []);
+
+  const mapSrc = apiKey 
+    ? `https://www.google.com/maps/embed/v1/place?key=${apiKey}&q=Evolvance,C.Astronomía,1,Torre+2,Sevilla`
+    : "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3169.576832629765!2d-6.009366624141662!3d37.42236907206452!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd126e1c27204f1f%3A0x3b64ea360ac9b33a!2sEvolvance!5e0!3m2!1ses!2ses!4v1700671373516!5m2!1ses!2ses";
+
   return (
     <section id="location" className="py-20 sm:py-32">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -19,7 +34,7 @@ export default function Location() {
             <Card className="overflow-hidden">
                  <div className="aspect-video w-full">
                     <iframe
-                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3169.576832629765!2d-6.009366624141662!3d37.42236907206452!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd126e1c27204f1f%3A0x3b64ea360ac9b33a!2sEvolvance!5e0!3m2!1ses!2ses!4v1700671373516!5m2!1ses!2ses"
+                        src={mapSrc}
                         width="100%"
                         height="100%"
                         style={{ border: 0 }}
