@@ -55,7 +55,7 @@ export default function SoftwarePage() {
         <div className="absolute inset-0 bg-black/60" />
         <div className="container mx-auto px-6 py-20 text-center relative z-10">
           <FadeIn>
-            <h1 className="text-4xl md:text-5xl font-bold leading-tight mb-4">Especialistas en Programación y Ciberseguridad</h1>
+            <h1 className="text-4xl md:text-5xl font-bold leading-tight mb-4">Especialistas en Programación a Medida</h1>
             <p className="text-lg md:text-xl mb-8 max-w-3xl mx-auto text-primary-foreground/80">Desarrollamos software a medida para potenciar tu negocio y lo protegemos con las mejores soluciones de ciberseguridad.</p>
              <ContactModal>
                 <Button size="lg" variant="secondary" className="font-bold">
@@ -160,3 +160,5 @@ export default function SoftwarePage() {
     </>
   );
 }
+
+    
