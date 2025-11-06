@@ -15,8 +15,8 @@ export default function Location() {
   }, []);
 
   const mapSrc = apiKey 
-    ? `https://www.google.com/maps/embed/v1/place?key=${apiKey}&q=Evolvance,C.Astronom%C3%ADa,1,Torre+2,Sevilla`
-    : "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3169.576832629765!2d-6.009366624141662!3d37.42236907206452!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd126e1c27204f1f%3A0x3b64ea360ac9b33a!2sEvolvance!5e0!3m2!1ses!2ses!4v1700671373516!5m2!1ses!2ses";
+    ? `https://www.google.com/maps/embed/v1/place?key=${apiKey}&q=Evolvance,Avenida+de+la+Ingenier%C3%ADa,Sevilla`
+    : "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d12678.85406087799!2d-6.009710842777508!3d37.4187063428983!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd126dd331551809%3A0xad52155f5536551!2sEvolvance!5e0!3m2!1ses!2ses!4v1700671373516!5m2!1ses!2ses";
 
   return (
     <section id="location" className="py-20 sm:py-32">
