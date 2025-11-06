@@ -79,7 +79,7 @@ export default function Footer() {
               <h3 className="font-headline font-semibold text-foreground mb-4">Contacto</h3>
                 <div className="text-sm text-muted-foreground space-y-2">
                     <p className="flex items-center justify-center sm:justify-start gap-2"><MapPin className="w-4 h-4 text-primary shrink-0"/> C. Astronomía, 1, Torre 2, 41015 Sevilla</p>
-                    {companyInfo?.phone && <p className="flex items-center justify-center sm:justify-start gap-2"><Phone className="w-4 h-4 text-primary shrink-0"/> {companyInfo.phone}</p>}
+                    {companyInfo?.phone && <p className="flex items-center justify-center sm:justify-start gap-2"><Phone className="w-4 h-4 text-primary shrink-0"/> {companyInfo.phone} | 601 86 96 68</p>}
                 </div>
             </div>
             <div className="text-center sm:text-left">
