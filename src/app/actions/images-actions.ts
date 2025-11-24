@@ -1,9 +1,8 @@
 
 'use server';
 
-import { db } from '@/lib/firebase';
-import { collection, doc, addDoc, updateDoc, deleteDoc, serverTimestamp } from 'firebase/firestore';
 import { revalidatePath } from 'next/cache';
+import { createDocument, updateDocument, deleteDocument, generateFirebaseId, serverTimestamp, getCollection } from '@/lib/firebase-adapter';
 
 // Main Image Type
 export interface StoredImage {
@@ -26,8 +25,6 @@ type ActionResult<T> = {
 };
 
 // Collection reference
-const imagesCollectionRef = collection(db, 'images');
-
 /**
  * Saves a new image or updates an existing one.
  */
@@ -38,19 +35,18 @@ export async function saveImage(data: ImageInput): Promise<ActionResult<string>>
     if (data.id) {
       // Update
       docId = data.id;
-      const docRef = doc(db, 'images', docId);
-      await updateDoc(docRef, {
+      await updateDocument('image', docId, {
         ...data,
         updatedAt: serverTimestamp(),
       });
     } else {
       // Create
-      const docRef = await addDoc(imagesCollectionRef, {
+      docId = generateFirebaseId();
+      await createDocument('image', docId, {
         ...data,
         createdAt: serverTimestamp(),
         updatedAt: serverTimestamp(),
       });
-      docId = docRef.id;
     }
     
     revalidatePath('/dashboard/imagenes');
@@ -67,11 +63,23 @@ export async function saveImage(data: ImageInput): Promise<ActionResult<string>>
  */
 export async function deleteImage(id: string): Promise<ActionResult<null>> {
   try {
-    await deleteDoc(doc(db, 'images', id));
+    await deleteDocument('image', id);
     revalidatePath('/dashboard/imagenes');
     return { success: true };
   } catch (error: any) {
     console.error('Error deleting image:', error);
     return { success: false, error: 'No se pudo eliminar la imagen. ' + error.message };
+  }
+}
+
+/**
+ * Gets all images.
+ */
+export async function getImages(): Promise<StoredImage[]> {
+  try {
+    return await getCollection<StoredImage>('image');
+  } catch (error: any) {
+    console.error('Error getting images:', error);
+    return [];
   }
 }

@@ -1,9 +1,8 @@
 
 'use server';
 
-import { db } from '@/lib/firebase';
-import { collection, doc, addDoc, updateDoc, deleteDoc, serverTimestamp } from 'firebase/firestore';
 import { revalidatePath } from 'next/cache';
+import { createDocument, updateDocument, deleteDocument, generateFirebaseId, serverTimestamp , getCollection } from '@/lib/firebase-adapter';
 
 // Main Tool Type
 export interface Tool {
@@ -30,8 +29,6 @@ type ActionResult<T> = {
 };
 
 // Collection reference
-const toolsCollectionRef = collection(db, 'tools');
-
 /**
  * Saves a new tool or updates an existing one.
  */
@@ -42,19 +39,18 @@ export async function saveTool(data: ToolInput): Promise<ActionResult<string>> {
     if (data.id) {
       // Update
       docId = data.id;
-      const docRef = doc(db, 'tools', docId);
-      await updateDoc(docRef, {
+      await updateDocument('tool', docId, {
         ...data,
         updatedAt: serverTimestamp(),
       });
     } else {
       // Create
-      const docRef = await addDoc(toolsCollectionRef, {
+      docId = generateFirebaseId();
+      await createDocument('tool', docId, {
         ...data,
         createdAt: serverTimestamp(),
         updatedAt: serverTimestamp(),
       });
-      docId = docRef.id;
     }
     
     revalidatePath('/dashboard/herramientas');
@@ -71,11 +67,23 @@ export async function saveTool(data: ToolInput): Promise<ActionResult<string>> {
  */
 export async function deleteTool(id: string): Promise<ActionResult<null>> {
   try {
-    await deleteDoc(doc(db, 'tools', id));
+    await deleteDocument('tool', id);
     revalidatePath('/dashboard/herramientas');
     return { success: true };
   } catch (error: any) {
     console.error('Error deleting tool:', error);
     return { success: false, error: 'No se pudo eliminar la herramienta. ' + error.message };
+  }
+}
+
+/**
+ * Gets all tools.
+ */
+export async function getTools(): Promise<Tool[]> {
+  try {
+    return await getCollection<Tool>('tool');
+  } catch (error: any) {
+    console.error('Error getting tools:', error);
+    return [];
   }
 }

@@ -1,9 +1,8 @@
 
 'use server';
 
-import { db } from '@/lib/firebase';
-import { collection, doc, addDoc, updateDoc, deleteDoc, serverTimestamp } from 'firebase/firestore';
 import { revalidatePath } from 'next/cache';
+import { createDocument, updateDocument, deleteDocument, generateFirebaseId, serverTimestamp , getCollection } from '@/lib/firebase-adapter';
 
 // Main IA Type
 export interface AIModel {
@@ -33,8 +32,6 @@ type ActionResult<T> = {
 };
 
 // Collection reference
-const iasCollectionRef = collection(db, 'ias');
-
 /**
  * Saves a new IA model or updates an existing one.
  */
@@ -45,19 +42,18 @@ export async function saveAIModel(data: AIModelInput): Promise<ActionResult<stri
     if (data.id) {
       // Update
       docId = data.id;
-      const docRef = doc(db, 'ias', docId);
-      await updateDoc(docRef, {
+      await updateDocument('ia', docId, {
         ...data,
         updatedAt: serverTimestamp(),
       });
     } else {
       // Create
-      const docRef = await addDoc(iasCollectionRef, {
+      docId = generateFirebaseId();
+      await createDocument('ia', docId, {
         ...data,
         createdAt: serverTimestamp(),
         updatedAt: serverTimestamp(),
       });
-      docId = docRef.id;
     }
     
     revalidatePath('/dashboard/ias');
@@ -74,11 +70,23 @@ export async function saveAIModel(data: AIModelInput): Promise<ActionResult<stri
  */
 export async function deleteAIModel(id: string): Promise<ActionResult<null>> {
   try {
-    await deleteDoc(doc(db, 'ias', id));
+    await deleteDocument('ia', id);
     revalidatePath('/dashboard/ias');
     return { success: true };
   } catch (error: any) {
     console.error('Error deleting IA model:', error);
     return { success: false, error: 'No se pudo eliminar la IA. ' + error.message };
+  }
+}
+
+/**
+ * Gets all ias.
+ */
+export async function getIas(): Promise<Ia[]> {
+  try {
+    return await getCollection<Ia>('ia');
+  } catch (error: any) {
+    console.error('Error getting ias:', error);
+    return [];
   }
 }

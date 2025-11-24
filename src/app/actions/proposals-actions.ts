@@ -1,9 +1,8 @@
 
 'use server';
 
-import { db } from '@/lib/firebase';
-import { collection, doc, addDoc, updateDoc, deleteDoc, serverTimestamp } from 'firebase/firestore';
 import { revalidatePath } from 'next/cache';
+import { createDocument, updateDocument, deleteDocument, generateFirebaseId, serverTimestamp , getCollection } from '@/lib/firebase-adapter';
 
 // Main Proposal Type (For HTML Proposals)
 export interface Proposal {
@@ -28,8 +27,6 @@ type ActionResult<T> = {
 };
 
 // Collection reference
-const proposalsCollectionRef = collection(db, 'proposals');
-
 /**
  * Saves a new proposal or updates an existing one.
  */
@@ -40,19 +37,18 @@ export async function saveProposal(data: ProposalInput): Promise<ActionResult<st
     if (data.id) {
       // Update
       docId = data.id;
-      const docRef = doc(db, 'proposals', docId);
-      await updateDoc(docRef, {
+      await updateDocument('proposal', docId, {
         ...data,
         updatedAt: serverTimestamp(),
       });
     } else {
       // Create
-      const docRef = await addDoc(proposalsCollectionRef, {
+      docId = generateFirebaseId();
+      await createDocument('proposal', docId, {
         ...data,
         createdAt: serverTimestamp(),
         updatedAt: serverTimestamp(),
       });
-      docId = docRef.id;
     }
     
     revalidatePath('/dashboard/proposals');
@@ -69,11 +65,23 @@ export async function saveProposal(data: ProposalInput): Promise<ActionResult<st
  */
 export async function deleteProposal(id: string): Promise<ActionResult<null>> {
   try {
-    await deleteDoc(doc(db, 'proposals', id));
+    await deleteDocument('proposal', id);
     revalidatePath('/dashboard/proposals');
     return { success: true };
   } catch (error: any) {
     console.error('Error deleting proposal:', error);
     return { success: false, error: 'No se pudo eliminar la propuesta. ' + error.message };
+  }
+}
+
+/**
+ * Gets all proposals.
+ */
+export async function getProposals(): Promise<Proposal[]> {
+  try {
+    return await getCollection<Proposal>('proposal');
+  } catch (error: any) {
+    console.error('Error getting proposals:', error);
+    return [];
   }
 }

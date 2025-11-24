@@ -1,9 +1,8 @@
 
 'use server';
 
-import { db } from '@/lib/firebase';
-import { collection, doc, addDoc, updateDoc, deleteDoc, serverTimestamp } from 'firebase/firestore';
 import { revalidatePath } from 'next/cache';
+import { createDocument, updateDocument, deleteDocument, generateFirebaseId, serverTimestamp , getCollection } from '@/lib/firebase-adapter';
 
 // Main Contract Type
 export interface Contract {
@@ -27,9 +26,6 @@ type ActionResult<T> = {
   error?: string;
 };
 
-// Collection reference
-const contractsCollectionRef = collection(db, 'contracts');
-
 /**
  * Saves a new contract or updates an existing one.
  */
@@ -40,19 +36,18 @@ export async function saveContract(data: ContractInput): Promise<ActionResult<st
     if (data.id) {
       // Update
       docId = data.id;
-      const docRef = doc(db, 'contracts', docId);
-      await updateDoc(docRef, {
+      await updateDocument('contract', docId, {
         ...data,
         updatedAt: serverTimestamp(),
       });
     } else {
       // Create
-      const docRef = await addDoc(contractsCollectionRef, {
+      docId = generateFirebaseId();
+      await createDocument('contract', docId, {
         ...data,
         createdAt: serverTimestamp(),
         updatedAt: serverTimestamp(),
       });
-      docId = docRef.id;
     }
     
     revalidatePath('/dashboard/contracts');
@@ -69,11 +64,23 @@ export async function saveContract(data: ContractInput): Promise<ActionResult<st
  */
 export async function deleteContract(id: string): Promise<ActionResult<null>> {
   try {
-    await deleteDoc(doc(db, 'contracts', id));
+    await deleteDocument('contract', id);
     revalidatePath('/dashboard/contracts');
     return { success: true };
   } catch (error: any) {
     console.error('Error deleting contract:', error);
     return { success: false, error: 'No se pudo eliminar el Contrato. ' + error.message };
+  }
+}
+
+/**
+ * Gets all contracts.
+ */
+export async function getContracts(): Promise<Contract[]> {
+  try {
+    return await getCollection<Contract>('contract');
+  } catch (error: any) {
+    console.error('Error getting contracts:', error);
+    return [];
   }
 }

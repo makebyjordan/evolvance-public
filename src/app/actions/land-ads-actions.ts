@@ -1,9 +1,8 @@
 
 'use server';
 
-import { db } from '@/lib/firebase';
-import { collection, doc, addDoc, updateDoc, deleteDoc, serverTimestamp, getDoc } from 'firebase/firestore';
 import { revalidatePath } from 'next/cache';
+import { getDocument, updateDocument, createDocument, deleteDocument, generateFirebaseId, serverTimestamp, getCollection, queryCollection, firebaseTimestampToDate } from '@/lib/firebase-adapter';
 import type { FeatureCard, IconListItem, MediaGridCard, PricingCard, FaqItem } from './presentations-actions';
 
 
@@ -101,8 +100,6 @@ type ActionResult<T> = {
 };
 
 // Collection reference
-const landAdsCollectionRef = collection(db, 'landAds');
-
 /**
  * Saves a new LandAd or updates an existing one.
  */
@@ -113,19 +110,18 @@ export async function saveLandAd(data: LandAdInput): Promise<ActionResult<string
     if (data.id) {
       // Update
       docId = data.id;
-      const docRef = doc(db, 'landAds', docId);
-      await updateDoc(docRef, {
+      await updateDocument('landAd', docId, {
         ...data,
         updatedAt: serverTimestamp(),
       });
     } else {
       // Create
-      const docRef = await addDoc(landAdsCollectionRef, {
+      docId = generateFirebaseId();
+      await createDocument('landAd', docId, {
         ...data,
         createdAt: serverTimestamp(),
         updatedAt: serverTimestamp(),
       });
-      docId = docRef.id;
     }
     
     revalidatePath('/dashboard/land-ads');
@@ -144,7 +140,7 @@ export async function saveLandAd(data: LandAdInput): Promise<ActionResult<string
  */
 export async function deleteLandAd(id: string): Promise<ActionResult<null>> {
   try {
-    await deleteDoc(doc(db, 'landAds', id));
+    await deleteDocument('landAd', id);
     revalidatePath('/dashboard/land-ads');
     return { success: true };
   } catch (error: any) {
@@ -158,17 +154,16 @@ export async function deleteLandAd(id: string): Promise<ActionResult<null>> {
  */
 export async function duplicateLandAd(id: string): Promise<ActionResult<string>> {
   try {
-    const docRef = doc(db, 'landAds', id);
-    const docSnap = await getDoc(docRef);
+    const originalData = await getDocument<any>('landAd', id);
 
-    if (!docSnap.exists()) {
+    if (!originalData) {
       return { success: false, error: 'El LandAD original no existe.' };
     }
 
-    const originalData = docSnap.data();
     const { id: _, createdAt, updatedAt, ...copyData } = originalData;
 
-    const newDocRef = await addDoc(landAdsCollectionRef, {
+    const newId = generateFirebaseId();
+    await createDocument('landAd', newId, {
       ...copyData,
       title: `Copia de ${originalData.title}`,
       code: `${originalData.code}-COPY-${Date.now()}`,
@@ -177,10 +172,22 @@ export async function duplicateLandAd(id: string): Promise<ActionResult<string>>
     });
 
     revalidatePath('/dashboard/land-ads');
-    return { success: true, data: newDocRef.id };
+    return { success: true, data: newId };
 
   } catch (error: any) {
     console.error('Error duplicating LandAd:', error);
     return { success: false, error: 'No se pudo duplicar el LandAD. ' + error.message };
+  }
+}
+
+/**
+ * Gets all landads.
+ */
+export async function getLandAds(): Promise<LandAd[]> {
+  try {
+    return await getCollection<LandAd>('landAd');
+  } catch (error: any) {
+    console.error('Error getting landads:', error);
+    return [];
   }
 }

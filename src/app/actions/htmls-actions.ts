@@ -1,9 +1,8 @@
 
 'use server';
 
-import { db } from '@/lib/firebase';
-import { collection, doc, addDoc, updateDoc, deleteDoc, serverTimestamp } from 'firebase/firestore';
 import { revalidatePath } from 'next/cache';
+import { createDocument, updateDocument, deleteDocument, generateFirebaseId, serverTimestamp , getCollection } from '@/lib/firebase-adapter';
 
 // Main Html Type
 export interface Html {
@@ -29,8 +28,6 @@ type ActionResult<T> = {
 };
 
 // Collection reference
-const htmlsCollectionRef = collection(db, 'htmls');
-
 /**
  * Saves a new html or updates an existing one.
  */
@@ -41,19 +38,18 @@ export async function saveHtml(data: HtmlInput): Promise<ActionResult<string>> {
     if (data.id) {
       // Update
       docId = data.id;
-      const docRef = doc(db, 'htmls', docId);
-      await updateDoc(docRef, {
+      await updateDocument('html', docId, {
         ...data,
         updatedAt: serverTimestamp(),
       });
     } else {
       // Create
-      const docRef = await addDoc(htmlsCollectionRef, {
+      docId = generateFirebaseId();
+      await createDocument('html', docId, {
         ...data,
         createdAt: serverTimestamp(),
         updatedAt: serverTimestamp(),
       });
-      docId = docRef.id;
     }
     
     revalidatePath('/dashboard/jordan');
@@ -72,7 +68,7 @@ export async function saveHtml(data: HtmlInput): Promise<ActionResult<string>> {
  */
 export async function deleteHtml(id: string): Promise<ActionResult<null>> {
   try {
-    await deleteDoc(doc(db, 'htmls', id));
+    await deleteDocument('html', id);
     revalidatePath('/dashboard/jordan');
     revalidatePath('/dashboard/sandra');
     revalidatePath('/dashboard/julian');
@@ -80,5 +76,17 @@ export async function deleteHtml(id: string): Promise<ActionResult<null>> {
   } catch (error: any) {
     console.error('Error deleting html:', error);
     return { success: false, error: 'No se pudo eliminar el HTML. ' + error.message };
+  }
+}
+
+/**
+ * Gets all htmls.
+ */
+export async function getHtmls(): Promise<Html[]> {
+  try {
+    return await getCollection<Html>('html');
+  } catch (error: any) {
+    console.error('Error getting htmls:', error);
+    return [];
   }
 }

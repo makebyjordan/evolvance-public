@@ -1,9 +1,8 @@
 
 'use server';
 
-import { db } from '@/lib/firebase';
-import { collection, doc, addDoc, updateDoc, deleteDoc, serverTimestamp } from 'firebase/firestore';
 import { revalidatePath } from 'next/cache';
+import { createDocument, updateDocument, deleteDocument, generateFirebaseId, serverTimestamp , getCollection } from '@/lib/firebase-adapter';
 
 // Main GeminiLink Type
 export interface GeminiLink {
@@ -27,8 +26,6 @@ type ActionResult<T> = {
 };
 
 // Collection reference
-const geminiLinksCollectionRef = collection(db, 'geminiLinks');
-
 /**
  * Saves a new link or updates an existing one.
  */
@@ -39,19 +36,18 @@ export async function saveGeminiLink(data: GeminiLinkInput): Promise<ActionResul
     if (data.id) {
       // Update
       docId = data.id;
-      const docRef = doc(db, 'geminiLinks', docId);
-      await updateDoc(docRef, {
+      await updateDocument('geminiLink', docId, {
         ...data,
         updatedAt: serverTimestamp(),
       });
     } else {
       // Create
-      const docRef = await addDoc(geminiLinksCollectionRef, {
+      docId = generateFirebaseId();
+      await createDocument('geminiLink', docId, {
         ...data,
         createdAt: serverTimestamp(),
         updatedAt: serverTimestamp(),
       });
-      docId = docRef.id;
     }
     
     revalidatePath('/dashboard/gemini');
@@ -68,11 +64,23 @@ export async function saveGeminiLink(data: GeminiLinkInput): Promise<ActionResul
  */
 export async function deleteGeminiLink(id: string): Promise<ActionResult<null>> {
   try {
-    await deleteDoc(doc(db, 'geminiLinks', id));
+    await deleteDocument('geminiLink', id);
     revalidatePath('/dashboard/gemini');
     return { success: true };
   } catch (error: any) {
     console.error('Error deleting link:', error);
     return { success: false, error: 'No se pudo eliminar el enlace. ' + error.message };
+  }
+}
+
+/**
+ * Gets all geminilinks.
+ */
+export async function getGeminiLinks(): Promise<GeminiLink[]> {
+  try {
+    return await getCollection<GeminiLink>('geminiLink');
+  } catch (error: any) {
+    console.error('Error getting geminilinks:', error);
+    return [];
   }
 }

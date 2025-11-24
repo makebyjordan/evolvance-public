@@ -1,9 +1,8 @@
 
 'use server';
 
-import { db } from '@/lib/firebase';
-import { collection, doc, addDoc, updateDoc, deleteDoc, serverTimestamp } from 'firebase/firestore';
 import { revalidatePath } from 'next/cache';
+import { createDocument, updateDocument, deleteDocument, generateFirebaseId, serverTimestamp , getCollection } from '@/lib/firebase-adapter';
 
 // Main Protocol Types
 export interface ProtocolStep {
@@ -30,8 +29,6 @@ type ActionResult<T> = {
   error?: string;
 };
 
-const protocolsCollectionRef = collection(db, 'protocols');
-
 /**
  * Saves a new protocol or updates an existing one.
  */
@@ -42,19 +39,18 @@ export async function saveProtocol(data: ProtocolInput): Promise<ActionResult<st
     if (data.id) {
       // Update
       docId = data.id;
-      const docRef = doc(db, 'protocols', docId);
-      await updateDoc(docRef, {
+      await updateDocument('protocol', docId, {
         ...data,
         updatedAt: serverTimestamp(),
       });
     } else {
       // Create
-      const docRef = await addDoc(protocolsCollectionRef, {
+      docId = generateFirebaseId();
+      await createDocument('protocol', docId, {
         ...data,
         createdAt: serverTimestamp(),
         updatedAt: serverTimestamp(),
       });
-      docId = docRef.id;
     }
     
     revalidatePath('/dashboard/protocolos');
@@ -71,11 +67,23 @@ export async function saveProtocol(data: ProtocolInput): Promise<ActionResult<st
  */
 export async function deleteProtocol(id: string): Promise<ActionResult<null>> {
   try {
-    await deleteDoc(doc(db, 'protocols', id));
+    await deleteDocument('protocol', id);
     revalidatePath('/dashboard/protocolos');
     return { success: true };
   } catch (error: any) {
     console.error('Error deleting protocol:', error);
     return { success: false, error: 'No se pudo eliminar el protocolo. ' + error.message };
+  }
+}
+
+/**
+ * Gets all protocols.
+ */
+export async function getProtocols(): Promise<Protocol[]> {
+  try {
+    return await getCollection<Protocol>('protocol');
+  } catch (error: any) {
+    console.error('Error getting protocols:', error);
+    return [];
   }
 }

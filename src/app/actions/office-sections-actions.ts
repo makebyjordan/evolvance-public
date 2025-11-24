@@ -1,9 +1,8 @@
 
 'use server';
 
-import { db } from '@/lib/firebase';
-import { collection, doc, addDoc, updateDoc, deleteDoc, serverTimestamp } from 'firebase/firestore';
 import { revalidatePath } from 'next/cache';
+import { createDocument, updateDocument, deleteDocument, generateFirebaseId, serverTimestamp, getCollection } from '@/lib/firebase-adapter';
 
 // Main OfficeSection Type
 export interface OfficeSection {
@@ -28,8 +27,6 @@ type ActionResult<T> = {
 };
 
 // Collection reference
-const officeSectionsCollectionRef = collection(db, 'officeSections');
-
 /**
  * Saves a new office section or updates an existing one.
  */
@@ -40,19 +37,18 @@ export async function saveOfficeSection(data: OfficeSectionInput): Promise<Actio
     if (data.id) {
       // Update
       docId = data.id;
-      const docRef = doc(db, 'officeSections', docId);
-      await updateDoc(docRef, {
+      await updateDocument('officeSection', docId, {
         ...data,
         updatedAt: serverTimestamp(),
       });
     } else {
       // Create
-      const docRef = await addDoc(officeSectionsCollectionRef, {
+      docId = generateFirebaseId();
+      await createDocument('officeSection', docId, {
         ...data,
         createdAt: serverTimestamp(),
         updatedAt: serverTimestamp(),
       });
-      docId = docRef.id;
     }
     
     revalidatePath('/dashboard/office-config');
@@ -70,12 +66,24 @@ export async function saveOfficeSection(data: OfficeSectionInput): Promise<Actio
  */
 export async function deleteOfficeSection(id: string): Promise<ActionResult<null>> {
   try {
-    await deleteDoc(doc(db, 'officeSections', id));
+    await deleteDocument('officeSection', id);
     revalidatePath('/dashboard/office-config');
     revalidatePath('/office');
     return { success: true };
   } catch (error: any) {
     console.error('Error deleting office section:', error);
     return { success: false, error: 'No se pudo eliminar la sección. ' + error.message };
+  }
+}
+
+/**
+ * Gets all officesections.
+ */
+export async function getOfficeSections(): Promise<OfficeSection[]> {
+  try {
+    return await getCollection<OfficeSection>('officeSection');
+  } catch (error: any) {
+    console.error('Error getting officesections:', error);
+    return [];
   }
 }

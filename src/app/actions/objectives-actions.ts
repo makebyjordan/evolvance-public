@@ -1,9 +1,8 @@
 
 'use server';
 
-import { db } from '@/lib/firebase';
-import { collection, doc, addDoc, updateDoc, deleteDoc, serverTimestamp } from 'firebase/firestore';
 import { revalidatePath } from 'next/cache';
+import { createDocument, updateDocument, deleteDocument, generateFirebaseId, serverTimestamp , getCollection } from '@/lib/firebase-adapter';
 
 // Main Objective Types
 export interface ObjectiveTask {
@@ -33,8 +32,6 @@ type ActionResult<T> = {
   error?: string;
 };
 
-const objectivesCollectionRef = collection(db, 'objectives');
-
 /**
  * Saves a new objective or updates an existing one.
  */
@@ -45,19 +42,18 @@ export async function saveObjective(data: ObjectiveInput): Promise<ActionResult<
     if (data.id) {
       // Update
       docId = data.id;
-      const docRef = doc(db, 'objectives', docId);
-      await updateDoc(docRef, {
+      await updateDocument('objective', docId, {
         ...data,
         updatedAt: serverTimestamp(),
       });
     } else {
       // Create
-      const docRef = await addDoc(objectivesCollectionRef, {
+      docId = generateFirebaseId();
+      await createDocument('objective', docId, {
         ...data,
         createdAt: serverTimestamp(),
         updatedAt: serverTimestamp(),
       });
-      docId = docRef.id;
     }
     
     revalidatePath(`/dashboard/${data.owner}`);
@@ -75,11 +71,23 @@ export async function saveObjective(data: ObjectiveInput): Promise<ActionResult<
  */
 export async function deleteObjective(id: string, owner: string): Promise<ActionResult<null>> {
   try {
-    await deleteDoc(doc(db, 'objectives', id));
+    await deleteDocument('objective', id);
     revalidatePath(`/dashboard/${owner}`);
     return { success: true };
   } catch (error: any) {
     console.error('Error deleting objective:', error);
     return { success: false, error: 'No se pudo eliminar el objetivo. ' + error.message };
+  }
+}
+
+/**
+ * Gets all objectives.
+ */
+export async function getObjectives(): Promise<Objective[]> {
+  try {
+    return await getCollection<Objective>('objective');
+  } catch (error: any) {
+    console.error('Error getting objectives:', error);
+    return [];
   }
 }

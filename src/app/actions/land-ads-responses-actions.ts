@@ -1,9 +1,8 @@
 
 'use server';
 
-import { db } from '@/lib/firebase';
-import { collection, addDoc, serverTimestamp, deleteDoc, doc } from 'firebase/firestore';
 import { revalidatePath } from 'next/cache';
+import { getDocument, updateDocument, createDocument, deleteDocument, generateFirebaseId, serverTimestamp, getCollection, queryCollection, firebaseTimestampToDate } from '@/lib/firebase-adapter';
 
 export interface LandAdResponse {
   id?: string;
@@ -18,19 +17,18 @@ type ActionResult<T> = {
   error?: string;
 };
 
-const responsesCollectionRef = collection(db, 'landAdResponses');
-
 export async function saveLandAdResponse(
   landAdId: string, 
   responses: { question: string; answer: string }[]
 ): Promise<ActionResult<string>> {
   try {
-    const docRef = await addDoc(responsesCollectionRef, {
+    const docId = generateFirebaseId();
+    await createDocument('landAdResponse', docId, {
       landAdId,
       responses,
       createdAt: serverTimestamp(),
     });
-    return { success: true, data: docRef.id };
+    return { success: true, data: docId };
   } catch (error: any) {
     console.error('Error saving LandAd response:', error);
     return { success: false, error: 'Las respuestas no se pudieron guardar. ' + error.message };
@@ -42,11 +40,23 @@ export async function saveLandAdResponse(
  */
 export async function deleteLandAdResponse(id: string): Promise<ActionResult<null>> {
   try {
-    await deleteDoc(doc(db, 'landAdResponses', id));
+    await deleteDocument('landAdResponse', id);
     revalidatePath('/dashboard/land-ads-responses');
     return { success: true };
   } catch (error: any) {
     console.error('Error deleting LandAd response:', error);
     return { success: false, error: 'No se pudo eliminar la respuesta. ' + error.message };
+  }
+}
+
+/**
+ * Gets all landadresponses.
+ */
+export async function getLandAdResponses(): Promise<LandAdResponse[]> {
+  try {
+    return await getCollection<LandAdResponse>('landAdResponse');
+  } catch (error: any) {
+    console.error('Error getting landadresponses:', error);
+    return [];
   }
 }

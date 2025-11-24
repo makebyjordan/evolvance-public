@@ -1,8 +1,7 @@
 'use server';
 
-import { db } from '@/lib/firebase';
-import { doc, getDoc, setDoc, serverTimestamp, Timestamp } from 'firebase/firestore';
 import { revalidatePath } from 'next/cache';
+import { getDocument, updateDocument, createDocument, serverTimestamp, firebaseTimestampToDate } from '@/lib/firebase-adapter';
 
 export interface ServiceItem {
   icon: string;
@@ -107,14 +106,12 @@ type ActionResult<T> = {
  */
 export async function getWebContent<T extends WebContentData>(section: WebContentSection): Promise<T | null> {
   try {
-    const docRef = doc(db, 'webContent', section);
-    const docSnap = await getDoc(docRef);
+    const data = await getDocument<any>('webContent', section);
 
-    if (docSnap.exists()) {
-      const data = docSnap.data();
+    if (data) {
       // Convert Timestamp to a serializable format (ISO string)
-      if (data.updatedAt && data.updatedAt instanceof Timestamp) {
-        data.updatedAt = data.updatedAt.toDate().toISOString();
+      if (data.updatedAt) {
+        data.updatedAt = firebaseTimestampToDate(data.updatedAt).toISOString();
       }
       return data as T;
     } else {
@@ -132,10 +129,9 @@ export async function getWebContent<T extends WebContentData>(section: WebConten
  */
 export async function saveWebContent(section: WebContentSection, data: WebContentData): Promise<ActionResult<null>> {
   try {
-    const docRef = doc(db, 'webContent', section);
     // Omit updatedAt from the data being saved, as it's managed by serverTimestamp
     const { updatedAt, ...saveData } = data;
-    await setDoc(docRef, { ...saveData, updatedAt: serverTimestamp() }, { merge: true });
+    await updateDocument('webContent', section, { ...saveData, updatedAt: serverTimestamp() } as any);
     
     // Revalidate the home page to show the new content
     revalidatePath('/', 'layout');

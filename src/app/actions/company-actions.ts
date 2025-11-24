@@ -1,9 +1,8 @@
 
 'use server';
 
-import { db } from '@/lib/firebase';
-import { doc, getDoc, setDoc, serverTimestamp, Timestamp } from 'firebase/firestore';
 import { revalidatePath } from 'next/cache';
+import { getDocument, updateDocument, serverTimestamp, firebaseTimestampToDate } from '@/lib/firebase-adapter';
 
 export interface CompanyInfo {
   name: string;
@@ -21,20 +20,17 @@ type ActionResult<T> = {
   error?: string;
 };
 
-const companyInfoRef = doc(db, 'company', 'info');
-
 /**
  * Gets the company information.
  */
 export async function getCompanyInfo(): Promise<CompanyInfo | null> {
   try {
-    const docSnap = await getDoc(companyInfoRef);
+    const data = await getDocument<any>('company', 'info');
 
-    if (docSnap.exists()) {
-      const data = docSnap.data();
+    if (data) {
       // Convert Timestamp to a serializable format (ISO string)
-      if (data.updatedAt && data.updatedAt instanceof Timestamp) {
-        data.updatedAt = data.updatedAt.toDate().toISOString();
+      if (data.updatedAt) {
+        data.updatedAt = firebaseTimestampToDate(data.updatedAt).toISOString();
       }
       return data as CompanyInfo;
     } else {
@@ -54,7 +50,7 @@ export async function saveCompanyInfo(data: CompanyInfo): Promise<ActionResult<n
   try {
     // Omit updatedAt from the data being saved, as it's managed by serverTimestamp
     const { updatedAt, ...saveData } = data;
-    await setDoc(companyInfoRef, { ...saveData, updatedAt: serverTimestamp() }, { merge: true });
+    await updateDocument('company', 'info', { ...saveData, updatedAt: serverTimestamp() });
     
     revalidatePath('/dashboard/empresa');
     

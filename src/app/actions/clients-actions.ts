@@ -1,8 +1,7 @@
 
 'use server';
 
-import { db } from '@/lib/firebase';
-import { collection, doc, addDoc, updateDoc, deleteDoc, serverTimestamp } from 'firebase/firestore';
+import { createDocument, updateDocument, deleteDocument, generateFirebaseId, serverTimestamp, getCollection } from '@/lib/firebase-adapter';
 
 // Main Client Type
 export interface Client {
@@ -28,9 +27,6 @@ type ActionResult<T> = {
   error?: string;
 };
 
-// Collection reference
-const clientsCollectionRef = collection(db, 'clients');
-
 /**
  * Saves a new client or updates an existing one.
  */
@@ -41,19 +37,18 @@ export async function saveClient(data: ClientInput): Promise<ActionResult<string
     if (data.id) {
       // Update
       docId = data.id;
-      const docRef = doc(db, 'clients', docId);
-      await updateDoc(docRef, {
+      await updateDocument('client', docId, {
         ...data,
         updatedAt: serverTimestamp(),
       });
     } else {
       // Create
-      const docRef = await addDoc(clientsCollectionRef, {
+      docId = generateFirebaseId();
+      await createDocument('client', docId, {
         ...data,
         createdAt: serverTimestamp(),
         updatedAt: serverTimestamp(),
       });
-      docId = docRef.id;
     }
     
     return { success: true, data: docId };
@@ -69,10 +64,22 @@ export async function saveClient(data: ClientInput): Promise<ActionResult<string
  */
 export async function deleteClient(id: string): Promise<ActionResult<null>> {
   try {
-    await deleteDoc(doc(db, 'clients', id));
+    await deleteDocument('client', id);
     return { success: true };
   } catch (error: any) {
     console.error('Error deleting client:', error);
     return { success: false, error: 'No se pudo eliminar el cliente. ' + error.message };
+  }
+}
+
+/**
+ * Gets all clients.
+ */
+export async function getClients(): Promise<Client[]> {
+  try {
+    return await getCollection<Client>('client');
+  } catch (error: any) {
+    console.error('Error getting clients:', error);
+    return [];
   }
 }

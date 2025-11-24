@@ -1,9 +1,8 @@
 
 'use server';
 
-import { db } from '@/lib/firebase';
-import { collection, doc, addDoc, updateDoc, deleteDoc, serverTimestamp } from 'firebase/firestore';
 import { revalidatePath } from 'next/cache';
+import { createDocument, updateDocument, deleteDocument, generateFirebaseId, serverTimestamp , getCollection } from '@/lib/firebase-adapter';
 
 // Main Service Type
 export interface Service {
@@ -30,9 +29,6 @@ type ActionResult<T> = {
   error?: string;
 };
 
-// Collection reference
-const servicesCollectionRef = collection(db, 'services');
-
 /**
  * Saves a new service or updates an existing one.
  */
@@ -43,19 +39,18 @@ export async function saveService(data: ServiceInput): Promise<ActionResult<stri
     if (data.id) {
       // Update
       docId = data.id;
-      const docRef = doc(db, 'services', docId);
-      await updateDoc(docRef, {
+      await updateDocument('service', docId, {
         ...data,
         updatedAt: serverTimestamp(),
       });
     } else {
       // Create
-      const docRef = await addDoc(servicesCollectionRef, {
+      docId = generateFirebaseId();
+      await createDocument('service', docId, {
         ...data,
         createdAt: serverTimestamp(),
         updatedAt: serverTimestamp(),
       });
-      docId = docRef.id;
     }
     
     revalidatePath('/dashboard/services');
@@ -72,11 +67,23 @@ export async function saveService(data: ServiceInput): Promise<ActionResult<stri
  */
 export async function deleteService(id: string): Promise<ActionResult<null>> {
   try {
-    await deleteDoc(doc(db, 'services', id));
+    await deleteDocument('service', id);
     revalidatePath('/dashboard/services');
     return { success: true };
   } catch (error: any) {
     console.error('Error deleting service:', error);
     return { success: false, error: 'No se pudo eliminar el servicio. ' + error.message };
+  }
+}
+
+/**
+ * Gets all services.
+ */
+export async function getServices(): Promise<Service[]> {
+  try {
+    return await getCollection<Service>('service');
+  } catch (error: any) {
+    console.error('Error getting services:', error);
+    return [];
   }
 }

@@ -1,8 +1,7 @@
 'use server';
 
-import { db } from '@/lib/firebase';
-import { collection, doc, addDoc, updateDoc, deleteDoc, serverTimestamp, writeBatch, getDoc } from 'firebase/firestore';
 import { revalidatePath } from 'next/cache';
+import { getDocument, updateDocument, createDocument, deleteDocument, generateFirebaseId, serverTimestamp, getCollection, queryCollection, firebaseTimestampToDate } from '@/lib/firebase-adapter';
 
 // Main Presupuesto Types
 export interface PresupuestoItem {
@@ -35,8 +34,6 @@ type ActionResult<T> = {
   error?: string;
 };
 
-const presupuestosCollectionRef = collection(db, 'presupuestos');
-
 /**
  * Saves a new presupuesto or updates an existing one.
  */
@@ -54,19 +51,18 @@ export async function savePresupuesto(data: PresupuestoInput): Promise<ActionRes
     if (data.id) {
       // Update
       docId = data.id;
-      const docRef = doc(db, 'presupuestos', docId);
-      await updateDoc(docRef, {
+      await updateDocument('presupuesto', docId, {
         ...presupuestoData,
         updatedAt: serverTimestamp(),
       });
     } else {
       // Create
-      const docRef = await addDoc(presupuestosCollectionRef, {
+      docId = generateFirebaseId();
+      await createDocument('presupuesto', docId, {
         ...presupuestoData,
         createdAt: serverTimestamp(),
         updatedAt: serverTimestamp(),
       });
-      docId = docRef.id;
     }
     
     revalidatePath('/dashboard/presupuestos');
@@ -83,7 +79,7 @@ export async function savePresupuesto(data: PresupuestoInput): Promise<ActionRes
  */
 export async function deletePresupuesto(id: string): Promise<ActionResult<null>> {
   try {
-    await deleteDoc(doc(db, 'presupuestos', id));
+    await deleteDocument('presupuesto', id);
     revalidatePath('/dashboard/presupuestos');
     return { success: true };
   } catch (error: any) {
@@ -145,5 +141,17 @@ export async function createFacturaFromPresupuesto(
   } catch (error: any) {
     console.error('Error creating factura:', error);
     return { success: false, error: 'No se pudo crear la factura. ' + error.message };
+  }
+}
+
+/**
+ * Gets all presupuestos.
+ */
+export async function getPresupuestos(): Promise<Presupuesto[]> {
+  try {
+    return await getCollection<Presupuesto>('presupuesto');
+  } catch (error: any) {
+    console.error('Error getting presupuestos:', error);
+    return [];
   }
 }

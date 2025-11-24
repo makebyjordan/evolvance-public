@@ -1,0 +1,336 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================
+// 🗄️ MODELOS DE MIGRACIÓN DESDE FIREBASE
+// ============================================
+
+model Client {
+  id        String   @id @default(cuid())
+  firebaseId String  @unique
+  data      Json
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("clients")
+}
+
+model Collaborator {
+  id         String   @id @default(cuid())
+  firebaseId String   @unique
+  data       Json
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@map("collaborators")
+}
+
+model Company {
+  id         String   @id @default(cuid())
+  firebaseId String   @unique
+  data       Json
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@map("company")
+}
+
+model Contract {
+  id         String   @id @default(cuid())
+  firebaseId String   @unique
+  data       Json
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@map("contracts")
+}
+
+model Factura {
+  id         String   @id @default(cuid())
+  firebaseId String   @unique
+  data       Json
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@map("facturas")
+}
+
+model FirebaseProject {
+  id         String   @id @default(cuid())
+  firebaseId String   @unique
+  data       Json
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@map("firebase_projects")
+}
+
+model GeminiLink {
+  id         String   @id @default(cuid())
+  firebaseId String   @unique
+  data       Json
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@map("gemini_links")
+}
+
+model Html {
+  id         String   @id @default(cuid())
+  firebaseId String   @unique
+  data       Json
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@map("htmls")
+}
+
+model Ia {
+  id         String   @id @default(cuid())
+  firebaseId String   @unique
+  data       Json
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@map("ias")
+}
+
+model Image {
+  id         String   @id @default(cuid())
+  firebaseId String   @unique
+  data       Json
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@map("images")
+}
+
+model InvoiceIn {
+  id         String   @id @default(cuid())
+  firebaseId String   @unique
+  data       Json
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@map("invoices_in")
+}
+
+model LandAdResponse {
+  id         String   @id @default(cuid())
+  firebaseId String   @unique
+  data       Json
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@map("land_ad_responses")
+}
+
+model LandAd {
+  id         String   @id @default(cuid())
+  firebaseId String   @unique
+  data       Json
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@map("land_ads")
+}
+
+model Objective {
+  id         String   @id @default(cuid())
+  firebaseId String   @unique
+  data       Json
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@map("objectives")
+}
+
+model OfficeSection {
+  id         String   @id @default(cuid())
+  firebaseId String   @unique
+  data       Json
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@map("office_sections")
+}
+
+model Portfolio {
+  id         String   @id @default(cuid())
+  firebaseId String   @unique
+  data       Json
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@map("portfolio")
+}
+
+model Presentation {
+  id         String   @id @default(cuid())
+  firebaseId String   @unique
+  data       Json
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@map("presentations")
+}
+
+model Presupuesto {
+  id         String   @id @default(cuid())
+  firebaseId String   @unique
+  data       Json
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@map("presupuestos")
+}
+
+model Proposal {
+  id         String   @id @default(cuid())
+  firebaseId String   @unique
+  data       Json
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@map("proposals")
+}
+
+model Protocol {
+  id         String   @id @default(cuid())
+  firebaseId String   @unique
+  data       Json
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@map("protocols")
+}
+
+model ServicePage {
+  id         String   @id @default(cuid())
+  firebaseId String   @unique
+  data       Json
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@map("service_pages")
+}
+
+model Service {
+  id         String   @id @default(cuid())
+  firebaseId String   @unique
+  data       Json
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@map("services")
+}
+
+model Tool {
+  id         String   @id @default(cuid())
+  firebaseId String   @unique
+  data       Json
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@map("tools")
+}
+
+model TrainingItem {
+  id         String   @id @default(cuid())
+  firebaseId String   @unique
+  data       Json
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@map("training_items")
+}
+
+model TrainingSubsection {
+  id         String   @id @default(cuid())
+  firebaseId String   @unique
+  data       Json
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@map("training_subsections")
+}
+
+model UserStatus {
+  id         String   @id @default(cuid())
+  firebaseId String   @unique
+  data       Json
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@map("user_status")
+}
+
+model Video {
+  id         String   @id @default(cuid())
+  firebaseId String   @unique
+  data       Json
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@map("videos")
+}
+
+model WebContent {
+  id         String   @id @default(cuid())
+  firebaseId String   @unique
+  data       Json
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@map("web_content")
+}
+
+model WorkSession {
+  id         String   @id @default(cuid())
+  firebaseId String   @unique
+  data       Json
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@map("work_sessions")
+}
+
+model FollowUp {
+  id         String   @id @default(cuid())
+  firebaseId String   @unique
+  data       Json
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@map("follow_ups")
+}
+
+model Horario {
+  id         String   @id @default(cuid())
+  firebaseId String   @unique
+  data       Json
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@map("horarios")
+}
+
+model InvoiceOut {
+  id         String   @id @default(cuid())
+  firebaseId String   @unique
+  data       Json
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@map("invoices_out")
+}

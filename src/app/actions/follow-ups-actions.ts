@@ -1,9 +1,8 @@
 
 'use server';
 
-import { db } from '@/lib/firebase';
-import { collection, doc, addDoc, updateDoc, deleteDoc, serverTimestamp } from 'firebase/firestore';
 import { revalidatePath } from 'next/cache';
+import { createDocument, updateDocument, deleteDocument, generateFirebaseId, serverTimestamp , getCollection } from '@/lib/firebase-adapter';
 
 // Main FollowUp Type
 export interface FollowUp {
@@ -31,8 +30,6 @@ type ActionResult<T> = {
 };
 
 // Collection reference
-const followUpsCollectionRef = collection(db, 'followUps');
-
 /**
  * Saves a new follow-up or updates an existing one.
  */
@@ -48,19 +45,18 @@ export async function saveFollowUp(data: FollowUpInput): Promise<ActionResult<st
     if (data.id) {
       // Update
       docId = data.id;
-      const docRef = doc(db, 'followUps', docId);
-      await updateDoc(docRef, {
+      await updateDocument('followUp', docId, {
         ...followUpData,
         updatedAt: serverTimestamp(),
       });
     } else {
       // Create
-      const docRef = await addDoc(followUpsCollectionRef, {
+      docId = generateFirebaseId();
+      await createDocument('followUp', docId, {
         ...followUpData,
         createdAt: serverTimestamp(),
         updatedAt: serverTimestamp(),
       });
-      docId = docRef.id;
     }
     
     revalidatePath('/dashboard/follow-ups');
@@ -77,11 +73,23 @@ export async function saveFollowUp(data: FollowUpInput): Promise<ActionResult<st
  */
 export async function deleteFollowUp(id: string): Promise<ActionResult<null>> {
   try {
-    await deleteDoc(doc(db, 'followUps', id));
+    await deleteDocument('followUp', id);
     revalidatePath('/dashboard/follow-ups');
     return { success: true };
   } catch (error: any) {
     console.error('Error deleting follow-up:', error);
     return { success: false, error: 'No se pudo eliminar el seguimiento. ' + error.message };
+  }
+}
+
+/**
+ * Gets all followups.
+ */
+export async function getFollowUps(): Promise<FollowUp[]> {
+  try {
+    return await getCollection<FollowUp>('followUp');
+  } catch (error: any) {
+    console.error('Error getting followups:', error);
+    return [];
   }
 }

@@ -1,9 +1,8 @@
 
 'use server';
 
-import { db } from '@/lib/firebase';
-import { collection, doc, addDoc, updateDoc, deleteDoc, serverTimestamp } from 'firebase/firestore';
 import { revalidatePath } from 'next/cache';
+import { createDocument, updateDocument, deleteDocument, generateFirebaseId, serverTimestamp , getCollection } from '@/lib/firebase-adapter';
 
 // Main TrainingItem Type
 export interface TrainingItem {
@@ -29,8 +28,6 @@ type ActionResult<T> = {
 };
 
 // Collection reference
-const trainingItemsCollectionRef = collection(db, 'trainingItems');
-
 /**
  * Saves a new training item or updates an existing one.
  */
@@ -41,19 +38,18 @@ export async function saveTrainingItem(data: TrainingItemInput): Promise<ActionR
     if (data.id) {
       // Update
       docId = data.id;
-      const docRef = doc(db, 'trainingItems', docId);
-      await updateDoc(docRef, {
+      await updateDocument('trainingItem', docId, {
         ...data,
         updatedAt: serverTimestamp(),
       });
     } else {
       // Create
-      const docRef = await addDoc(trainingItemsCollectionRef, {
+      docId = generateFirebaseId();
+      await createDocument('trainingItem', docId, {
         ...data,
         createdAt: serverTimestamp(),
         updatedAt: serverTimestamp(),
       });
-      docId = docRef.id;
     }
     
     revalidatePath('/dashboard/training');
@@ -70,11 +66,23 @@ export async function saveTrainingItem(data: TrainingItemInput): Promise<ActionR
  */
 export async function deleteTrainingItem(id: string): Promise<ActionResult<null>> {
   try {
-    await deleteDoc(doc(db, 'trainingItems', id));
+    await deleteDocument('trainingItem', id);
     revalidatePath('/dashboard/training');
     return { success: true };
   } catch (error: any) {
     console.error('Error deleting training item:', error);
     return { success: false, error: 'No se pudo eliminar la formación. ' + error.message };
+  }
+}
+
+/**
+ * Gets all trainingitems.
+ */
+export async function getTrainingItems(): Promise<TrainingItem[]> {
+  try {
+    return await getCollection<TrainingItem>('trainingItem');
+  } catch (error: any) {
+    console.error('Error getting trainingitems:', error);
+    return [];
   }
 }

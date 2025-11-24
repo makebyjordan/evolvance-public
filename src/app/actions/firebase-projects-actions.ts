@@ -1,9 +1,8 @@
 
 'use server';
 
-import { db } from '@/lib/firebase';
-import { collection, doc, addDoc, updateDoc, deleteDoc, serverTimestamp } from 'firebase/firestore';
 import { revalidatePath } from 'next/cache';
+import { createDocument, updateDocument, deleteDocument, generateFirebaseId, serverTimestamp , getCollection } from '@/lib/firebase-adapter';
 
 // Main FirebaseProject Type
 export interface FirebaseProject {
@@ -32,8 +31,6 @@ type ActionResult<T> = {
 };
 
 // Collection reference
-const projectsCollectionRef = collection(db, 'firebaseProjects');
-
 /**
  * Saves a new project or updates an existing one.
  */
@@ -54,19 +51,18 @@ export async function saveFirebaseProject(data: FirebaseProjectInput): Promise<A
     if (data.id) {
       // Update
       docId = data.id;
-      const docRef = doc(db, 'firebaseProjects', docId);
-      await updateDoc(docRef, {
+      await updateDocument('firebaseProject', docId, {
         ...projectData,
         updatedAt: serverTimestamp(),
       });
     } else {
       // Create
-      const docRef = await addDoc(projectsCollectionRef, {
+      docId = generateFirebaseId();
+      await createDocument('firebaseProject', docId, {
         ...projectData,
         createdAt: serverTimestamp(),
         updatedAt: serverTimestamp(),
       });
-      docId = docRef.id;
     }
     
     revalidatePath('/dashboard/firebase');
@@ -83,11 +79,23 @@ export async function saveFirebaseProject(data: FirebaseProjectInput): Promise<A
  */
 export async function deleteFirebaseProject(id: string): Promise<ActionResult<null>> {
   try {
-    await deleteDoc(doc(db, 'firebaseProjects', id));
+    await deleteDocument('firebaseProject', id);
     revalidatePath('/dashboard/firebase');
     return { success: true };
   } catch (error: any) {
     console.error('Error deleting firebase project:', error);
     return { success: false, error: 'No se pudo eliminar el proyecto. ' + error.message };
+  }
+}
+
+/**
+ * Gets all firebaseprojects.
+ */
+export async function getFirebaseProjects(): Promise<FirebaseProject[]> {
+  try {
+    return await getCollection<FirebaseProject>('firebaseProject');
+  } catch (error: any) {
+    console.error('Error getting firebaseprojects:', error);
+    return [];
   }
 }

@@ -1,9 +1,8 @@
 
 'use server';
 
-import { db } from '@/lib/firebase';
-import { collection, doc, addDoc, updateDoc, deleteDoc, serverTimestamp } from 'firebase/firestore';
 import { revalidatePath } from 'next/cache';
+import { createDocument, updateDocument, deleteDocument, generateFirebaseId, serverTimestamp } from '@/lib/firebase-adapter';
 
 // Main TrainingSubsection Type
 export interface TrainingSubsection {
@@ -27,8 +26,6 @@ type ActionResult<T> = {
 };
 
 // Collection reference
-const trainingSubsectionsCollectionRef = collection(db, 'trainingSubsections');
-
 /**
  * Saves a new subsection or updates an existing one.
  */
@@ -39,19 +36,18 @@ export async function saveTrainingSubsection(data: TrainingSubsectionInput): Pro
     if (data.id) {
       // Update
       docId = data.id;
-      const docRef = doc(db, 'trainingSubsections', docId);
-      await updateDoc(docRef, {
+      await updateDocument('training', docId, {
         ...data,
         updatedAt: serverTimestamp(),
       });
     } else {
       // Create
-      const docRef = await addDoc(trainingSubsectionsCollectionRef, {
+      docId = generateFirebaseId();
+      await createDocument('training', docId, {
         ...data,
         createdAt: serverTimestamp(),
         updatedAt: serverTimestamp(),
       });
-      docId = docRef.id;
     }
     
     revalidatePath('/dashboard/training');
@@ -68,7 +64,7 @@ export async function saveTrainingSubsection(data: TrainingSubsectionInput): Pro
  */
 export async function deleteTrainingSubsection(id: string): Promise<ActionResult<null>> {
   try {
-    await deleteDoc(doc(db, 'trainingSubsections', id));
+    await deleteDocument('training', id);
     revalidatePath('/dashboard/training');
     return { success: true };
   } catch (error: any) {

@@ -30,6 +30,11 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  experimental: {
+    serverActions: {
+      allowedOrigins: ['localhost:9002', '127.0.0.1:51559'],
+    },
+  },
   // --- Bloque de reescritura para el nuevo subdominio ---
   async rewrites() {
     return {

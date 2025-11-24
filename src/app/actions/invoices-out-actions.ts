@@ -1,9 +1,8 @@
 
 'use server';
 
-import { db } from '@/lib/firebase';
-import { collection, doc, addDoc, updateDoc, deleteDoc, serverTimestamp } from 'firebase/firestore';
 import { revalidatePath } from 'next/cache';
+import { createDocument, updateDocument, deleteDocument, generateFirebaseId, serverTimestamp , getCollection } from '@/lib/firebase-adapter';
 
 // Main InvoiceOut Type
 export interface InvoiceOut {
@@ -33,8 +32,6 @@ type ActionResult<T> = {
 };
 
 // Collection reference
-const invoicesOutCollectionRef = collection(db, 'invoicesOut');
-
 /**
  * Saves a new invoice or updates an existing one.
  */
@@ -45,19 +42,18 @@ export async function saveInvoiceOut(data: InvoiceOutInput): Promise<ActionResul
     if (data.id) {
       // Update
       docId = data.id;
-      const docRef = doc(db, 'invoicesOut', docId);
-      await updateDoc(docRef, {
+      await updateDocument('invoiceOut', docId, {
         ...data,
         updatedAt: serverTimestamp(),
       });
     } else {
       // Create
-      const docRef = await addDoc(invoicesOutCollectionRef, {
+      docId = generateFirebaseId();
+      await createDocument('invoiceOut', docId, {
         ...data,
         createdAt: serverTimestamp(),
         updatedAt: serverTimestamp(),
       });
-      docId = docRef.id;
     }
     
     revalidatePath('/dashboard/invoices-out');
@@ -74,11 +70,23 @@ export async function saveInvoiceOut(data: InvoiceOutInput): Promise<ActionResul
  */
 export async function deleteInvoiceOut(id: string): Promise<ActionResult<null>> {
   try {
-    await deleteDoc(doc(db, 'invoicesOut', id));
+    await deleteDocument('invoiceOut', id);
     revalidatePath('/dashboard/invoices-out');
     return { success: true };
   } catch (error: any) {
     console.error('Error deleting invoice:', error);
     return { success: false, error: 'No se pudo eliminar la factura. ' + error.message };
+  }
+}
+
+/**
+ * Gets all invoicesout.
+ */
+export async function getInvoicesOut(): Promise<InvoiceOut[]> {
+  try {
+    return await getCollection<InvoiceOut>('invoiceOut');
+  } catch (error: any) {
+    console.error('Error getting invoicesout:', error);
+    return [];
   }
 }

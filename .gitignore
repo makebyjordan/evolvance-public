@@ -43,3 +43,18 @@ next-env.d.ts
 # firebase
 firebase-debug.log
 firestore-debug.log
+
+# ============================================
+# 🔐 Firebase Admin credentials (AÑADIDO)
+# ============================================
+config/firebase-admin-key.json
+config/*.json
+!config/.gitkeep
+
+# ============================================
+# 💾 Backups de base de datos (AÑADIDO)
+# ============================================
+backup/
+*.tar.gz
+*.zip
+/src/generated/prisma

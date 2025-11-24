@@ -1,9 +1,8 @@
 
 'use server';
 
-import { db } from '@/lib/firebase';
-import { collection, doc, addDoc, updateDoc, deleteDoc, serverTimestamp } from 'firebase/firestore';
 import { revalidatePath } from 'next/cache';
+import { createDocument, updateDocument, deleteDocument, generateFirebaseId, serverTimestamp , getCollection } from '@/lib/firebase-adapter';
 
 // Main Video Type
 export interface StoredVideo {
@@ -26,8 +25,6 @@ type ActionResult<T> = {
 };
 
 // Collection reference
-const videosCollectionRef = collection(db, 'videos');
-
 /**
  * Saves a new video or updates an existing one.
  */
@@ -38,19 +35,18 @@ export async function saveVideo(data: VideoInput): Promise<ActionResult<string>>
     if (data.id) {
       // Update
       docId = data.id;
-      const docRef = doc(db, 'videos', docId);
-      await updateDoc(docRef, {
+      await updateDocument('video', docId, {
         ...data,
         updatedAt: serverTimestamp(),
       });
     } else {
       // Create
-      const docRef = await addDoc(videosCollectionRef, {
+      docId = generateFirebaseId();
+      await createDocument('video', docId, {
         ...data,
         createdAt: serverTimestamp(),
         updatedAt: serverTimestamp(),
       });
-      docId = docRef.id;
     }
     
     revalidatePath('/dashboard/videos');
@@ -67,11 +63,23 @@ export async function saveVideo(data: VideoInput): Promise<ActionResult<string>>
  */
 export async function deleteVideo(id: string): Promise<ActionResult<null>> {
   try {
-    await deleteDoc(doc(db, 'videos', id));
+    await deleteDocument('video', id);
     revalidatePath('/dashboard/videos');
     return { success: true };
   } catch (error: any) {
     console.error('Error deleting video:', error);
     return { success: false, error: 'No se pudo eliminar el video. ' + error.message };
+  }
+}
+
+/**
+ * Gets all videos.
+ */
+export async function getVideos(): Promise<Video[]> {
+  try {
+    return await getCollection<Video>('video');
+  } catch (error: any) {
+    console.error('Error getting videos:', error);
+    return [];
   }
 }

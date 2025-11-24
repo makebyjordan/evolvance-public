@@ -1,9 +1,8 @@
 
 'use server';
 
-import { db } from '@/lib/firebase';
-import { collection, doc, addDoc, updateDoc, deleteDoc, serverTimestamp } from 'firebase/firestore';
 import { revalidatePath } from 'next/cache';
+import { createDocument, updateDocument, deleteDocument, generateFirebaseId, serverTimestamp , getCollection } from '@/lib/firebase-adapter';
 
 export interface FeatureCard {
   icon?: string;
@@ -90,8 +89,6 @@ type ActionResult<T> = {
 };
 
 // Collection reference
-const presentationsCollectionRef = collection(db, 'presentations');
-
 /**
  * Saves a new presentation or updates an existing one.
  */
@@ -102,19 +99,18 @@ export async function savePresentation(data: PresentationInput): Promise<ActionR
     if (data.id) {
       // Update
       docId = data.id;
-      const docRef = doc(db, 'presentations', docId);
-      await updateDoc(docRef, {
+      await updateDocument('presentation', docId, {
         ...data,
         updatedAt: serverTimestamp(),
       });
     } else {
       // Create
-      const docRef = await addDoc(presentationsCollectionRef, {
+      docId = generateFirebaseId();
+      await createDocument('presentation', docId, {
         ...data,
         createdAt: serverTimestamp(),
         updatedAt: serverTimestamp(),
       });
-      docId = docRef.id;
     }
     
     revalidatePath('/dashboard/presentations');
@@ -134,12 +130,24 @@ export async function savePresentation(data: PresentationInput): Promise<ActionR
  */
 export async function deletePresentation(id: string): Promise<ActionResult<null>> {
   try {
-    await deleteDoc(doc(db, 'presentations', id));
+    await deleteDocument('presentation', id);
     revalidatePath('/dashboard/presentations');
      revalidatePath('/presentations');
     return { success: true };
   } catch (error: any) {
     console.error('Error deleting presentation:', error);
     return { success: false, error: 'No se pudo eliminar la presentación. ' + error.message };
+  }
+}
+
+/**
+ * Gets all presentations.
+ */
+export async function getPresentations(): Promise<Presentation[]> {
+  try {
+    return await getCollection<Presentation>('presentation');
+  } catch (error: any) {
+    console.error('Error getting presentations:', error);
+    return [];
   }
 }

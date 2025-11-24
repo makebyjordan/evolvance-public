@@ -1,9 +1,8 @@
 
 'use server';
 
-import { db } from '@/lib/firebase';
-import { collection, doc, addDoc, updateDoc, deleteDoc, serverTimestamp } from 'firebase/firestore';
 import { revalidatePath } from 'next/cache';
+import { createDocument, updateDocument, deleteDocument, generateFirebaseId, serverTimestamp , getCollection } from '@/lib/firebase-adapter';
 
 // Main PortfolioProject Type
 export interface PortfolioProject {
@@ -29,8 +28,6 @@ type ActionResult<T> = {
 };
 
 // Collection reference
-const portfolioCollectionRef = collection(db, 'portfolio');
-
 /**
  * Saves a new project or updates an existing one.
  */
@@ -41,19 +38,18 @@ export async function savePortfolioProject(data: PortfolioProjectInput): Promise
     if (data.id) {
       // Update
       docId = data.id;
-      const docRef = doc(db, 'portfolio', docId);
-      await updateDoc(docRef, {
+      await updateDocument('portfolio', docId, {
         ...data,
         updatedAt: serverTimestamp(),
       });
     } else {
       // Create
-      const docRef = await addDoc(portfolioCollectionRef, {
+      docId = generateFirebaseId();
+      await createDocument('portfolio', docId, {
         ...data,
         createdAt: serverTimestamp(),
         updatedAt: serverTimestamp(),
       });
-      docId = docRef.id;
     }
     
     revalidatePath('/dashboard/portfolio');
@@ -71,12 +67,24 @@ export async function savePortfolioProject(data: PortfolioProjectInput): Promise
  */
 export async function deletePortfolioProject(id: string): Promise<ActionResult<null>> {
   try {
-    await deleteDoc(doc(db, 'portfolio', id));
+    await deleteDocument('portfolio', id);
     revalidatePath('/dashboard/portfolio');
     revalidatePath('/'); // Revalidate home page
     return { success: true };
   } catch (error: any) {
     console.error('Error deleting portfolio project:', error);
     return { success: false, error: 'No se pudo eliminar el proyecto. ' + error.message };
+  }
+}
+
+/**
+ * Gets all portfolio.
+ */
+export async function getPortfolio(): Promise<Portfolio[]> {
+  try {
+    return await getCollection<Portfolio>('portfolio');
+  } catch (error: any) {
+    console.error('Error getting portfolio:', error);
+    return [];
   }
 }

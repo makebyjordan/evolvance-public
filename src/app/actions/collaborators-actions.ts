@@ -1,9 +1,9 @@
 'use server';
 
-import { db, storage } from '@/lib/firebase';
-import { collection, doc, addDoc, updateDoc, deleteDoc, serverTimestamp } from 'firebase/firestore';
+import { storage } from '@/lib/firebase';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { revalidatePath } from 'next/cache';
+import { createDocument, updateDocument, deleteDocument, generateFirebaseId, serverTimestamp , getCollection } from '@/lib/firebase-adapter';
 
 
 // Main Collaborator Type
@@ -32,9 +32,6 @@ type ActionResult<T> = {
   error?: string;
 };
 
-// Collection reference
-const collaboratorsCollectionRef = collection(db, 'collaborators');
-
 /**
  * Saves a new collaborator or updates an existing one.
  */
@@ -45,19 +42,18 @@ export async function saveCollaborator(data: Partial<CollaboratorInput & { contr
     if (data.id) {
       // Update
       docId = data.id;
-      const docRef = doc(db, 'collaborators', docId);
-      await updateDoc(docRef, {
+      await updateDocument('collaborator', docId, {
         ...data,
         updatedAt: serverTimestamp(),
       });
     } else {
       // Create
-      const docRef = await addDoc(collaboratorsCollectionRef, {
+      docId = generateFirebaseId();
+      await createDocument('collaborator', docId, {
         ...data,
         createdAt: serverTimestamp(),
         updatedAt: serverTimestamp(),
       });
-      docId = docRef.id;
     }
     revalidatePath('/dashboard/collaborators');
     return { success: true, data: docId };
@@ -73,7 +69,7 @@ export async function saveCollaborator(data: Partial<CollaboratorInput & { contr
  */
 export async function deleteCollaborator(id: string): Promise<ActionResult<null>> {
   try {
-    await deleteDoc(doc(db, 'collaborators', id));
+    await deleteDocument('collaborator', id);
     revalidatePath('/dashboard/collaborators');
     return { success: true };
   } catch (error: any) {
@@ -84,9 +80,9 @@ export async function deleteCollaborator(id: string): Promise<ActionResult<null>
 
 /**
  * Uploads a contract PDF for a collaborator.
+ * NOTE: Still using Firebase Storage for file uploads
  */
 export async function uploadContractPdf(collaboratorId: string, formData: FormData): Promise<ActionResult<string>> {
-  // --- LÍNEA DE DEPURACIÓN AÑADIDA AQUÍ ---
   console.log("Intentando subir PDF para el collaboratorId:", collaboratorId);
 
   const file = formData.get('pdf-file') as File;
@@ -104,8 +100,7 @@ export async function uploadContractPdf(collaboratorId: string, formData: FormDa
     await uploadBytes(storageRef, file);
     const downloadURL = await getDownloadURL(storageRef);
 
-    const collaboratorRef = doc(db, 'collaborators', collaboratorId);
-    await updateDoc(collaboratorRef, {
+    await updateDocument('collaborator', collaboratorId, {
       contractPdfUrl: downloadURL,
       updatedAt: serverTimestamp(),
     });
@@ -116,5 +111,17 @@ export async function uploadContractPdf(collaboratorId: string, formData: FormDa
   } catch (error: any) {
     console.error('Error uploading PDF:', error);
     return { success: false, error: 'No se pudo subir el archivo. ' + error.message };
+  }
+}
+
+/**
+ * Gets all collaborators.
+ */
+export async function getCollaborators(): Promise<Collaborator[]> {
+  try {
+    return await getCollection<Collaborator>('collaborator');
+  } catch (error: any) {
+    console.error('Error getting collaborators:', error);
+    return [];
   }
 }

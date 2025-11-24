@@ -1,8 +1,7 @@
 'use server';
 
-import { db } from '@/lib/firebase';
-import { collection, doc, addDoc, updateDoc, deleteDoc, serverTimestamp } from 'firebase/firestore';
 import { revalidatePath } from 'next/cache';
+import { createDocument, updateDocument, deleteDocument, generateFirebaseId, serverTimestamp , getCollection } from '@/lib/firebase-adapter';
 
 // Main Factura Types
 export interface FacturaItem {
@@ -37,8 +36,6 @@ type ActionResult<T> = {
   error?: string;
 };
 
-const facturasCollectionRef = collection(db, 'facturas');
-
 /**
  * Saves a new factura or updates an existing one.
  */
@@ -57,19 +54,18 @@ export async function saveFactura(data: FacturaInput): Promise<ActionResult<stri
     if (data.id) {
       // Update
       docId = data.id;
-      const docRef = doc(db, 'facturas', docId);
-      await updateDoc(docRef, {
+      await updateDocument('factura', docId, {
         ...facturaData,
         updatedAt: serverTimestamp(),
       });
     } else {
       // Create
-      const docRef = await addDoc(facturasCollectionRef, {
+      docId = generateFirebaseId();
+      await createDocument('factura', docId, {
         ...facturaData,
         createdAt: serverTimestamp(),
         updatedAt: serverTimestamp(),
       });
-      docId = docRef.id;
     }
     
     revalidatePath('/dashboard/facturas');
@@ -86,11 +82,23 @@ export async function saveFactura(data: FacturaInput): Promise<ActionResult<stri
  */
 export async function deleteFactura(id: string): Promise<ActionResult<null>> {
   try {
-    await deleteDoc(doc(db, 'facturas', id));
+    await deleteDocument('factura', id);
     revalidatePath('/dashboard/facturas');
     return { success: true };
   } catch (error: any) {
     console.error('Error deleting factura:', error);
     return { success: false, error: 'No se pudo eliminar la factura. ' + error.message };
+  }
+}
+
+/**
+ * Gets all facturas.
+ */
+export async function getFacturas(): Promise<Factura[]> {
+  try {
+    return await getCollection<Factura>('factura');
+  } catch (error: any) {
+    console.error('Error getting facturas:', error);
+    return [];
   }
 }
